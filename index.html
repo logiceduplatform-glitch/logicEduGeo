@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang='el'>
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://apis.google.com https://www.gstatic.com https://*.firebaseio.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://*.googleusercontent.com https://*.google.com; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://*.firebase.com https://*.cloudfunctions.net wss://*.firebaseio.com https://formspree.io; frame-src https://accounts.google.com https://*.firebaseapp.com https://*.stripe.com;">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="canonical" href="https://geoloplatform.com/">
+  <title>GeoLo Platform – Learn. Think. Solve.</title>
+  <meta name="description" content="Train your brain with logic! 350+ educational games for kids 2-12 & adults. Logic, math, language, science with progress tracking. Free to try!">
+  <meta name="theme-color" content="#7c3aed">
+  <meta property="og:title" content="GeoLo Platform – Learn. Think. Solve.">
+  <meta property="og:description" content="Train your brain with logic! 350+ educational games for kids 2-12 & adults. Logic, math, language, science with progress tracking.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://geoloplatform.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://geoloplatform.com/">
+  <meta property="og:site_name" content="GeoLo Platform">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="GeoLo Platform – Learn. Think. Solve.">
+  <meta name="twitter:description" content="Train your brain with logic! 350+ educational games for kids 2-12 & adults.">
+  <meta name="twitter:image" content="https://geoloplatform.com/og-image.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "GeoLo Platform",
+    "url": "https://geoloplatform.com",
+    "description": "Train your brain with logic! 350+ educational games for kids 2-12 & adults. Learn. Think. Solve.",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Web",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
+  }
+  </script>
+</head>
+<body>
+  <div id='root'></div>
+  <script type='module' src='/src/main.jsx'></script>
+  <script>
+    if ('serviceWorker' in navigator && location.hostname !== 'localhost' && !location.hostname.startsWith('127.')) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').then(function(reg) {
+          if (reg.active) reg.active.postMessage('PRECACHE_GAMES');
+          reg.addEventListener('updatefound', function() {
+            var nw = reg.installing;
+            if (nw) nw.addEventListener('statechange', function() {
+              if (nw.state === 'activated') nw.postMessage('PRECACHE_GAMES');
+              if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+                window.dispatchEvent(new CustomEvent('sw-update-available'));
+              }
+            });
+          });
+        }).catch(function() {});
+      });
+    } else if ('serviceWorker' in navigator) {
+      // Unregister any previously installed SW in dev mode
+      navigator.serviceWorker.getRegistrations().then(regs => {
+        regs.forEach(r => r.unregister());
+      });
+      caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+    }
+  </script>
+</body>
+</html>

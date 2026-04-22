@@ -1,0 +1,62 @@
+export const LOGIC_4_5_GAMES = [
+  { id: "memoryMatch", title: { el: "Μνήμη", en: "Memory Match" }, icon: "🧠", description: { el: "Βρες τα ίδια ζευγάρια", en: "Find matching pairs" }, color: "from-violet-400 to-fuchsia-500" },
+  { id: "patternRecognition", title: { el: "Αναγνώριση Μοτίβων", en: "Pattern Recognition" }, icon: "🔲", description: { el: "Βρες το σωστό μοτίβο", en: "Find the correct pattern" }, color: "from-cyan-400 to-blue-500" },
+  { id: "oddOneOut", title: { el: "Βρες το Διαφορετικό", en: "Odd One Out" }, icon: "🤔", description: { el: "Ποιο δεν ταιριάζει;", en: "Which doesn't belong?" }, color: "from-orange-400 to-amber-500" },
+  { id: "findOddOneOut", title: { el: "Ψάξε το Περίεργο", en: "Find the Odd" }, icon: "🔎", description: { el: "Βρες αυτό που ξεχωρίζει", en: "Find the one that stands out" }, color: "from-rose-400 to-pink-500" },
+  { id: "maze", title: { el: "Λαβύρινθος", en: "Maze" }, icon: "🌀", description: { el: "Βρες το δρόμο!", en: "Find the way!" }, color: "from-emerald-400 to-teal-500" },
+  { id: "groupByCategories", title: { el: "Ομαδοποίηση", en: "Group by Categories" }, icon: "📦", description: { el: "Βάλε τα αντικείμενα σε ομάδες", en: "Sort objects into groups" }, color: "from-blue-400 to-indigo-500" },
+  { id: "sortBySize", title: { el: "Ταξινόμηση Μεγέθους", en: "Sort by Size" }, icon: "📏", description: { el: "Βάλε σε σειρά μεγέθους", en: "Arrange by size" }, color: "from-teal-400 to-emerald-500" },
+  { id: "sizeSorting", title: { el: "Μικρό → Μεγάλο", en: "Small → Large" }, icon: "📐", description: { el: "Πάτα από μικρό σε μεγάλο", en: "Tap smallest to largest" }, color: "from-amber-400 to-yellow-500" },
+  { id: "positionMemory", title: { el: "Μνήμη Θέσης", en: "Position Memory" }, icon: "📍", description: { el: "Θυμήσου πού ήταν!", en: "Remember where it was!" }, color: "from-purple-400 to-violet-500" },
+  { id: "whichDisappeared", title: { el: "Τι Εξαφανίστηκε;", en: "What Disappeared?" }, icon: "👻", description: { el: "Ποιο αντικείμενο χάθηκε;", en: "Which object vanished?" }, color: "from-slate-400 to-gray-500" },
+  { id: "whichMoved", title: { el: "Τι Μετακινήθηκε;", en: "What Moved?" }, icon: "🔄", description: { el: "Ποιο άλλαξε θέση;", en: "Which changed position?" }, color: "from-indigo-400 to-blue-500" },
+  { id: "whatWasInBetween", title: { el: "Τι Ήταν Ανάμεσα;", en: "What Was In Between?" }, icon: "↔️", description: { el: "Θυμήσου τη σειρά!", en: "Remember the sequence!" }, color: "from-pink-400 to-rose-500" },
+  { id: "findHalfShape", title: { el: "Βρες το Μισό", en: "Find Half Shape" }, icon: "◗", description: { el: "Ταίριαξε τα μισά σχήματα", en: "Match the shape halves" }, color: "from-sky-400 to-blue-500" },
+  { id: "completeSymmetry", title: { el: "Συμμετρία", en: "Complete Symmetry" }, icon: "🪞", description: { el: "Ολοκλήρωσε τη συμμετρία", en: "Complete the symmetry" }, color: "from-fuchsia-400 to-purple-500" },
+  { id: "flippedShapes", title: { el: "Ανεστραμμένα Σχήματα", en: "Flipped Shapes" }, icon: "🔀", description: { el: "Βρες το σωστό ανάποδο", en: "Find the correct flip" }, color: "from-lime-400 to-green-500" },
+  { id: "matchShapeObject", title: { el: "Σχήμα → Αντικείμενο", en: "Shape → Object" }, icon: "🔷", description: { el: "Ταίριαξε σχήμα με αντικείμενο", en: "Match shape with object" }, color: "from-red-400 to-orange-500" },
+  { id: "findMissingNumber", title: { el: "Βρες τον Αριθμό", en: "Find Missing Number" }, icon: "❓", description: { el: "Ποιος αριθμός λείπει;", en: "Which number is missing?" }, color: "from-green-400 to-emerald-500" },
+  { id: "whichIsLess", title: { el: "Ποιο Είναι Λιγότερο;", en: "Which Is Less?" }, icon: "⚖️", description: { el: "Σύγκρινε ποσότητες", en: "Compare quantities" }, color: "from-yellow-400 to-amber-500" },
+  { id: "whatRemains", title: { el: "Τι Μένει;", en: "What Remains?" }, icon: "➖", description: { el: "Αφαίρεσε και βρες", en: "Subtract and find out" }, color: "from-orange-400 to-red-500" },
+  { id: "robotRequests", title: { el: "Εντολές Ρομπότ", en: "Robot Requests" }, icon: "🤖", description: { el: "Ακολούθησε τις εντολές", en: "Follow the commands" }, color: "from-gray-400 to-slate-500" },
+  { id: "guessFromPieces", title: { el: "Μάντεψε από Κομμάτια", en: "Guess from Pieces" }, icon: "🧩", description: { el: "Τι δείχνει η εικόνα;", en: "What does the image show?" }, color: "from-violet-400 to-indigo-500" },
+  { id: "spotDifference", title: { el: "Βρες Διαφορές", en: "Spot Differences" }, icon: "🔍", description: { el: "Βρες τις διαφορές", en: "Find the differences" }, color: "from-pink-400 to-red-500" },
+  { id: "foodSorting", title: { el: "Ταξινόμηση Φαγητού", en: "Food Sorting" }, icon: "🍎", description: { el: "Ταξινόμησε τα φαγητά", en: "Sort the foods" }, color: "from-red-400 to-orange-500" },
+  { id: "patternMatch", title: { el: "Μοτίβα (Απλά)", en: "Patterns (Simple)" }, icon: "🔳", description: { el: "Βρες το απλό μοτίβο", en: "Find the simple pattern" }, color: "from-teal-400 to-cyan-500" },
+];
+
+export const SCHOOL_2_3_GAMES = [
+  { id: "shapesQuiz", title: { el: "Κουίζ Σχημάτων", en: "Shapes Quiz" }, icon: "🔷", description: { el: "Μάθε τα σχήματα", en: "Learn the shapes" }, color: "from-cyan-400 to-blue-500" },
+  { id: "colorsQuiz", title: { el: "Κουίζ Χρωμάτων", en: "Colors Quiz" }, icon: "🎨", description: { el: "Μάθε τα χρώματα", en: "Learn the colors" }, color: "from-pink-400 to-rose-500" },
+  { id: "numbersQuiz", title: { el: "Κουίζ Αριθμών", en: "Numbers Quiz" }, icon: "🔢", description: { el: "Μάθε τους αριθμούς", en: "Learn the numbers" }, color: "from-emerald-400 to-teal-500" },
+  { id: "firstWordsQuiz", title: { el: "Πρώτες Λέξεις", en: "First Words" }, icon: "📝", description: { el: "Μάθε λέξεις", en: "Learn words" }, color: "from-purple-400 to-violet-500" },
+  { id: "animalQuiz", title: { el: "Κουίζ Ζώων", en: "Animal Quiz" }, icon: "🐾", description: { el: "Μάθε τα ζώα", en: "Learn the animals" }, color: "from-green-400 to-emerald-500" },
+  { id: "bodyParts", title: { el: "Μέρη Σώματος", en: "Body Parts" }, icon: "👤", description: { el: "Μάθε τα μέρη του σώματος", en: "Learn body parts" }, color: "from-orange-400 to-red-500" },
+];
+
+export const FUN_2_3_GAMES = [
+  { id: "tapPuzzle", title: { el: "Tap Παζλ", en: "Tap Puzzle" }, icon: "🧩", description: { el: "Πάτα τα κομμάτια με τη σειρά", en: "Tap the pieces in order" }, color: "from-blue-400 to-purple-500" },
+  { id: "puzzleBoard", title: { el: "Παζλ Εικόνων", en: "Image Puzzle" }, icon: "🖼️", description: { el: "Σύρε τα κομμάτια", en: "Drag pieces to complete" }, color: "from-indigo-400 to-blue-500" },
+  { id: "bubblePop", title: { el: "Φούσκες", en: "Bubble Pop" }, icon: "🫧", description: { el: "Σκάσε τις φούσκες!", en: "Pop all the bubbles!" }, color: "from-cyan-400 to-blue-500" },
+  { id: "colorMatch", title: { el: "Χρωματιστά Ταιριάσματα", en: "Color Match" }, icon: "🎨", description: { el: "Ταίριαξε τα χρώματα", en: "Match the colors" }, color: "from-pink-400 to-rose-500" },
+  { id: "shapeMatch", title: { el: "Σχήματα", en: "Shape Match" }, icon: "⬟", description: { el: "Ταίριαξε τα σχήματα", en: "Match the shapes" }, color: "from-amber-400 to-orange-500" },
+  { id: "countAndLearn", title: { el: "Μέτρα & Μάθε", en: "Count & Learn" }, icon: "🔢", description: { el: "Μάθε να μετράς", en: "Learn to count" }, color: "from-emerald-400 to-teal-500" },
+  { id: "animalSounds", title: { el: "Ήχοι Ζώων", en: "Animal Sounds" }, icon: "🐮", description: { el: "Ποιο ζώο κάνει αυτό;", en: "Which animal sounds like this?" }, color: "from-green-400 to-lime-500" },
+  { id: "musicalPiano", title: { el: "Πιανάκι", en: "Musical Piano" }, icon: "🎹", description: { el: "Παίξε μελωδίες", en: "Play melodies" }, color: "from-violet-400 to-purple-500" },
+  { id: "balloonCatch", title: { el: "Πιάσε τα Μπαλόνια", en: "Balloon Catch" }, icon: "🎈", description: { el: "Πιάσε τα σωστά μπαλόνια", en: "Catch the right balloons" }, color: "from-red-400 to-rose-500" },
+  { id: "colorDrawing", title: { el: "Ζωγραφική", en: "Color Drawing" }, icon: "🖍️", description: { el: "Ελεύθερη ζωγραφική", en: "Free drawing" }, color: "from-yellow-400 to-orange-500" },
+  { id: "funGamesQuiz", title: { el: "Παιχνίδια Ζώων", en: "Animal Fun Games" }, icon: "🐻", description: { el: "Drag & drop ζώα", en: "Drag & drop animals" }, color: "from-lime-400 to-green-500" },
+];
+
+export const LOGIC_2_3_GAMES = [
+  { id: "memoryMatch", title: { el: "Μνήμη", en: "Memory Match" }, icon: "🧠", description: { el: "Βρες τα ζευγάρια", en: "Find matching pairs" }, color: "from-violet-400 to-fuchsia-500" },
+  { id: "patternMatch", title: { el: "Μοτίβα", en: "Pattern Match" }, icon: "🔲", description: { el: "Βρες το μοτίβο", en: "Find the pattern" }, color: "from-cyan-400 to-blue-500" },
+  { id: "oddOneOut", title: { el: "Βρες το Διαφορετικό", en: "Odd One Out" }, icon: "🤔", description: { el: "Ποιο δεν ταιριάζει;", en: "Which doesn't belong?" }, color: "from-orange-400 to-amber-500" },
+  { id: "sizeSorting", title: { el: "Ταξινόμηση Μεγέθους", en: "Size Sorting" }, icon: "📏", description: { el: "Βάλε σε σειρά μεγέθους", en: "Sort by size" }, color: "from-teal-400 to-emerald-500" },
+  { id: "spotDifference", title: { el: "Βρες Διαφορές", en: "Spot Difference" }, icon: "🔍", description: { el: "Βρες τις διαφορές", en: "Find the differences" }, color: "from-pink-400 to-red-500" },
+  { id: "foodSorting", title: { el: "Ταξινόμηση Φαγητού", en: "Food Sorting" }, icon: "🍎", description: { el: "Ταξινόμησε τα φαγητά", en: "Sort the foods" }, color: "from-red-400 to-orange-500" },
+  { id: "emotionsMatch", title: { el: "Συναισθήματα", en: "Emotions Match" }, icon: "😊", description: { el: "Μάθε τα συναισθήματα", en: "Learn emotions" }, color: "from-yellow-400 to-orange-500" },
+  { id: "animalHabitats", title: { el: "Σπίτια Ζώων", en: "Animal Habitats" }, icon: "🏡", description: { el: "Βάλε κάθε ζώο στο σπίτι", en: "Put animals in homes" }, color: "from-green-400 to-emerald-500" },
+  { id: "animalTracks", title: { el: "Ίχνη Ζώων", en: "Animal Tracks" }, icon: "🐾", description: { el: "Ταίριαξε ζώο με ίχνη", en: "Match animal tracks" }, color: "from-lime-400 to-green-500" },
+  { id: "weatherClothes", title: { el: "Ρούχα Καιρού", en: "Weather Clothes" }, icon: "☀️", description: { el: "Διάλεξε τα σωστά ρούχα", en: "Choose the right clothes" }, color: "from-blue-400 to-cyan-500" },
+];

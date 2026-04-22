@@ -1,0 +1,58 @@
+[
+  {
+    "title": {
+      "el": "Ζώα",
+      "en": "Animals"
+    },
+    "pieces": [
+      { "id": 1, "label": "🐱" },
+      { "id": 2, "label": "🐶" }
+    ]
+  },
+  {
+    "title": {
+      "el": "Φρούτα",
+      "en": "Fruits"
+    },
+    "pieces": [
+      { "id": 1, "label": "🍎" },
+      { "id": 2, "label": "🍌" },
+      { "id": 3, "label": "🍇" }
+    ]
+  },
+  {
+    "title": {
+      "el": "Χρώματα",
+      "en": "Colors"
+    },
+    "pieces": [
+      { "id": 1, "label": "🔴" },
+      { "id": 2, "label": "🟢" },
+      { "id": 3, "label": "🔵" },
+      { "id": 4, "label": "🟡" }
+    ]
+  },
+  {
+    "title": {
+      "el": "Οχήματα",
+      "en": "Vehicles"
+    },
+    "pieces": [
+      { "id": 1, "label": "🚗" },
+      { "id": 2, "label": "🚌" },
+      { "id": 3, "label": "✈️" }
+    ]
+  },
+  {
+    "title": {
+      "el": "Πρόσωπα",
+      "en": "Faces"
+    },
+    "pieces": [
+      { "id": 1, "label": "😊" },
+      { "id": 2, "label": "😂" },
+      { "id": 3, "label": "🥰" },
+      { "id": 4, "label": "😎" }
+    ]
+  }
+]

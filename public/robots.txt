@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /play/
+Disallow: /profile
+Disallow: /parent-dashboard
+Disallow: /stats
+Disallow: /guest-setup
+Disallow: /onboarding
+
+Sitemap: https://geoloplatform.com/sitemap.xml

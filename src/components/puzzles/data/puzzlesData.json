@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "title": "Cat",
+    "width": 300,
+    "height": 300,
+    "pieces": [
+      { "id": "c1", "image": "/images/cat1.png", "x": 0, "y": 0 },
+      { "id": "c2", "image": "/images/cat2.png", "x": 150, "y": 0 },
+      { "id": "c3", "image": "/images/cat3.png", "x": 0, "y": 150 },
+      { "id": "c4", "image": "/images/cat4.png", "x": 150, "y": 150 }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Dog",
+    "width": 300,
+    "height": 300,
+    "pieces": [
+      { "id": "d1", "image": "/images/dog1.png", "x": 0, "y": 0 },
+      { "id": "d2", "image": "/images/dog2.png", "x": 150, "y": 0 },
+      { "id": "d3", "image": "/images/dog3.png", "x": 0, "y": 150 },
+      { "id": "d4", "image": "/images/dog4.png", "x": 150, "y": 150 }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Fish",
+    "width": 300,
+    "height": 300,
+    "pieces": [
+      { "id": "f1", "image": "/images/fish1.png", "x": 0, "y": 0 },
+      { "id": "f2", "image": "/images/fish2.png", "x": 150, "y": 0 },
+      { "id": "f3", "image": "/images/fish3.png", "x": 0, "y": 150 },
+      { "id": "f4", "image": "/images/fish4.png", "x": 150, "y": 150 }
+    ]
+  }
+]

@@ -1,0 +1,175 @@
+// src/components/quiz/data/questionsLogicMath.js
+export const questionsLogicMath = [
+  {
+    id: 'math-1',
+    category: 'Math',
+    difficulty: 'easy',
+    question: { en: 'What is 7 + 5?', el: 'Πόσο κάνει 7 + 5;' },
+    options: [10, 12, 14],
+    correct: 12,
+    points: 10
+  },
+  {
+    id: 'math-2',
+    category: 'Math',
+    difficulty: 'medium',
+    question: { en: 'What is 9 × 6?', el: 'Πόσο κάνει 9 × 6;' },
+    options: [42, 48, 54],
+    correct: 54,
+    points: 15
+  },
+  {
+    id: 'math-3',
+    category: 'Math',
+    difficulty: 'hard',
+    question: { en: 'Solve: 45 ÷ 5 + 7', el: 'Λύσε: 45 ÷ 5 + 7' },
+    options: [14, 16, 18],
+    correct: 16,
+    points: 20
+  },
+  {
+    id: 'math-4',
+    category: 'Math',
+    difficulty: 'easy',
+    question: { en: 'What is 15 − 7?', el: 'Πόσο κάνει 15 − 7;' },
+    options: [6, 7, 8],
+    correct: 8
+  },
+  {
+    id: 'math-5',
+    category: 'Math',
+    difficulty: 'easy',
+    question: { en: 'What is half of 12?', el: 'Πόσο κάνει το μισό του 12;' },
+    options: [4, 6, 8],
+    correct: 6
+  },
+
+  // === Geometry (5) ===
+  {
+    id: 'geom-1',
+    category: 'Geometry',
+    difficulty: 'easy',
+    question: { en: 'Which shape has 3 sides?', el: 'Ποιο σχήμα έχει 3 πλευρές;' },
+    options: { en: ['Square', 'Triangle', 'Circle'], el: ['Τετράγωνο', 'Τρίγωνο', 'Κύκλος'] },
+    correct: { en: 'Triangle', el: 'Τρίγωνο' }
+  },
+  {
+    id: 'geom-2',
+    category: 'Geometry',
+    difficulty: 'easy',
+    question: { en: 'How many sides does a square have?', el: 'Πόσες πλευρές έχει το τετράγωνο;' },
+    options: [3, 4, 5],
+    correct: 4
+  },
+  {
+    id: 'geom-3',
+    category: 'Geometry',
+    difficulty: 'medium',
+    question: { en: 'Which shape has 6 sides?', el: 'Ποιο σχήμα έχει 6 πλευρές;' },
+    options: { en: ['Pentagon', 'Hexagon', 'Rectangle'], el: ['Πεντάγωνο', 'Εξάγωνο', 'Ορθογώνιο'] },
+    correct: { en: 'Hexagon', el: 'Εξάγωνο' }
+  },
+  {
+    id: 'geom-4',
+    category: 'Geometry',
+    difficulty: 'medium',
+    question: { en: 'Which of these is a 3D solid?', el: 'Ποιο από αυτά είναι στερεό σχήμα (3D);' },
+    options: { en: ['Cube', 'Square', 'Circle'], el: ['Κύβος', 'Τετράγωνο', 'Κύκλος'] },
+    correct: { en: 'Cube', el: 'Κύβος' }
+  },
+  {
+    id: 'geom-5',
+    category: 'Geometry',
+    difficulty: 'easy',
+    question: { en: 'Which shape is round?', el: 'Ποιο σχήμα είναι στρογγυλό;' },
+    options: { en: ['Circle', 'Triangle', 'Rectangle'], el: ['Κύκλος', 'Τρίγωνο', 'Ορθογώνιο'] },
+    correct: { en: 'Circle', el: 'Κύκλος' }
+  },
+
+  // === Logic (5) ===
+  {
+    id: 'logic-1',
+    category: 'Logic',
+    difficulty: 'medium',
+    question: { en: 'What comes next in the pattern: 2, 4, 8, 16, ?', el: 'Τι ακολουθεί στη σειρά: 2, 4, 8, 16, ;' },
+    options: [18, 24, 32],
+    correct: 32
+  },
+  {
+    id: 'logic-2',
+    category: 'Logic',
+    difficulty: 'easy',
+    question: { en: 'What comes next: 1, 3, 5, 7, ?', el: 'Τι ακολουθεί: 1, 3, 5, 7, ;' },
+    options: [8, 9, 10],
+    correct: 9
+  },
+  {
+    id: 'logic-3',
+    category: 'Logic',
+    difficulty: 'easy',
+    question: { en: 'Which does not belong?', el: 'Ποιο δεν ταιριάζει;' },
+    options: { en: ['cat', 'dog', 'apple'], el: ['γάτα', 'σκύλος', 'μήλο'] },
+    correct: { en: 'apple', el: 'μήλο' }
+  },
+  {
+    id: 'logic-4',
+    category: 'Logic',
+    difficulty: 'medium',
+    question: { en: 'If today is Monday, what day is two days after?', el: 'Αν σήμερα είναι Δευτέρα, ποια μέρα είναι δύο μέρες μετά;' },
+    options: { en: ['Tuesday', 'Wednesday', 'Thursday'], el: ['Τρίτη', 'Τετάρτη', 'Πέμπτη'] },
+    correct: { en: 'Wednesday', el: 'Τετάρτη' }
+  },
+  {
+    id: 'logic-5',
+    category: 'Logic',
+    difficulty: 'medium',
+    question: {
+      en: 'The pattern repeats: ▲, ▲, ■, ▲, ▲, ■, ? — what comes next?',
+      el: 'Το μοτίβο επαναλαμβάνεται: ▲, ▲, ■, ▲, ▲, ■, ; — τι ακολουθεί;'
+    },
+    options: { en: ['▲', '■', '●'], el: ['▲', '■', '●'] },
+    correct: { en: '▲', el: '▲' }
+  },
+
+  // === Vocabulary (5) ===
+  {
+    id: 'vocab-1',
+    category: 'Vocabulary',
+    difficulty: 'easy',
+    question: { en: 'Select the synonym of "happy".', el: 'Επίλεξε το συνώνυμο της λέξης «χαρούμενος».' },
+    options: { en: ['sad', 'glad', 'angry'], el: ['λυπημένος', 'χαρούμενος', 'θυμωμένος'] },
+    correct: { en: 'glad', el: 'χαρούμενος' }
+  },
+  {
+    id: 'vocab-2',
+    category: 'Vocabulary',
+    difficulty: 'easy',
+    question: { en: 'What is the opposite of "hot"?', el: 'Ποιο είναι το αντίθετο του «ζεστό»;' },
+    options: { en: ['cold', 'warm', 'tiny'], el: ['κρύο', 'ζεστός', 'μικρός'] },
+    correct: { en: 'cold', el: 'κρύο' }
+  },
+  {
+    id: 'vocab-3',
+    category: 'Vocabulary',
+    difficulty: 'medium',
+    question: { en: "Choose the plural of 'fox'.", el: 'Επίλεξε τον πληθυντικό του «παιδί».' },
+    options: { en: ['foxes', 'foxs', 'foxxes'], el: ['παιδιά', 'παιδία', 'παιδείς'] },
+    correct: { en: 'foxes', el: 'παιδιά' }
+  },
+  {
+    id: 'vocab-4',
+    category: 'Vocabulary',
+    difficulty: 'easy',
+    question: { en: 'Pick the word that is a fruit.', el: 'Διάλεξε τη λέξη που είναι φρούτο.' },
+    options: { en: ['apple', 'car', 'chair'], el: ['μήλο', 'αμάξι', 'καρέκλα'] },
+    correct: { en: 'apple', el: 'μήλο' }
+  },
+  {
+    id: 'vocab-5',
+    category: 'Vocabulary',
+    difficulty: 'medium',
+    question: { en: "Which word means 'small'?", el: 'Ποια λέξη σημαίνει «μικρός»;' },
+    options: { en: ['tiny', 'huge', 'loud'], el: ['μικρός', 'τεράστιος', 'θορυβώδης'] },
+    correct: { en: 'tiny', el: 'μικρός' }
+  }
+];
