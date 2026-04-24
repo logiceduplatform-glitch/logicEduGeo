@@ -165,8 +165,12 @@ export default function AuthPage() {
         await registerWithEmail(email, password);
         navigate("/onboarding");
       } else {
-        await loginWithEmail(email, password, rememberMe);
-        navigate("/");
+        const loggedInUser = await loginWithEmail(email, password, rememberMe);
+        const uid = loggedInUser?.uid;
+        const hasProfile = uid
+          ? (localStorage.getItem(`geo:userProfile:${uid}`) || localStorage.getItem("geo:userProfile"))
+          : localStorage.getItem("geo:userProfile");
+        navigate(hasProfile ? "/" : "/onboarding");
       }
     } catch {
       // error handled by AuthContext
@@ -178,8 +182,11 @@ export default function AuthPage() {
     setLocalError(null);
     setIsLoading(true);
     try {
-      await loginWithGoogle();
-      const hasProfile = localStorage.getItem("geo:userProfile");
+      const googleUser = await loginWithGoogle();
+      const uid = googleUser?.uid;
+      const hasProfile = uid
+        ? (localStorage.getItem(`geo:userProfile:${uid}`) || localStorage.getItem("geo:userProfile"))
+        : localStorage.getItem("geo:userProfile");
       navigate(hasProfile ? "/" : "/onboarding");
     } catch {
       // error handled by AuthContext

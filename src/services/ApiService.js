@@ -28,7 +28,32 @@ export const ApiService = {
     return !!(auth?.currentUser && db);
   },
 
-  // ─── Profiles ───────────────────────────────────────────
+  // ─── User Profile (role, name, age, avatar) ────────────
+  async getUserProfile() {
+    const ref = userDoc("data/userProfile");
+    if (!ref) return { ok: false, data: null };
+    try {
+      const snap = await getDoc(ref);
+      return { ok: true, data: snap.exists() ? snap.data() : null };
+    } catch (e) {
+      devWarn("[ApiService] getUserProfile:", e);
+      return { ok: false, data: null };
+    }
+  },
+
+  async saveUserProfile(profile) {
+    const ref = userDoc("data/userProfile");
+    if (!ref) return { ok: false };
+    try {
+      await setDoc(ref, { ...profile, updatedAt: new Date().toISOString() }, { merge: true });
+      return { ok: true };
+    } catch (e) {
+      devWarn("[ApiService] saveUserProfile:", e);
+      return { ok: false };
+    }
+  },
+
+  // ─── Child Profiles ───────────────────────────────────────────
   async getProfiles() {
     const u = uid();
     if (!u || !db) return { ok: false, data: [] };
@@ -240,7 +265,8 @@ export const ApiService = {
   async pullAll() {
     if (!this.isAvailable()) return { ok: false, data: null };
     try {
-      const [profiles, progress, favorites, stats, quizzes] = await Promise.all([
+      const [userProfile, profiles, progress, favorites, stats, quizzes] = await Promise.all([
+        this.getUserProfile(),
         this.getProfiles(),
         this.getAllProgress(),
         this.getFavorites(),
@@ -250,6 +276,7 @@ export const ApiService = {
       return {
         ok: true,
         data: {
+          userProfile: userProfile.data || null,
           profiles: profiles.data || [],
           progress: progress.data || {},
           favorites: favorites.data || [],
@@ -267,6 +294,10 @@ export const ApiService = {
     if (!this.isAvailable()) return { ok: false };
     try {
       const promises = [];
+
+      if (localData.userProfile) {
+        promises.push(this.saveUserProfile(localData.userProfile));
+      }
 
       if (localData.profiles?.length) {
         for (const p of localData.profiles) {

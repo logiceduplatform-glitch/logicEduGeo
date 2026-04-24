@@ -14,6 +14,7 @@ import {
   browserSessionPersistence,
 } from "firebase/auth";
 import { SyncService } from "../services/SyncService";
+import { ApiService } from "../services/ApiService";
 import { AnalyticsService } from "../services/AnalyticsService";
 import { StorageService } from "../services/StorageService";
 
@@ -24,6 +25,23 @@ const NO_AUTH_MSG = {
   en: "Auth service unavailable. Try guest mode.",
 };
 
+function loadProfileForUid(uid) {
+  try {
+    if (uid) {
+      const perUser = localStorage.getItem(`geo:userProfile:${uid}`);
+      if (perUser) return JSON.parse(perUser);
+    }
+    const legacy = localStorage.getItem("geo:userProfile");
+    return legacy ? JSON.parse(legacy) : null;
+  } catch { return null; }
+}
+
+function saveProfileForUid(uid, profile) {
+  const effectiveUid = uid || auth?.currentUser?.uid;
+  localStorage.setItem("geo:userProfile", JSON.stringify(profile));
+  if (effectiveUid) localStorage.setItem(`geo:userProfile:${effectiveUid}`, JSON.stringify(profile));
+}
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [guest, setGuest] = useState(() => {
@@ -32,12 +50,7 @@ export function AuthProvider({ children }) {
       return saved ? JSON.parse(saved) : null;
     } catch { return null; }
   });
-  const [userProfile, setUserProfile] = useState(() => {
-    try {
-      const saved = localStorage.getItem("geo:userProfile");
-      return saved ? JSON.parse(saved) : null;
-    } catch { return null; }
-  });
+  const [userProfile, setUserProfile] = useState(() => loadProfileForUid(null));
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [syncing, setSyncing] = useState(false);
@@ -58,7 +71,7 @@ export function AuthProvider({ children }) {
   };
 
   const loginWithGoogle = async () => {
-    if (!auth) { setError(NO_AUTH_MSG[getLang()]); return; }
+    if (!auth) { setError(NO_AUTH_MSG[getLang()]); return null; }
     const provider = new GoogleAuthProvider();
     try {
       setError(null);
@@ -67,8 +80,10 @@ export function AuthProvider({ children }) {
       localStorage.removeItem("geo:guestProfile");
       syncAfterLogin();
       AnalyticsService.login("google");
+      return result.user;
     } catch (err) {
       setError(err.message);
+      return null;
     }
   };
 
@@ -90,16 +105,18 @@ export function AuthProvider({ children }) {
   };
 
   const loginWithEmail = async (email, password, rememberMe) => {
-    if (!auth) { setError(NO_AUTH_MSG[getLang()]); return; }
+    if (!auth) { setError(NO_AUTH_MSG[getLang()]); return null; }
     try {
       setError(null);
       await setPersistence(
         auth,
         rememberMe ? browserLocalPersistence : browserSessionPersistence
       );
-      await signInWithEmailAndPassword(auth, email, password);
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      return result.user;
     } catch (err) {
       setError(err.message);
+      return null;
     }
   };
 
@@ -121,14 +138,20 @@ export function AuthProvider({ children }) {
     }
     setUser(null);
     setGuest(null);
+    setUserProfile(null);
     localStorage.removeItem("geo:guestProfile");
+    localStorage.removeItem("geo:userProfile");
     localStorage.removeItem("geo:activeProfileId");
+    localStorage.removeItem("geo:childProfiles");
+    localStorage.removeItem("geo:studentName");
+    localStorage.removeItem("geo:myClassrooms");
     StorageService.setScope(null);
   };
 
   const saveUserProfile = (profile) => {
     setUserProfile(profile);
-    localStorage.setItem("geo:userProfile", JSON.stringify(profile));
+    saveProfileForUid(user?.uid, profile);
+    ApiService.saveUserProfile(profile).catch(() => {});
   };
 
   const beginGuest = (profileData) => {
@@ -165,12 +188,28 @@ export function AuthProvider({ children }) {
       setLoading(false);
       return;
     }
-    const unsub = onAuthStateChanged(auth, (firebaseUser) => {
+    const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
       setUser(firebaseUser || null);
-      setLoading(false);
       if (firebaseUser) {
+        let profile = loadProfileForUid(firebaseUser.uid);
+        if (profile && !localStorage.getItem(`geo:userProfile:${firebaseUser.uid}`)) {
+          localStorage.setItem(`geo:userProfile:${firebaseUser.uid}`, JSON.stringify(profile));
+        }
+        if (!profile) {
+          try {
+            const res = await ApiService.getUserProfile();
+            if (res.ok && res.data) {
+              profile = res.data;
+              saveProfileForUid(firebaseUser.uid, profile);
+            }
+          } catch { /* ignore */ }
+        }
+        setUserProfile(profile);
         syncAfterLogin();
+      } else {
+        setUserProfile(null);
       }
+      setLoading(false);
     });
     return () => unsub();
   }, [syncAfterLogin]);

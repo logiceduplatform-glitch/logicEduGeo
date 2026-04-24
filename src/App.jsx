@@ -47,13 +47,18 @@ const OnlineMultiplayerPage = React.lazy(() => import("./pages/OnlineMultiplayer
 const AITutorPage = React.lazy(() => import("./pages/AITutorPage"));
 const TeacherDashboard = React.lazy(() => import("./pages/TeacherDashboard"));
 const JoinClassroomPage = React.lazy(() => import("./pages/JoinClassroomPage"));
+const MyClassroomPage = React.lazy(() => import("./pages/MyClassroomPage"));
 const AchievementsPage = React.lazy(() => import("./pages/AchievementsPage"));
 const ShopPage = React.lazy(() => import("./pages/ShopPage"));
 
 function PlayGate({ children }) {
-  const { user, guest, loading, isGuestExpired } = React.useContext(AuthContext);
+  const { user, guest, loading, isGuestExpired, userProfile } = React.useContext(AuthContext);
+  const loc = useLocation();
   if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" /></div>;
-  if (user) return children;
+  if (user) {
+    if (!userProfile && loc.pathname !== "/onboarding") return <Navigate to="/onboarding" replace />;
+    return children;
+  }
   if (guest) {
     if (isGuestExpired()) return <Navigate to="/guest-expired" replace />;
     return children;
@@ -90,6 +95,17 @@ function ScrollToTop() {
     window.scrollTo(0, 0);
     AnalyticsService.pageView(pathname);
   }, [pathname]);
+  return null;
+}
+
+function OnboardingGuard() {
+  const { user, userProfile, loading } = React.useContext(AuthContext);
+  const { pathname } = useLocation();
+  const skipPaths = ["/onboarding", "/auth", "/guest-setup", "/guest-expired", "/privacy", "/terms", "/faq", "/contact", "/about"];
+  if (loading) return null;
+  if (user && !userProfile && !skipPaths.includes(pathname)) {
+    return <Navigate to="/onboarding" replace />;
+  }
   return null;
 }
 
@@ -152,6 +168,7 @@ export default function App() {
         <ProgressProvider>
           <BrowserRouter>
             <ScrollToTop />
+            <OnboardingGuard />
             <ToastProvider>
             <SkipLink />
             <ErrorBoundary>
@@ -201,6 +218,8 @@ export default function App() {
                 <Route path="/teacher-dashboard" element={<PlayGate><ErrorBoundary><TeacherDashboard /></ErrorBoundary></PlayGate>} />
                 <Route path="/join/:code" element={<PlayGate><ErrorBoundary><JoinClassroomPage /></ErrorBoundary></PlayGate>} />
                 <Route path="/join" element={<PlayGate><ErrorBoundary><JoinClassroomPage /></ErrorBoundary></PlayGate>} />
+                <Route path="/my-classroom/:code" element={<PlayGate><ErrorBoundary><MyClassroomPage /></ErrorBoundary></PlayGate>} />
+                <Route path="/my-classroom" element={<PlayGate><ErrorBoundary><MyClassroomPage /></ErrorBoundary></PlayGate>} />
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </Suspense>

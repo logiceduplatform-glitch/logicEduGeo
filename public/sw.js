@@ -1,6 +1,6 @@
-const CACHE_NAME = "edu-platform-v4";
-const RUNTIME_CACHE = "edu-runtime-v4";
-const GAME_CACHE = "edu-games-v1";
+const CACHE_NAME = "edu-platform-v6";
+const RUNTIME_CACHE = "edu-runtime-v6";
+const GAME_CACHE = "edu-games-v3";
 
 const STATIC_ASSETS = [
   "/",
@@ -95,20 +95,15 @@ self.addEventListener("fetch", (event) => {
 
   if (isStaticAsset(url)) {
     event.respondWith(
-      caches.open(RUNTIME_CACHE).then((cache) =>
-        cache.match(event.request).then((cached) => {
-          const fetchPromise = fetch(event.request)
-            .then((response) => {
-              if (response && response.status === 200 && response.type === "basic") {
-                cache.put(event.request, response.clone());
-              }
-              return response;
-            })
-            .catch(() => cached);
-
-          return cached || fetchPromise;
+      fetch(event.request)
+        .then((response) => {
+          if (response && response.status === 200 && response.type === "basic") {
+            const clone = response.clone();
+            caches.open(RUNTIME_CACHE).then((cache) => cache.put(event.request, clone));
+          }
+          return response;
         })
-      )
+        .catch(() => caches.open(RUNTIME_CACHE).then((cache) => cache.match(event.request)))
     );
     return;
   }

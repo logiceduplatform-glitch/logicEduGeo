@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { updateProfile } from "firebase/auth";
 import SEO from "../components/SEO";
 import { AuthContext } from "../auth/AuthContext";
 import { LanguageContext } from "../i18n/LanguageContext";
@@ -198,6 +199,11 @@ export default function OnboardingPage() {
   const progress = (step / totalSteps) * 100;
 
   const handleFinish = () => {
+    // Sync display name to Firebase Auth for all roles
+    if (user && name.trim() && !user.displayName) {
+      updateProfile(user, { displayName: name.trim() }).catch(() => {});
+    }
+
     if (role === "parent") {
       const goalToObjective = { school_prep: "school", fun_learning: "fun", logic_skills: "logic", all_round: "school" };
       const childObjective = goalToObjective[parentGoal] || "school";
@@ -227,8 +233,11 @@ export default function OnboardingPage() {
     }
 
     if (role === "teacher") {
-      const profile = { name: name.trim(), role: "teacher", age: "Adult", objective: "brain", schoolName: schoolName.trim(), gradeRange };
+      const profile = { name: name.trim(), role: "teacher", objective: "brain", schoolName: schoolName.trim(), gradeRange };
       saveUserProfile(profile);
+      if (user && name.trim()) {
+        updateProfile(user, { displayName: name.trim() }).catch(() => {});
+      }
       navigate("/teacher-dashboard");
       return;
     }

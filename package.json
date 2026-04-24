@@ -12,6 +12,7 @@
     "test:e2e:nav": "node tests/e2e/navigation.mjs",
     "test:e2e:full": "node tests/e2e/fullJourneys.mjs",
     "test:e2e:features": "node tests/e2e/newFeatures.mjs",
+    "test:e2e:teacher": "node tests/e2e/teacherFlow.mjs",
     "test:all": "vitest run && echo '--- Unit/Component tests passed ---'",
     "test:coverage": "vitest run --coverage",
     "test:a11y": "vitest run --reporter=verbose src/test/accessibility.test.jsx",

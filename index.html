@@ -3,7 +3,7 @@
 <head>
   <meta charset='UTF-8'>
   <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://apis.google.com https://www.gstatic.com https://*.firebaseio.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://*.googleusercontent.com https://*.google.com; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://*.firebase.com https://*.cloudfunctions.net wss://*.firebaseio.com https://formspree.io; frame-src https://accounts.google.com https://*.firebaseapp.com https://*.stripe.com;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://apis.google.com https://www.gstatic.com https://*.firebaseio.com https://www.googletagmanager.com https://*.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://*.googleusercontent.com https://*.google.com https://www.googletagmanager.com https://*.google-analytics.com; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://*.firebase.com https://*.cloudfunctions.net wss://*.firebaseio.com https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com https://*.analytics.google.com https://firebaseinstallations.googleapis.com; frame-src https://accounts.google.com https://*.firebaseapp.com https://*.stripe.com;">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="manifest" href="/manifest.json">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -51,14 +51,20 @@
             if (nw) nw.addEventListener('statechange', function() {
               if (nw.state === 'activated') nw.postMessage('PRECACHE_GAMES');
               if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+                nw.postMessage('SKIP_WAITING');
                 window.dispatchEvent(new CustomEvent('sw-update-available'));
               }
             });
           });
+          navigator.serviceWorker.addEventListener('controllerchange', function() {
+            if (!window.__swReloading) {
+              window.__swReloading = true;
+              window.location.reload();
+            }
+          });
         }).catch(function() {});
       });
     } else if ('serviceWorker' in navigator) {
-      // Unregister any previously installed SW in dev mode
       navigator.serviceWorker.getRegistrations().then(regs => {
         regs.forEach(r => r.unregister());
       });

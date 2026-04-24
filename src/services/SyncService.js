@@ -1,3 +1,4 @@
+import { auth } from "../auth/firebase";
 import { ApiService } from "./ApiService";
 import { StorageService } from "./StorageService";
 import { ProfileService } from "./ProfileService";
@@ -62,11 +63,32 @@ function collectLocalData() {
     quizzes = JSON.parse(localStorage.getItem("geo:customQuizzes")) || [];
   } catch { /* empty */ }
 
-  return { profiles, favorites, progress: cleanProgress, stats, quizzes };
+  let userProfile = null;
+  try {
+    const uid = auth?.currentUser?.uid;
+    if (uid) {
+      const raw = localStorage.getItem(`geo:userProfile:${uid}`) || localStorage.getItem("geo:userProfile");
+      if (raw) userProfile = JSON.parse(raw);
+    }
+  } catch { /* empty */ }
+
+  return { userProfile, profiles, favorites, progress: cleanProgress, stats, quizzes };
 }
 
 function applyCloudData(cloud) {
   if (!cloud) return;
+
+  if (cloud.userProfile) {
+    const uid = auth?.currentUser?.uid;
+    if (uid) {
+      const localKey = `geo:userProfile:${uid}`;
+      const existing = localStorage.getItem(localKey);
+      if (!existing) {
+        localStorage.setItem(localKey, JSON.stringify(cloud.userProfile));
+        localStorage.setItem("geo:userProfile", JSON.stringify(cloud.userProfile));
+      }
+    }
+  }
 
   if (cloud.profiles?.length) {
     const existing = ProfileService.getAll();

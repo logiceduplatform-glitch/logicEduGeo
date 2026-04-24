@@ -64,6 +64,18 @@ export default function Navbar() {
   const ageCatRef = useRef(null);
   const isEl = lang === "el";
 
+  const classroomHasNew = (() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem("geo:myClassrooms") || "[]");
+      if (!saved.length) return false;
+      for (const cls of saved) {
+        const lastSeen = localStorage.getItem(`geo:classroomLastSeen:${cls.code}`);
+        if (!lastSeen) return true;
+      }
+      return false;
+    } catch { return false; }
+  })();
+
   async function hashPin(pin) {
     const encoded = new TextEncoder().encode(pin + "edu-salt-2026");
     const hash = await crypto.subtle.digest("SHA-256", encoded);
@@ -133,7 +145,7 @@ export default function Navbar() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
-  const activeChild = ProfileService.getActive();
+  const activeChild = userRole === "teacher" ? null : ProfileService.getActive();
 
   const currentAge = activeChild?.age || guest?.age || userProfile?.age || null;
   const currentAgeIcon = currentAge ? AGE_ICONS[currentAge] : null;
@@ -149,7 +161,8 @@ export default function Navbar() {
   const initials = displayName
     ? displayName.slice(0, 2).toUpperCase()
     : "?";
-  const avatarUrl = activeChild ? null : (user?.photoURL || null);
+  const avatarUrl = activeChild ? null : (userProfile?.customPhoto || user?.photoURL || null);
+  const userEmoji = activeChild ? null : (userProfile?.avatar || null);
   const activeChildAvatar = activeChild?.avatar || null;
 
   useEffect(() => {
@@ -387,8 +400,8 @@ export default function Navbar() {
             </div>
           )}
 
-          {/* Multi-child profile switcher (read-only for children) */}
-          {isLoggedIn && user && (
+          {/* Multi-child profile switcher (read-only for children, hidden for teachers) */}
+          {isLoggedIn && user && userRole !== "teacher" && (
             <ProfileSwitcher lang={lang} onSwitch={() => window.location.reload()} readOnly={!!activeChild} />
           )}
 
@@ -408,6 +421,10 @@ export default function Navbar() {
                 {activeChildAvatar ? (
                   <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-lg border-2 border-indigo-300">
                     {activeChildAvatar}
+                  </div>
+                ) : userEmoji ? (
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-lg border-2 border-purple-300">
+                    {userEmoji}
                   </div>
                 ) : avatarUrl ? (
                   <img src={avatarUrl} alt={`${displayName} avatar`} loading="lazy" className="w-8 h-8 rounded-full border-2 border-purple-300 object-cover" />
@@ -445,7 +462,7 @@ export default function Navbar() {
                         {isEl ? "Λειτουργία επισκέπτη" : "Guest mode"}
                       </p>
                     )}
-                    {userProfile?.age && (
+                    {userProfile?.age && userRole !== "teacher" && (
                       <p className="text-xs text-slate-400 mt-0.5">{userProfile.age}</p>
                     )}
                     {userRole && userRole !== "student" && (
@@ -542,6 +559,25 @@ export default function Navbar() {
                       {isEl ? "Πίνακας Δασκάλου" : "Teacher Dashboard"}
                     </button>
                   )}
+
+                  {userRole !== "teacher" && (
+                    <button
+                      onClick={() => { setProfileOpen(false); navigate("/my-classroom"); }}
+                      className="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-700 dark:hover:text-blue-400 transition-colors flex items-center gap-2 relative"
+                    >
+                      <span>🏫</span>
+                      {isEl ? "Η Τάξη μου" : "My Classroom"}
+                      {classroomHasNew && <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse ml-auto" />}
+                    </button>
+                  )}
+
+                  <button
+                    onClick={() => { setProfileOpen(false); navigate("/join"); }}
+                    className="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-700 dark:hover:text-blue-400 transition-colors flex items-center gap-2"
+                  >
+                    <span>🔑</span>
+                    {isEl ? "Γρήγορος κωδικός quiz" : "Quick Quiz Code"}
+                  </button>
 
                   <button
                     onClick={() => { setProfileOpen(false); navigate("/content-editor"); }}
@@ -692,6 +728,10 @@ export default function Navbar() {
                       <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-xl border-2 border-indigo-300">
                         {activeChildAvatar}
                       </div>
+                    ) : userEmoji ? (
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-xl border-2 border-purple-300">
+                        {userEmoji}
+                      </div>
                     ) : avatarUrl ? (
                       <img src={avatarUrl} alt={`${displayName} avatar`} loading="lazy" className="w-10 h-10 rounded-full border-2 border-purple-300 object-cover" />
                     ) : (
@@ -710,7 +750,7 @@ export default function Navbar() {
                   </div>
 
                   {/* Mobile age badge with category options */}
-                  {currentAgeIcon && (
+                  {currentAgeIcon && userRole !== "teacher" && (
                     <div>
                       <div className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 font-medium">
                         <span className="text-lg">{currentAgeIcon}</span>
@@ -818,6 +858,23 @@ export default function Navbar() {
                       📚 {isEl ? "Πίνακας Δασκάλου" : "Teacher Dashboard"}
                     </button>
                   )}
+
+                  {userRole !== "teacher" && (
+                    <button
+                      onClick={() => { setMobileOpen(false); navigate("/my-classroom"); }}
+                      className="block w-full text-left px-4 py-3 rounded-xl text-blue-600 dark:text-blue-400 font-medium hover:bg-blue-50 dark:hover:bg-blue-900/30 relative"
+                    >
+                      🏫 {isEl ? "Η Τάξη μου" : "My Classroom"}
+                      {classroomHasNew && <span className="inline-block w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse ml-2 align-middle" />}
+                    </button>
+                  )}
+
+                  <button
+                    onClick={() => { setMobileOpen(false); navigate("/join"); }}
+                    className="block w-full text-left px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 font-medium hover:bg-blue-50 dark:hover:bg-blue-900/30"
+                  >
+                    🔑 {isEl ? "Γρήγορος κωδικός quiz" : "Quick Quiz Code"}
+                  </button>
 
                   <button
                     onClick={() => { setMobileOpen(false); navigate("/content-editor"); }}

@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { deleteUser } from "firebase/auth";
+import { deleteUser, updateProfile } from "firebase/auth";
 import { AuthContext } from "../auth/AuthContext";
 import { auth } from "../auth/firebase";
 import { LanguageContext } from "../i18n/LanguageContext";
@@ -12,7 +12,7 @@ import { NotificationService } from "../services/NotificationService";
 import { ProfileService } from "../services/ProfileService";
 import { StorageService } from "../services/StorageService";
 import ProfileSwitcher from "../components/ProfileSwitcher";
-import AvatarPicker from "../components/AvatarPicker";
+
 import {
   ageToQuizRoute,
   adultObjectiveRoutes,
@@ -34,6 +34,14 @@ function getObjectiveRoutes(ageKey) {
   if (ageKey === "Age 11–12" || ageKey === "Age 11-12") return age11_12ObjectiveRoutes;
   return null;
 }
+
+// Matches OnboardingPage teacher step (gradeRange keys: elem, middle, high, all)
+const TEACHER_GRADE_OPTIONS = [
+  { key: "elem", icon: "📗", color: "from-emerald-400 to-teal-500" },
+  { key: "middle", icon: "📘", color: "from-blue-400 to-indigo-500" },
+  { key: "high", icon: "📕", color: "from-red-400 to-rose-500" },
+  { key: "all", icon: "📚", color: "from-purple-400 to-violet-500" },
+];
 
 const AGE_OPTIONS = [
   { key: "Age 2-3", icon: "👶" },
@@ -95,6 +103,13 @@ const T = {
     quizSoundDesc: "Σωστό/λάθος ήχοι στα quiz",
     notifLabel: "Ειδοποιήσεις",
     notifDesc: "Υπενθυμίσεις σερί & αποστολών",
+    teacherSettingsTitle: "Ρυθμίσεις δασκάλου",
+    schoolLabel: "Σχολείο",
+    gradeRangeLabel: "Βαθμίδα μαθητών",
+    teacherElem: "Δημοτικό",
+    teacherMiddle: "Γυμνάσιο",
+    teacherHigh: "Λύκειο",
+    teacherAll: "Όλες οι βαθμίδες",
   },
   en: {
     title: "Profile & Settings",
@@ -133,13 +148,138 @@ const T = {
     quizSoundDesc: "Correct/wrong sounds in quizzes",
     notifLabel: "Notifications",
     notifDesc: "Streak & mission reminders",
+    teacherSettingsTitle: "Teacher settings",
+    schoolLabel: "School",
+    gradeRangeLabel: "Student grade level",
+    teacherElem: "Elementary",
+    teacherMiddle: "Middle school",
+    teacherHigh: "High school",
+    teacherAll: "All levels",
   },
+};
+
+const teacherGradeLabel = (optKey, tObj) => {
+  const map = { elem: tObj.teacherElem, middle: tObj.teacherMiddle, high: tObj.teacherHigh, all: tObj.teacherAll };
+  return map[optKey] || optKey;
 };
 
 async function hashPin(pin) {
   const encoded = new TextEncoder().encode(pin + "edu-salt-2026");
   const hash = await crypto.subtle.digest("SHA-256", encoded);
   return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
+const EMOJI_AVATARS = ["🦊", "🐼", "🦁", "🐸", "🐶", "🐱", "🐰", "🦄", "🐻", "🐧", "🦋", "🐝"];
+
+function resizeImageFile(file, maxSize = 128) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = maxSize;
+        canvas.height = maxSize;
+        const ctx = canvas.getContext("2d");
+        const minDim = Math.min(img.width, img.height);
+        const sx = (img.width - minDim) / 2;
+        const sy = (img.height - minDim) / 2;
+        ctx.drawImage(img, sx, sy, minDim, minDim, 0, 0, maxSize, maxSize);
+        resolve(canvas.toDataURL("image/jpeg", 0.8));
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function InlineAvatarPicker({ selectedAvatar, avatarUrl, lang, onSelectEmoji, onPhotoUpload, onClose }) {
+  const isEl = lang === "el";
+  const [picked, setPicked] = React.useState(selectedAvatar || "");
+  const [photoPreview, setPhotoPreview] = React.useState(null);
+  const [uploading, setUploading] = React.useState(false);
+  const fileRef = React.useRef(null);
+
+  const handleFile = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file || !file.type.startsWith("image/")) return;
+    setUploading(true);
+    try {
+      const dataUrl = await resizeImageFile(file, 128);
+      setPhotoPreview(dataUrl);
+      setPicked("");
+    } catch { /* ignore */ } finally { setUploading(false); }
+  };
+
+  return (
+    <>
+      <h2 className="text-xl font-bold text-slate-800 dark:text-white text-center mb-5">
+        {isEl ? "Επίλεξε Avatar" : "Choose Avatar"}
+      </h2>
+
+      <div className="mb-4">
+        <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
+        <button
+          type="button"
+          onClick={() => fileRef.current?.click()}
+          disabled={uploading}
+          className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-600 hover:border-purple-400 transition-colors"
+        >
+          {photoPreview ? (
+            <img src={photoPreview} alt="preview" className="w-12 h-12 rounded-xl object-cover" />
+          ) : avatarUrl ? (
+            <img src={avatarUrl} alt="current" className="w-12 h-12 rounded-xl object-cover opacity-60" />
+          ) : (
+            <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-2xl">📷</div>
+          )}
+          <div className="text-left">
+            <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">{isEl ? "Ανέβασε φωτογραφία" : "Upload photo"}</p>
+            <p className="text-xs text-slate-400">JPG, PNG</p>
+          </div>
+        </button>
+      </div>
+
+      <div className="flex items-center gap-3 mb-4">
+        <div className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
+        <span className="text-xs font-semibold text-slate-400 uppercase">{isEl ? "ή" : "or"}</span>
+        <div className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
+      </div>
+
+      <div className="grid grid-cols-4 gap-3 mb-6">
+        {EMOJI_AVATARS.map((emoji) => (
+          <button
+            key={emoji}
+            type="button"
+            onClick={() => { setPicked(emoji); setPhotoPreview(null); }}
+            className={`w-16 h-16 rounded-2xl text-3xl flex items-center justify-center transition-all ${
+              picked === emoji && !photoPreview
+                ? "bg-purple-100 dark:bg-purple-900/50 border-2 border-purple-500 scale-110 shadow-lg"
+                : "bg-slate-100 dark:bg-slate-700 border-2 border-transparent hover:border-purple-300 hover:scale-105"
+            }`}
+          >
+            {emoji}
+          </button>
+        ))}
+      </div>
+
+      <div className="flex gap-3">
+        <button type="button" onClick={onClose} className="flex-1 px-4 py-2.5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold hover:bg-slate-300 transition-colors">
+          {isEl ? "Κλείσιμο" : "Close"}
+        </button>
+        {photoPreview ? (
+          <button type="button" onClick={() => onPhotoUpload(photoPreview)} className="flex-1 px-4 py-2.5 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold hover:scale-105 transition-transform shadow-lg">
+            {isEl ? "Επιλογή" : "Select"}
+          </button>
+        ) : (
+          <button type="button" onClick={() => { if (picked) onSelectEmoji(picked); }} disabled={!picked} className="flex-1 px-4 py-2.5 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold hover:scale-105 transition-transform shadow-lg disabled:opacity-50 disabled:hover:scale-100">
+            {isEl ? "Επιλογή" : "Select"}
+          </button>
+        )}
+      </div>
+    </>
+  );
 }
 
 export default function ProfilePage() {
@@ -152,7 +292,8 @@ export default function ProfilePage() {
   const { isPremium, tier, unsubscribe } = useSubscription();
 
   const isParent = userProfile?.role === "parent";
-  const activeChild = ProfileService.getActive();
+  const isTeacher = userProfile?.role === "teacher";
+  const activeChild = isTeacher ? null : ProfileService.getActive();
   const isChildView = !!activeChild;
 
   const [parentUnlocked, setParentUnlocked] = useState(false);
@@ -175,6 +316,9 @@ export default function ProfilePage() {
   const [name, setName] = useState(userProfile?.name || user?.displayName || "");
   const [age, setAge] = useState(userProfile?.age || guest?.age || "");
   const [objective, setObjective] = useState(userProfile?.objective || guest?.objective || "");
+  const [schoolName, setSchoolName] = useState(userProfile?.schoolName || "");
+  const [gradeRange, setGradeRange] = useState(userProfile?.gradeRange || "");
+  const [teacherSettingsSaved, setTeacherSettingsSaved] = useState(false);
   const [saved, setSaved] = useState(false);
   const [resetSent, setResetSent] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -188,6 +332,13 @@ export default function ProfilePage() {
   const [notifEnabled, setNotifEnabled] = useState(() => NotificationService.isEnabled());
 
   useEffect(() => {
+    if (isTeacher) {
+      setSchoolName(userProfile?.schoolName || "");
+      setGradeRange(userProfile?.gradeRange || "");
+    }
+  }, [isTeacher, userProfile?.schoolName, userProfile?.gradeRange]);
+
+  useEffect(() => {
     if (tab === "sounds") {
       setVoiceEnabled(VoiceService.isEnabled());
       setVoiceRate(VoiceService.getRate());
@@ -198,7 +349,7 @@ export default function ProfilePage() {
 
   const displayEmail = user?.email || "";
   const isGoogle = user?.providerData?.[0]?.providerId === "google.com";
-  const avatarUrl = user?.photoURL || null;
+  const avatarUrl = userProfile?.customPhoto || user?.photoURL || null;
   const initials = (name || displayEmail?.split("@")[0] || "?").slice(0, 2).toUpperCase();
   const createdAt = user?.metadata?.creationTime
     ? new Date(user.metadata.creationTime).toLocaleDateString(lang === "el" ? "el-GR" : "en-US", { year: "numeric", month: "long" })
@@ -226,6 +377,12 @@ export default function ProfilePage() {
 
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
+  };
+
+  const handleTeacherSettingsSave = () => {
+    saveUserProfile({ ...(userProfile || {}), schoolName: schoolName.trim(), gradeRange });
+    setTeacherSettingsSaved(true);
+    setTimeout(() => setTeacherSettingsSaved(false), 2000);
   };
 
   const handleResetPassword = async () => {
@@ -377,29 +534,34 @@ export default function ProfilePage() {
         )}
 
         {/* Header card */}
-        <div className="bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-600 rounded-3xl p-8 text-white mb-6 relative overflow-hidden">
-          <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/5 rounded-full" />
-          <div className="absolute -left-6 -bottom-6 w-28 h-28 bg-white/5 rounded-full" />
+        <div className="bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-600 rounded-3xl p-8 text-white mb-6 relative overflow-visible">
+          <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/5 rounded-full pointer-events-none" />
+          <div className="absolute -left-6 -bottom-6 w-28 h-28 bg-white/5 rounded-full pointer-events-none" />
 
           <div className="relative flex items-center gap-5">
-            <div className="relative group">
-              {selectedAvatar ? (
-                <div className="w-20 h-20 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center text-4xl border-4 border-white/30 shadow-lg">
-                  {selectedAvatar}
-                </div>
-              ) : avatarUrl ? (
-                <img src={avatarUrl} alt={`${name || "User"} avatar`} loading="lazy" className="w-20 h-20 rounded-2xl border-4 border-white/30 object-cover shadow-lg" />
-              ) : (
-                <div className="w-20 h-20 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center text-3xl font-bold border-4 border-white/30 shadow-lg">
-                  {initials}
-                </div>
-              )}
-              <button
+            <div className="flex flex-col items-center gap-2">
+              <div
                 onClick={() => setShowAvatarPicker(true)}
-                className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-white text-purple-600 flex items-center justify-center text-sm shadow-lg hover:scale-110 transition-transform"
-                title={lang === "el" ? "Αλλαγή avatar" : "Change avatar"}
+                className="w-20 h-20 rounded-2xl border-4 border-white/30 shadow-lg overflow-hidden flex items-center justify-center cursor-pointer hover:scale-105 transition-transform"
               >
-                ✏️
+                {selectedAvatar ? (
+                  <div className="w-full h-full bg-white/20 backdrop-blur flex items-center justify-center text-4xl">
+                    {selectedAvatar}
+                  </div>
+                ) : avatarUrl ? (
+                  <img src={avatarUrl} alt={`${name || "User"} avatar`} loading="lazy" className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full bg-white/20 backdrop-blur flex items-center justify-center text-3xl font-bold">
+                    {initials}
+                  </div>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowAvatarPicker(p => !p)}
+                className="px-2.5 py-1 rounded-full bg-white/20 hover:bg-white/30 text-white text-xs font-medium transition-colors flex items-center gap-1"
+              >
+                ✏️ {lang === "el" ? "Αλλαγή" : "Edit"}
               </button>
             </div>
             <div>
@@ -415,6 +577,38 @@ export default function ProfilePage() {
             </div>
           </div>
         </div>
+
+        {showAvatarPicker && (
+          <div
+            className="fixed inset-0 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fadeIn"
+            style={{ zIndex: 99999 }}
+            onClick={() => setShowAvatarPicker(false)}
+          >
+            <div
+              className="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl max-w-sm w-full p-6"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <InlineAvatarPicker
+                selectedAvatar={selectedAvatar}
+                avatarUrl={avatarUrl}
+                lang={lang}
+                onSelectEmoji={(emoji) => {
+                  setSelectedAvatar(emoji);
+                  saveUserProfile({ ...(userProfile || {}), name: name.trim(), age, objective, avatar: emoji, customPhoto: null });
+                  if (user) updateProfile(user, { photoURL: "" }).catch(() => {});
+                  setShowAvatarPicker(false);
+                }}
+                onPhotoUpload={(dataUrl) => {
+                  setSelectedAvatar(null);
+                  saveUserProfile({ ...(userProfile || {}), name: name.trim(), age, objective, avatar: null, customPhoto: dataUrl });
+                  if (user) updateProfile(user, { photoURL: dataUrl }).catch(() => {});
+                  setShowAvatarPicker(false);
+                }}
+                onClose={() => setShowAvatarPicker(false)}
+              />
+            </div>
+          </div>
+        )}
 
         {/* Tabs */}
         <div
@@ -541,6 +735,78 @@ export default function ProfilePage() {
           </div>
         )}
 
+        {/* Teacher: school + grade range */}
+        {tab === "profile" && user && isTeacher && (
+          <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-xl p-6 sm:p-8 border border-slate-100 dark:border-slate-700 mt-6 space-y-6">
+            <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-1 flex items-center gap-2">
+              <span>🏫</span>
+              {l.teacherSettingsTitle}
+            </h3>
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                {l.schoolLabel}
+              </label>
+              <input
+                type="text"
+                value={schoolName}
+                onChange={(e) => setSchoolName(e.target.value)}
+                className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 dark:border-slate-600 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 dark:focus:ring-purple-900/50 outline-none transition-all text-slate-800 dark:text-slate-100 bg-white dark:bg-slate-700"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                {l.gradeRangeLabel}
+              </label>
+              <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                {TEACHER_GRADE_OPTIONS.map((g) => (
+                  <button
+                    key={g.key}
+                    type="button"
+                    onClick={() => setGradeRange(g.key)}
+                    className={`relative rounded-xl p-3 border-2 text-left transition-all ${
+                      gradeRange === g.key
+                        ? "border-purple-500 dark:border-purple-400 bg-purple-50 dark:bg-purple-900/30 shadow-md"
+                        : "border-slate-200 dark:border-slate-600 hover:border-purple-300 dark:hover:border-purple-500 hover:bg-purple-50/50 dark:hover:bg-purple-900/20"
+                    }`}
+                  >
+                    <div
+                      className={`w-9 h-9 rounded-lg bg-gradient-to-br ${g.color} flex items-center justify-center text-base mb-1.5 shadow-sm`}
+                    >
+                      {g.icon}
+                    </div>
+                    <span className="text-xs font-semibold text-slate-700 dark:text-slate-200">
+                      {teacherGradeLabel(g.key, l)}
+                    </span>
+                    {gradeRange === g.key && (
+                      <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-purple-500 flex items-center justify-center">
+                        <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={handleTeacherSettingsSave}
+              className="w-full py-3 rounded-xl font-bold text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-lg shadow-purple-200 dark:shadow-purple-900/30 transition-all flex items-center justify-center gap-2 active:scale-95"
+            >
+              {teacherSettingsSaved ? (
+                <>
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                  {l.saved}
+                </>
+              ) : (
+                l.save
+              )}
+            </button>
+          </div>
+        )}
+
         {/* Parent tools section */}
         {tab === "profile" && user && isParent && (
           <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-slate-100 dark:border-slate-700 mt-6 p-6 sm:p-8">
@@ -598,8 +864,8 @@ export default function ProfilePage() {
           <ChildProfilesManager lang={lang} isEl={isEl} />
         )}
 
-        {/* Child profiles section (for non-parent logged-in users) */}
-        {tab === "profile" && user && userProfile?.role !== "parent" && (
+        {/* Child profiles section (for non-parent, non-teacher logged-in users) */}
+        {tab === "profile" && user && userProfile?.role !== "parent" && !isTeacher && (
           <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-xl p-6 sm:p-8 border border-slate-100 dark:border-slate-700 mt-6">
             <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-2 flex items-center gap-2">
               <span>👨‍👩‍👧‍👦</span>
@@ -1460,17 +1726,6 @@ function ChildProfilesManager({ lang, isEl }) {
         )}
       </div>
 
-      {showAvatarPicker && (
-        <AvatarPicker
-          currentAvatar={selectedAvatar}
-          onSelect={(emoji) => {
-            setSelectedAvatar(emoji);
-            saveUserProfile({ ...(userProfile || {}), name: name.trim(), age, objective, avatar: emoji });
-            setShowAvatarPicker(false);
-          }}
-          onClose={() => setShowAvatarPicker(false)}
-        />
-      )}
     </div>
   );
 }
