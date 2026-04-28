@@ -1,9 +1,8 @@
-import React, { useState, useContext, useEffect, useCallback, useRef } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import { LanguageContext } from "../i18n/LanguageContext";
 import { AuthContext } from "../auth/AuthContext";
-import { db, storage } from "../auth/firebase";
+import { db } from "../auth/firebase";
 import { collection, doc, setDoc, getDocs, deleteDoc, query, where } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const LESSONS_KEY = "geo:teacherLessons";
 
@@ -188,13 +187,12 @@ const T = {
     sectionTitle: "Τίτλος ενότητας",
     sectionContent: "Περιεχόμενο",
     sectionImage: "Εικόνα (URL, προαιρετικά)",
-    uploadFile: "Ανέβασε αρχείο",
-    uploadingFile: "Ανέβασμα...",
+    addLink: "Προσθήκη συνδέσμου",
+    linkName: "Τίτλος (π.χ. Σημειώσεις PDF)",
+    linkUrl: "Σύνδεσμος (URL)",
+    linkHint: "Google Drive, Dropbox, YouTube κ.ά.",
     attachments: "Συνημμένα",
     removeAttachment: "Αφαίρεση",
-    uploadHint: "PDF, εικόνα ή έγγραφο (έως 10MB)",
-    uploadError: "Σφάλμα κατά το ανέβασμα. Δοκίμασε ξανά.",
-    loginRequired: "Χρειάζεται σύνδεση λογαριασμού για upload.",
     addSection: "Προσθήκη ενότητας",
     removeSection: "Αφαίρεση",
     linkedQuiz: "Σύνδεση με Quiz",
@@ -234,13 +232,12 @@ const T = {
     sectionTitle: "Section title",
     sectionContent: "Content",
     sectionImage: "Image (URL, optional)",
-    uploadFile: "Upload file",
-    uploadingFile: "Uploading...",
+    addLink: "Add link",
+    linkName: "Title (e.g. Notes PDF)",
+    linkUrl: "Link (URL)",
+    linkHint: "Google Drive, Dropbox, YouTube etc.",
     attachments: "Attachments",
     removeAttachment: "Remove",
-    uploadHint: "PDF, image, or document (up to 10MB)",
-    uploadError: "Upload failed. Please try again.",
-    loginRequired: "Sign in required to upload files.",
     addSection: "Add section",
     removeSection: "Remove",
     linkedQuiz: "Link to Quiz",
@@ -282,24 +279,22 @@ function emptyLesson() {
   };
 }
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-const ACCEPTED_TYPES = "image/*,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt";
-
-function getFileIcon(name) {
-  const ext = (name || "").split(".").pop().toLowerCase();
-  if (["jpg", "jpeg", "png", "gif", "webp", "svg"].includes(ext)) return "🖼️";
-  if (ext === "pdf") return "📄";
-  if (["doc", "docx"].includes(ext)) return "📝";
-  if (["ppt", "pptx"].includes(ext)) return "📊";
-  if (["xls", "xlsx"].includes(ext)) return "📈";
-  return "📎";
+function getLinkIcon(url) {
+  const u = (url || "").toLowerCase();
+  if (u.includes("drive.google")) return "📁";
+  if (u.includes("dropbox")) return "📦";
+  if (u.includes("youtube") || u.includes("youtu.be")) return "🎬";
+  if (u.match(/\.(pdf)(\?|$)/)) return "📄";
+  if (u.match(/\.(jpg|jpeg|png|gif|webp|svg)(\?|$)/)) return "🖼️";
+  if (u.match(/\.(doc|docx)(\?|$)/)) return "📝";
+  if (u.match(/\.(ppt|pptx)(\?|$)/)) return "📊";
+  return "🔗";
 }
 
 export default function TeacherLessons({ quizzes = [], classrooms = [], lang }) {
   const isEl = lang === "el";
   const l = T[isEl ? "el" : "en"];
   const { user } = useContext(AuthContext);
-  const fileInputRefs = useRef({});
 
   const [lessons, setLessons] = useState(() => getLocalLessons());
   const [editing, setEditing] = useState(null);
@@ -308,52 +303,20 @@ export default function TeacherLessons({ quizzes = [], classrooms = [], lang }) 
   const [success, setSuccess] = useState(null);
   const [assignPopup, setAssignPopup] = useState(null);
   const [previewLesson, setPreviewLesson] = useState(null);
-  const [uploading, setUploading] = useState({});
 
-  const handleFileUpload = useCallback(async (sectionIdx, file) => {
-    if (!user || !storage) {
-      setError(l.loginRequired);
-      return;
-    }
-    if (file.size > MAX_FILE_SIZE) {
-      setError(isEl ? "Το αρχείο είναι πολύ μεγάλο (max 10MB)" : "File too large (max 10MB)");
-      return;
-    }
-    const uploadKey = `${sectionIdx}-${Date.now()}`;
-    setUploading(prev => ({ ...prev, [sectionIdx]: true }));
-    try {
-      const ext = file.name.split(".").pop();
-      const path = `lessons/${user.uid}/${editing.id}/${sectionIdx}_${Date.now()}.${ext}`;
-      const storageRef = ref(storage, path);
-      await uploadBytes(storageRef, file);
-      const url = await getDownloadURL(storageRef);
-      const attachment = { name: file.name, url, type: file.type, size: file.size };
-
-      const isImage = file.type.startsWith("image/");
-      const s = [...editing.sections];
-      const sec = { ...s[sectionIdx] };
-      if (isImage && !sec.imageUrl) {
-        sec.imageUrl = url;
-      }
-      sec.attachments = [...(sec.attachments || []), attachment];
-      s[sectionIdx] = sec;
-      setEditing({ ...editing, sections: s });
-    } catch (err) {
-      if (import.meta.env.DEV) console.error("[Upload]", err);
-      setError(l.uploadError);
-    } finally {
-      setUploading(prev => { const n = { ...prev }; delete n[sectionIdx]; return n; });
-    }
-  }, [user, editing, l, isEl]);
+  const addAttachmentLink = useCallback((sectionIdx, name, url) => {
+    if (!url.trim()) return;
+    const s = [...editing.sections];
+    const sec = { ...s[sectionIdx] };
+    sec.attachments = [...(sec.attachments || []), { name: name.trim() || url, url: url.trim() }];
+    s[sectionIdx] = sec;
+    setEditing({ ...editing, sections: s });
+  }, [editing]);
 
   const removeAttachment = useCallback((sectionIdx, attachIdx) => {
     const s = [...editing.sections];
     const sec = { ...s[sectionIdx] };
-    const removed = sec.attachments[attachIdx];
     sec.attachments = sec.attachments.filter((_, i) => i !== attachIdx);
-    if (sec.imageUrl === removed?.url) {
-      sec.imageUrl = "";
-    }
     s[sectionIdx] = sec;
     setEditing({ ...editing, sections: s });
   }, [editing]);
@@ -513,28 +476,29 @@ export default function TeacherLessons({ quizzes = [], classrooms = [], lang }) 
                   <textarea value={sec.content} onChange={e => { const s = [...editing.sections]; s[i] = { ...s[i], content: e.target.value }; setEditing({ ...editing, sections: s }); }} rows={5} className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 outline-none text-sm bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 resize-y focus:border-purple-400" placeholder={l.sectionContent} />
                   <input type="url" value={sec.imageUrl || ""} onChange={e => { const s = [...editing.sections]; s[i] = { ...s[i], imageUrl: e.target.value }; setEditing({ ...editing, sections: s }); }} className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 outline-none text-sm bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:border-purple-400" placeholder={l.sectionImage} />
 
-                  {/* File upload */}
+                  {/* Add link */}
                   <div className="pt-1">
-                    <input
-                      type="file"
-                      ref={el => { fileInputRefs.current[i] = el; }}
-                      className="hidden"
-                      accept={ACCEPTED_TYPES}
-                      onChange={e => { if (e.target.files[0]) handleFileUpload(i, e.target.files[0]); e.target.value = ""; }}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => fileInputRefs.current[i]?.click()}
-                      disabled={uploading[i]}
-                      className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-dashed border-indigo-300 dark:border-indigo-700 text-indigo-600 dark:text-indigo-400 text-xs font-semibold hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors disabled:opacity-50"
-                    >
-                      {uploading[i] ? (
-                        <><span className="animate-spin inline-block w-3.5 h-3.5 border-2 border-indigo-400 border-t-transparent rounded-full" /> {l.uploadingFile}</>
-                      ) : (
-                        <><span>📎</span> {l.uploadFile}</>
-                      )}
-                    </button>
-                    <span className="text-[10px] text-slate-400 ml-2">{l.uploadHint}</span>
+                    <details className="group">
+                      <summary className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-dashed border-indigo-300 dark:border-indigo-700 text-indigo-600 dark:text-indigo-400 text-xs font-semibold hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors cursor-pointer list-none">
+                        <span>🔗</span> {l.addLink}
+                        <span className="text-[10px] text-slate-400 font-normal ml-1">({l.linkHint})</span>
+                      </summary>
+                      <div className="mt-2 flex flex-col sm:flex-row gap-2">
+                        <input type="text" id={`att-name-${i}`} className="flex-1 px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 outline-none text-xs bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:border-indigo-400" placeholder={l.linkName} />
+                        <input type="url" id={`att-url-${i}`} className="flex-[2] px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 outline-none text-xs bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:border-indigo-400" placeholder={l.linkUrl} />
+                        <button type="button" onClick={() => {
+                          const nameEl = document.getElementById(`att-name-${i}`);
+                          const urlEl = document.getElementById(`att-url-${i}`);
+                          if (urlEl?.value?.trim()) {
+                            addAttachmentLink(i, nameEl?.value || "", urlEl.value);
+                            if (nameEl) nameEl.value = "";
+                            urlEl.value = "";
+                          }
+                        }} className="px-4 py-2 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 text-xs font-bold hover:bg-indigo-200 dark:hover:bg-indigo-900/50 transition-colors whitespace-nowrap">
+                          + {isEl ? "Προσθήκη" : "Add"}
+                        </button>
+                      </div>
+                    </details>
                   </div>
 
                   {/* Attachments list */}
@@ -543,9 +507,8 @@ export default function TeacherLessons({ quizzes = [], classrooms = [], lang }) 
                       <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">{l.attachments}:</span>
                       {sec.attachments.map((att, ai) => (
                         <div key={ai} className="flex items-center gap-2 bg-white dark:bg-slate-700 rounded-lg px-3 py-1.5 border border-slate-200 dark:border-slate-600 text-xs">
-                          <span>{getFileIcon(att.name)}</span>
+                          <span>{getLinkIcon(att.url)}</span>
                           <a href={att.url} target="_blank" rel="noopener noreferrer" className="flex-1 truncate text-indigo-600 dark:text-indigo-400 hover:underline font-medium">{att.name}</a>
-                          <span className="text-slate-400">{(att.size / 1024).toFixed(0)}KB</span>
                           <button onClick={() => removeAttachment(i, ai)} className="text-red-400 hover:text-red-600 font-bold" title={l.removeAttachment}>×</button>
                         </div>
                       ))}
@@ -693,9 +656,8 @@ export default function TeacherLessons({ quizzes = [], classrooms = [], lang }) 
                     <div className="mt-3 space-y-1.5">
                       {sec.attachments.map((att, ai) => (
                         <a key={ai} href={att.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-slate-50 dark:bg-slate-700/50 rounded-lg px-3 py-2 border border-slate-200 dark:border-slate-600 text-xs text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors">
-                          <span>{getFileIcon(att.name)}</span>
+                          <span>{getLinkIcon(att.url)}</span>
                           <span className="font-medium truncate">{att.name}</span>
-                          <span className="text-slate-400 ml-auto">{(att.size / 1024).toFixed(0)}KB</span>
                         </a>
                       ))}
                     </div>

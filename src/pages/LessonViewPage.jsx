@@ -222,17 +222,12 @@ export default function LessonViewPage() {
               <div className="mt-5 space-y-2">
                 <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">{isEl ? "Συνημμένα" : "Attachments"}</h4>
                 {currentSection.attachments.map((att, ai) => {
-                  const ext = (att.name || "").split(".").pop().toLowerCase();
-                  const isImg = ["jpg", "jpeg", "png", "gif", "webp", "svg"].includes(ext);
-                  const isPdf = ext === "pdf";
-                  const icon = isImg ? "🖼️" : isPdf ? "📄" : ["doc", "docx"].includes(ext) ? "📝" : ["ppt", "pptx"].includes(ext) ? "📊" : "📎";
+                  const u = (att.url || "").toLowerCase();
+                  const icon = u.includes("drive.google") ? "📁" : u.includes("dropbox") ? "📦" : (u.includes("youtube") || u.includes("youtu.be")) ? "🎬" : u.match(/\.pdf(\?|$)/) ? "📄" : "🔗";
                   return (
                     <a key={ai} href={att.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-slate-50 dark:bg-slate-700/50 rounded-xl px-4 py-3 border border-slate-200 dark:border-slate-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors group">
                       <span className="text-xl">{icon}</span>
-                      <div className="flex-1 min-w-0">
-                        <span className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 group-hover:underline truncate block">{att.name}</span>
-                        <span className="text-[10px] text-slate-400">{att.size ? `${(att.size / 1024).toFixed(0)}KB` : ""}</span>
-                      </div>
+                      <span className="flex-1 min-w-0 text-sm font-semibold text-indigo-600 dark:text-indigo-400 group-hover:underline truncate">{att.name}</span>
                       <span className="text-xs text-slate-400">{isEl ? "Άνοιγμα ↗" : "Open ↗"}</span>
                     </a>
                   );

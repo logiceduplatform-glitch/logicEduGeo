@@ -50,6 +50,10 @@ const T = {
     lessons: "Μαθήματα τάξης",
     noLessons: "Δεν υπάρχουν μαθήματα ακόμα",
     readLesson: "Διάβασε",
+    homework: "Εργασίες",
+    noHomework: "Δεν υπάρχουν εργασίες ακόμα",
+    dueDate: "Προθεσμία",
+    expired: "Έληξε",
     start: "Ξεκίνα",
     notFound: "Δεν βρέθηκε τάξη με αυτόν τον κωδικό",
     alreadyEnrolled: "Είσαι ήδη εγγεγραμμένος!",
@@ -88,6 +92,10 @@ const T = {
     lessons: "Classroom lessons",
     noLessons: "No lessons yet",
     readLesson: "Read",
+    homework: "Homework",
+    noHomework: "No homework yet",
+    dueDate: "Due date",
+    expired: "Expired",
     start: "Start",
     notFound: "No classroom found with this code",
     alreadyEnrolled: "You're already enrolled!",
@@ -150,6 +158,7 @@ export default function MyClassroomPage() {
   const [enrolling, setEnrolling] = useState(false);
   const [quizzes, setQuizzes] = useState([]);
   const [lessons, setLessons] = useState([]);
+  const [homework, setHomework] = useState([]);
   const [announcements, setAnnouncements] = useState([]);
 
   // Quiz playing state
@@ -197,6 +206,17 @@ export default function MyClassroomPage() {
         setLessons(loadedL);
       } catch {
         setLessons([]);
+      }
+
+      try {
+        const hwQ = query(collection(db, "classroomHomework"), where("classroomCode", "==", upper));
+        const hwSnap = await getDocs(hwQ);
+        const loadedHw = [];
+        hwSnap.forEach((d) => loadedHw.push({ id: d.id, ...d.data() }));
+        loadedHw.sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || ""));
+        setHomework(loadedHw);
+      } catch {
+        setHomework([]);
       }
 
       const lastSeenKey = `geo:classroomLastSeen:${upper}`;
@@ -673,6 +693,34 @@ export default function MyClassroomPage() {
                         </button>
                       </div>
                     ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Homework */}
+              {homework.length > 0 && (
+                <div>
+                  <h3 className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <span>📋</span> {l.homework}
+                  </h3>
+                  <div className="grid gap-3">
+                    {homework.map((hw) => {
+                      const isExpired = hw.deadline && new Date(hw.deadline) < new Date();
+                      return (
+                        <div key={hw.id} className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-700 shadow-sm">
+                          <div className="flex items-center gap-2 flex-wrap mb-1">
+                            <span className="text-lg">📋</span>
+                            <h4 className="text-base font-bold text-slate-800 dark:text-slate-100">{hw.title}</h4>
+                            {isExpired && <span className="text-[10px] px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 font-bold">{l.expired}</span>}
+                          </div>
+                          {hw.description && <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">{hw.description}</p>}
+                          <div className="flex items-center gap-4 text-xs text-slate-400">
+                            {hw.deadline && <span>📅 {l.dueDate}: {new Date(hw.deadline).toLocaleDateString(isEl ? "el-GR" : "en-US", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}</span>}
+                            <span>👤 {hw.teacherName}</span>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               )}

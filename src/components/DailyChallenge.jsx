@@ -132,15 +132,23 @@ export default function DailyChallenge() {
           </div>
         )}
 
-        <button
-          onClick={() => navigate(challenge.route)}
-          disabled={completed}
-          className={`px-6 py-3 rounded-2xl font-bold text-sm transition-all ${completed ? "bg-white/20 text-white/60 cursor-default" : "bg-white text-purple-700 hover:bg-white/90 hover:scale-[1.02] shadow-lg"}`}
-        >
-          {completed
-            ? (isEl ? "✅ Ολοκληρώθηκε!" : "✅ Completed!")
-            : (isEl ? "Ξεκίνα →" : "Start →")}
-        </button>
+        <div className="flex gap-3 flex-wrap">
+          <button
+            onClick={() => navigate(challenge.route)}
+            disabled={completed}
+            className={`px-6 py-3 rounded-2xl font-bold text-sm transition-all ${completed ? "bg-white/20 text-white/60 cursor-default" : "bg-white text-purple-700 hover:bg-white/90 hover:scale-[1.02] shadow-lg"}`}
+          >
+            {completed
+              ? (isEl ? "✅ Ολοκληρώθηκε!" : "✅ Completed!")
+              : (isEl ? "Ξεκίνα →" : "Start →")}
+          </button>
+          <button
+            onClick={() => navigate("/daily")}
+            className="px-6 py-3 rounded-2xl font-bold text-sm bg-amber-400/90 text-amber-900 hover:bg-amber-300 hover:scale-[1.02] shadow-lg transition-all"
+          >
+            🎯 {isEl ? "Ημερήσια Πρόκληση" : "Daily Challenge"}
+          </button>
+        </div>
       </div>
     </div>
   );

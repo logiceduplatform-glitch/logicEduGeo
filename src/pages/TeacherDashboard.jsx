@@ -9,6 +9,7 @@ import Navbar from "../components/Navbar";
 import SEO from "../components/SEO";
 import { ProfileService } from "../services/ProfileService";
 import TeacherLessons from "../components/TeacherLessons";
+import TeacherHomework from "../components/TeacherHomework";
 
 const STORAGE_KEY = "geo:teacherQuizzes";
 const DIFFICULTY_OPTIONS = ["easy", "medium", "hard"];
@@ -184,6 +185,8 @@ const T = {
     tabClassroom: "Η Τάξη μου",
     tabResources: "Πόροι",
     tabLessons: "Μαθήματα",
+    tabHomework: "Εργασίες",
+    tabLiveQuiz: "Live Quiz",
     createNew: "Νέο Quiz",
     noQuizzes: "Δεν έχεις δημιουργήσει quiz ακόμα",
     quizTitle: "Τίτλος quiz",
@@ -346,6 +349,8 @@ const T = {
     tabClassroom: "My Classroom",
     tabResources: "Resources",
     tabLessons: "Lessons",
+    tabHomework: "Homework",
+    tabLiveQuiz: "Live Quiz",
     createNew: "New Quiz",
     noQuizzes: "You haven't created any quizzes yet",
     quizTitle: "Quiz title",
@@ -1205,6 +1210,8 @@ export default function TeacherDashboard() {
   const TABS = [
     { key: "quizzes", label: l.tabQuizzes, icon: "📝" },
     { key: "lessons", label: l.tabLessons, icon: "📖" },
+    { key: "homework", label: l.tabHomework, icon: "📋" },
+    { key: "liveQuiz", label: l.tabLiveQuiz, icon: "🎮" },
     { key: "classroom", label: l.tabClassroom, icon: "🏫" },
     { key: "analytics", label: l.tabAnalytics, icon: "📈" },
     { key: "resources", label: l.tabResources, icon: "📚" },
@@ -1558,6 +1565,25 @@ export default function TeacherDashboard() {
           {/* LESSONS TAB */}
           {tab === "lessons" && (
             <TeacherLessons quizzes={quizzes} classrooms={classrooms} lang={lang} />
+          )}
+
+          {/* HOMEWORK TAB */}
+          {tab === "homework" && (
+            <TeacherHomework quizzes={quizzes} classrooms={classrooms} lang={lang} />
+          )}
+
+          {/* LIVE QUIZ TAB */}
+          {tab === "liveQuiz" && (
+            <div className="space-y-4">
+              <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 shadow-sm text-center space-y-4">
+                <span className="text-5xl block">🎮</span>
+                <h3 className="text-xl font-bold text-slate-800 dark:text-white">{l.tabLiveQuiz}</h3>
+                <p className="text-sm text-slate-500 dark:text-slate-400">{isEl ? "Ξεκίνα ένα live quiz session και μοίρασε τον κωδικό στους μαθητές σου!" : "Start a live quiz session and share the code with your students!"}</p>
+                <button onClick={() => navigate("/live-quiz")} className="px-8 py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold shadow-md hover:shadow-lg transition-all text-lg">
+                  🚀 {isEl ? "Ξεκίνα Live Quiz" : "Start Live Quiz"}
+                </button>
+              </div>
+            </div>
           )}
 
           {/* ANALYTICS TAB */}

@@ -10,6 +10,8 @@ import SearchOverlay from "./SearchOverlay";
 import { ProfileService } from "../services/ProfileService";
 import { CoinService } from "../services/CoinService";
 import { SoundService } from "../services/SoundService";
+import AvatarDisplay, { getAvatarData } from "./AvatarDisplay";
+import NotificationBell from "./NotificationBell";
 import {
   ageToQuizRoute,
   adultObjectiveRoutes,
@@ -167,11 +169,19 @@ export default function Navbar() {
   const avatarUrl = activeChild ? null : (userProfile?.customPhoto || user?.photoURL || null);
   const userEmoji = activeChild ? null : (userProfile?.avatar || null);
   const activeChildAvatar = activeChild?.avatar || null;
+  const [customAvatar, setCustomAvatar] = useState(() => getAvatarData());
+  const hasCustomAvatar = customAvatar && customAvatar.face !== "f1" || customAvatar?.hair !== "h1" || customAvatar?.eyes !== "e1";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const onAvatarChanged = () => setCustomAvatar(getAvatarData());
+    window.addEventListener("geo:avatarChanged", onAvatarChanged);
+    return () => window.removeEventListener("geo:avatarChanged", onAvatarChanged);
   }, []);
 
   useEffect(() => {
@@ -212,7 +222,8 @@ export default function Navbar() {
       return [
         { label: isEl ? "Dashboard" : "Dashboard", fullLabel: isEl ? "Πίνακας Δασκάλου" : "Teacher Dashboard", href: "/teacher-dashboard", isRoute: true, icon: "📚" },
         { label: isEl ? "Παιχνίδια" : "Games", fullLabel: isEl ? "Παιχνίδια" : "Games", href: "#categories", icon: "🎮" },
-        { label: isEl ? "Blog" : "Blog", fullLabel: isEl ? "Blog" : "Blog", href: "/blog", isRoute: true, icon: "📝" },
+        { label: isEl ? "Live Quiz" : "Live Quiz", fullLabel: isEl ? "Live Quiz" : "Live Quiz", href: "/live-quiz", isRoute: true, icon: "🎮" },
+        { label: isEl ? "Φύλλα" : "Worksheets", fullLabel: isEl ? "Φύλλα Εργασίας" : "Worksheets", href: "/worksheets", isRoute: true, icon: "🖨️" },
       ];
     }
     if (userRole === "parent" && !activeChild) {
@@ -225,9 +236,10 @@ export default function Navbar() {
     }
     return [
       { label: isEl ? "Παιχνίδια" : "Games", fullLabel: isEl ? "Παιχνίδια" : "Games", href: "#categories", icon: "🎮" },
-      { label: isEl ? "Ρεκόρ" : "Records", fullLabel: isEl ? "Τα Ρεκόρ μου" : "My Records", href: "/my-records", isRoute: true, icon: "🏆" },
+      { label: isEl ? "Πρόκληση" : "Daily", fullLabel: isEl ? "Ημερήσια Πρόκληση" : "Daily Challenge", href: "/daily", isRoute: true, icon: "🎯" },
+      { label: isEl ? "Χάρτης" : "Map", fullLabel: isEl ? "Χάρτης Περιπέτειας" : "Adventure Map", href: "/adventure", isRoute: true, icon: "🗺️" },
+      { label: isEl ? "Φίλοι" : "Challenge", fullLabel: isEl ? "Προκάλεσε Φίλο" : "Challenge Friend", href: "/challenge", isRoute: true, icon: "⚔️" },
       { label: isEl ? "Η Τάξη μου" : "My Class", fullLabel: isEl ? "Η Τάξη μου" : "My Classroom", href: "/my-classroom", isRoute: true, icon: "🏫" },
-      { label: isEl ? "Blog" : "Blog", fullLabel: isEl ? "Blog" : "Blog", href: "/blog", isRoute: true, icon: "📝" },
     ];
   })();
 
@@ -335,6 +347,8 @@ export default function Navbar() {
               {/Mac|iPhone|iPad/.test(navigator.userAgent) ? "⌘K" : "Ctrl+K"}
             </kbd>
           </button>
+          {/* Notification bell */}
+          {isLoggedIn && <NotificationBell />}
           {/* Theme toggle */}
           <button
             onClick={toggleTheme}
@@ -449,6 +463,8 @@ export default function Navbar() {
                   <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-lg border-2 border-indigo-300">
                     {activeChildAvatar}
                   </div>
+                ) : hasCustomAvatar ? (
+                  <AvatarDisplay avatar={customAvatar} size={32} className="border-2 border-purple-300" />
                 ) : userEmoji ? (
                   <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-lg border-2 border-purple-300">
                     {userEmoji}
@@ -547,6 +563,14 @@ export default function Navbar() {
                   >
                     <span>🛍️</span>
                     {isEl ? "Κατάστημα" : "Shop"}
+                  </button>
+
+                  <button
+                    onClick={() => { setProfileOpen(false); navigate("/avatar"); }}
+                    className="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:text-purple-700 dark:hover:text-purple-400 transition-colors flex items-center gap-2"
+                  >
+                    <span>🎭</span>
+                    {isEl ? "Το Avatar μου" : "My Avatar"}
                   </button>
 
                   {userRole === "parent" && user && !activeChild && (
@@ -776,6 +800,8 @@ export default function Navbar() {
                       <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-xl border-2 border-indigo-300">
                         {activeChildAvatar}
                       </div>
+                    ) : hasCustomAvatar ? (
+                      <AvatarDisplay avatar={customAvatar} size={40} className="border-2 border-purple-300" />
                     ) : userEmoji ? (
                       <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-xl border-2 border-purple-300">
                         {userEmoji}

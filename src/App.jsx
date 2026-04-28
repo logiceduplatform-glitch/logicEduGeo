@@ -56,6 +56,12 @@ const BlogPage = React.lazy(() => import("./pages/BlogPage"));
 const ForTeachersPage = React.lazy(() => import("./pages/ForTeachersPage"));
 const ForParentsPage = React.lazy(() => import("./pages/ForParentsPage"));
 const LessonViewPage = React.lazy(() => import("./pages/LessonViewPage"));
+const DailyChallengePage = React.lazy(() => import("./pages/DailyChallengePage"));
+const AdventureMapPage = React.lazy(() => import("./pages/AdventureMapPage"));
+const AvatarBuilderPage = React.lazy(() => import("./pages/AvatarBuilderPage"));
+const LiveQuizPage = React.lazy(() => import("./pages/LiveQuizPage"));
+const ChallengeFriendPage = React.lazy(() => import("./pages/ChallengeFriendPage"));
+const PrintableWorksheetsPage = React.lazy(() => import("./pages/PrintableWorksheetsPage"));
 
 function PlayGate({ children }) {
   const { user, guest, loading, isGuestExpired, userProfile } = React.useContext(AuthContext);
@@ -230,6 +236,12 @@ export default function App() {
                 <Route path="/join/:code" element={<PlayGate><ErrorBoundary><JoinClassroomPage /></ErrorBoundary></PlayGate>} />
                 <Route path="/join" element={<PlayGate><ErrorBoundary><JoinClassroomPage /></ErrorBoundary></PlayGate>} />
                 <Route path="/lesson/:code" element={<ErrorBoundary><LessonViewPage /></ErrorBoundary>} />
+                <Route path="/daily" element={<ErrorBoundary><DailyChallengePage /></ErrorBoundary>} />
+                <Route path="/adventure" element={<ErrorBoundary><AdventureMapPage /></ErrorBoundary>} />
+                <Route path="/avatar" element={<ErrorBoundary><AvatarBuilderPage /></ErrorBoundary>} />
+                <Route path="/live-quiz" element={<ErrorBoundary><LiveQuizPage /></ErrorBoundary>} />
+                <Route path="/challenge" element={<ErrorBoundary><ChallengeFriendPage /></ErrorBoundary>} />
+                <Route path="/worksheets" element={<ErrorBoundary><PrintableWorksheetsPage /></ErrorBoundary>} />
                 <Route path="/my-classroom/:code" element={<PlayGate><ErrorBoundary><MyClassroomPage /></ErrorBoundary></PlayGate>} />
                 <Route path="/my-classroom" element={<PlayGate><ErrorBoundary><MyClassroomPage /></ErrorBoundary></PlayGate>} />
                 <Route path="*" element={<NotFoundPage />} />

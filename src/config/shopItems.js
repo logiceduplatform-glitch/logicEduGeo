@@ -35,10 +35,16 @@ export const SHOP_ITEMS = {
     { id: "pet_turtle", emoji: "🐢", name: { el: "Χελώνα", en: "Turtle" }, price: 15 },
     { id: "pet_fox", emoji: "🦊", name: { el: "Αλεπού", en: "Fox" }, price: 20 },
   ],
+  avatarParts: [
+    { id: "avatar_sparkle", emoji: "✨", name: { el: "Λαμπερό Αξεσουάρ", en: "Sparkle Accessory" }, price: 15, category: "accessory" },
+    { id: "avatar_explorer_hat", emoji: "🪖", name: { el: "Καπέλο Εξερευνητή", en: "Explorer Hat" }, price: 20, category: "hat" },
+    { id: "avatar_cowboy_hat", emoji: "🤠", name: { el: "Καπέλο Καουμπόι", en: "Cowboy Hat" }, price: 20, category: "hat" },
+  ],
 };
 
 export const SHOP_TABS = [
   { id: "avatars", icon: "🎭", label: { el: "Avatars", en: "Avatars" } },
   { id: "themes", icon: "🎨", label: { el: "Θέματα", en: "Themes" } },
   { id: "pets", icon: "🐾", label: { el: "Κατοικίδια", en: "Pets" } },
+  { id: "avatarParts", icon: "🧩", label: { el: "Avatar Parts", en: "Avatar Parts" } },
 ];
