@@ -8,6 +8,7 @@ import { collection, doc, setDoc, getDoc, getDocs, deleteDoc, query, where, orde
 import Navbar from "../components/Navbar";
 import SEO from "../components/SEO";
 import { ProfileService } from "../services/ProfileService";
+import TeacherLessons from "../components/TeacherLessons";
 
 const STORAGE_KEY = "geo:teacherQuizzes";
 const DIFFICULTY_OPTIONS = ["easy", "medium", "hard"];
@@ -182,6 +183,7 @@ const T = {
     tabQuizzes: "Τα Quiz μου",
     tabClassroom: "Η Τάξη μου",
     tabResources: "Πόροι",
+    tabLessons: "Μαθήματα",
     createNew: "Νέο Quiz",
     noQuizzes: "Δεν έχεις δημιουργήσει quiz ακόμα",
     quizTitle: "Τίτλος quiz",
@@ -343,6 +345,7 @@ const T = {
     tabQuizzes: "My Quizzes",
     tabClassroom: "My Classroom",
     tabResources: "Resources",
+    tabLessons: "Lessons",
     createNew: "New Quiz",
     noQuizzes: "You haven't created any quizzes yet",
     quizTitle: "Quiz title",
@@ -1201,6 +1204,7 @@ export default function TeacherDashboard() {
 
   const TABS = [
     { key: "quizzes", label: l.tabQuizzes, icon: "📝" },
+    { key: "lessons", label: l.tabLessons, icon: "📖" },
     { key: "classroom", label: l.tabClassroom, icon: "🏫" },
     { key: "analytics", label: l.tabAnalytics, icon: "📈" },
     { key: "resources", label: l.tabResources, icon: "📚" },
@@ -1549,6 +1553,11 @@ export default function TeacherDashboard() {
                 )}
               </div>
             )
+          )}
+
+          {/* LESSONS TAB */}
+          {tab === "lessons" && (
+            <TeacherLessons quizzes={quizzes} classrooms={classrooms} lang={lang} />
           )}
 
           {/* ANALYTICS TAB */}

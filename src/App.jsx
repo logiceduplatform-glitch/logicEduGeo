@@ -55,6 +55,7 @@ const CurriculumMapPage = React.lazy(() => import("./pages/CurriculumMapPage"));
 const BlogPage = React.lazy(() => import("./pages/BlogPage"));
 const ForTeachersPage = React.lazy(() => import("./pages/ForTeachersPage"));
 const ForParentsPage = React.lazy(() => import("./pages/ForParentsPage"));
+const LessonViewPage = React.lazy(() => import("./pages/LessonViewPage"));
 
 function PlayGate({ children }) {
   const { user, guest, loading, isGuestExpired, userProfile } = React.useContext(AuthContext);
@@ -228,6 +229,7 @@ export default function App() {
                 <Route path="/teacher-dashboard" element={<PlayGate><ErrorBoundary><TeacherDashboard /></ErrorBoundary></PlayGate>} />
                 <Route path="/join/:code" element={<PlayGate><ErrorBoundary><JoinClassroomPage /></ErrorBoundary></PlayGate>} />
                 <Route path="/join" element={<PlayGate><ErrorBoundary><JoinClassroomPage /></ErrorBoundary></PlayGate>} />
+                <Route path="/lesson/:code" element={<ErrorBoundary><LessonViewPage /></ErrorBoundary>} />
                 <Route path="/my-classroom/:code" element={<PlayGate><ErrorBoundary><MyClassroomPage /></ErrorBoundary></PlayGate>} />
                 <Route path="/my-classroom" element={<PlayGate><ErrorBoundary><MyClassroomPage /></ErrorBoundary></PlayGate>} />
                 <Route path="*" element={<NotFoundPage />} />

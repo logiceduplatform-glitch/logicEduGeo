@@ -47,6 +47,9 @@ const T = {
     noAnnouncements: "Δεν υπάρχουν ανακοινώσεις",
     quizzes: "Quiz τάξης",
     noQuizzes: "Δεν υπάρχουν quiz ακόμα",
+    lessons: "Μαθήματα τάξης",
+    noLessons: "Δεν υπάρχουν μαθήματα ακόμα",
+    readLesson: "Διάβασε",
     start: "Ξεκίνα",
     notFound: "Δεν βρέθηκε τάξη με αυτόν τον κωδικό",
     alreadyEnrolled: "Είσαι ήδη εγγεγραμμένος!",
@@ -82,6 +85,9 @@ const T = {
     noAnnouncements: "No announcements",
     quizzes: "Classroom quizzes",
     noQuizzes: "No quizzes yet",
+    lessons: "Classroom lessons",
+    noLessons: "No lessons yet",
+    readLesson: "Read",
     start: "Start",
     notFound: "No classroom found with this code",
     alreadyEnrolled: "You're already enrolled!",
@@ -143,6 +149,7 @@ export default function MyClassroomPage() {
   const [studentName, setStudentName] = useState(() => localStorage.getItem("geo:studentName") || "");
   const [enrolling, setEnrolling] = useState(false);
   const [quizzes, setQuizzes] = useState([]);
+  const [lessons, setLessons] = useState([]);
   const [announcements, setAnnouncements] = useState([]);
 
   // Quiz playing state
@@ -179,6 +186,18 @@ export default function MyClassroomPage() {
       qSnap.forEach((d) => loadedQ.push({ id: d.id, ...d.data() }));
       loadedQ.sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || ""));
       setQuizzes(loadedQ);
+
+      // Load lessons assigned to this classroom
+      try {
+        const lQ = query(collection(db, "classroomLessons"), where("classroomCode", "==", upper));
+        const lSnap = await getDocs(lQ);
+        const loadedL = [];
+        lSnap.forEach((d) => loadedL.push({ id: d.id, ...d.data() }));
+        loadedL.sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || ""));
+        setLessons(loadedL);
+      } catch {
+        setLessons([]);
+      }
 
       const lastSeenKey = `geo:classroomLastSeen:${upper}`;
       const prevLastSeen = localStorage.getItem(lastSeenKey) || "1970-01-01";
@@ -617,6 +636,41 @@ export default function MyClassroomPage() {
                           {ann.teacherName && `${ann.teacherName} · `}
                           {new Date(ann.createdAt).toLocaleDateString(isEl ? "el-GR" : "en-US", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
                         </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Lessons */}
+              {lessons.length > 0 && (
+                <div>
+                  <h3 className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <span>📖</span> {l.lessons}
+                  </h3>
+                  <div className="grid gap-3">
+                    {lessons.map((lesson) => (
+                      <div key={lesson.id} className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-700 shadow-sm flex items-center gap-4 flex-wrap">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h4 className="text-base font-bold text-slate-800 dark:text-slate-100 truncate">{lesson.lessonTitle}</h4>
+                            {lesson.createdAt > lastSeenTs && (
+                              <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-md bg-purple-500 text-white animate-pulse">NEW</span>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-3 text-xs text-slate-400 dark:text-slate-500 mt-0.5">
+                            {lesson.subject && <span>{lesson.subject}</span>}
+                            <span>{lesson.sections?.length || 0} {isEl ? "ενότητες" : "sections"}</span>
+                            {lesson.linkedQuizId && <span className="text-purple-500">📝 {isEl ? "Quiz" : "Quiz"}</span>}
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => navigate(`/lesson/${lesson.code}`)}
+                          className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-sm hover:from-purple-700 hover:to-indigo-700 transition-all shadow-md"
+                        >
+                          {`${l.readLesson} →`}
+                        </button>
                       </div>
                     ))}
                   </div>

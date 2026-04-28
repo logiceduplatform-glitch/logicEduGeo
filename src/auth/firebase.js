@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 import { getAnalytics, isSupported } from "firebase/analytics";
 
 const hasConfig = !!(
@@ -13,6 +14,7 @@ const hasConfig = !!(
 let auth = null;
 let googleProvider = null;
 let db = null;
+let storage = null;
 let analytics = null;
 
 if (hasConfig) {
@@ -21,12 +23,14 @@ if (hasConfig) {
     authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
     projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
     appId: import.meta.env.VITE_FIREBASE_APP_ID,
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || `${import.meta.env.VITE_FIREBASE_PROJECT_ID}.firebasestorage.app`,
     measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || undefined,
   };
   const app = initializeApp(firebaseConfig);
   auth = getAuth(app);
   googleProvider = new GoogleAuthProvider();
   db = getFirestore(app);
+  storage = getStorage(app);
 
   const consent = localStorage.getItem("edu:cookieConsent");
   if (consent === "accepted") {
@@ -52,4 +56,4 @@ function enableAnalytics() {
   }).catch(() => {});
 }
 
-export { auth, googleProvider, db, analytics, enableAnalytics };
+export { auth, googleProvider, db, storage, analytics, enableAnalytics };
