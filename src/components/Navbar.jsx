@@ -198,18 +198,38 @@ export default function Navbar() {
     };
   }, []);
 
-  const NAV_LINKS = isLoggedIn
-    ? [
+  const NAV_LINKS = (() => {
+    if (!isLoggedIn) {
+      return [
         { label: isEl ? "Παιχνίδια" : "Games", fullLabel: isEl ? "Παιχνίδια" : "Games", href: "#categories", icon: "🎮" },
-        { label: isEl ? "Ρεκόρ" : "Records", fullLabel: isEl ? "Τα Ρεκόρ μου" : "My Records", href: "/my-records", isRoute: true, icon: "🏆" },
-        { label: isEl ? "Blog" : "Blog", fullLabel: isEl ? "Blog" : "Blog", href: "/blog", isRoute: true, icon: "📝" },
-      ]
-    : [
-        { label: isEl ? "Παιχνίδια" : "Games", fullLabel: isEl ? "Παιχνίδια" : "Games", href: "#categories", icon: "🎮" },
+        { label: isEl ? "Γονείς" : "Parents", fullLabel: isEl ? "Για Γονείς" : "For Parents", href: "/for-parents", isRoute: true, icon: "👨‍👩‍👧" },
         { label: isEl ? "Δάσκαλοι" : "Teachers", fullLabel: isEl ? "Για Εκπαιδευτικούς" : "For Teachers", href: "/for-teachers", isRoute: true, icon: "👨‍🏫" },
+        { label: isEl ? "Blog" : "Blog", fullLabel: isEl ? "Blog" : "Blog", href: "/blog", isRoute: true, icon: "📝" },
         { label: isEl ? "Τιμές" : "Pricing", fullLabel: isEl ? "Πλάνα & Τιμές" : "Plans & Pricing", href: "#pricing", icon: "💎" },
+      ];
+    }
+    if (userRole === "teacher" && !teacherInChildMode) {
+      return [
+        { label: isEl ? "Dashboard" : "Dashboard", fullLabel: isEl ? "Πίνακας Δασκάλου" : "Teacher Dashboard", href: "/teacher-dashboard", isRoute: true, icon: "📚" },
+        { label: isEl ? "Παιχνίδια" : "Games", fullLabel: isEl ? "Παιχνίδια" : "Games", href: "#categories", icon: "🎮" },
         { label: isEl ? "Blog" : "Blog", fullLabel: isEl ? "Blog" : "Blog", href: "/blog", isRoute: true, icon: "📝" },
       ];
+    }
+    if (userRole === "parent" && !activeChild) {
+      return [
+        { label: isEl ? "Παιχνίδια" : "Games", fullLabel: isEl ? "Παιχνίδια" : "Games", href: "#categories", icon: "🎮" },
+        { label: isEl ? "Dashboard" : "Dashboard", fullLabel: isEl ? "Γονικός Πίνακας" : "Parent Dashboard", href: "/parent-dashboard", isRoute: true, icon: "📊" },
+        { label: isEl ? "Αναφορές" : "Reports", fullLabel: isEl ? "Εβδομαδιαίες Αναφορές" : "Weekly Reports", href: "/weekly-report", isRoute: true, icon: "📋" },
+        { label: isEl ? "Blog" : "Blog", fullLabel: isEl ? "Blog" : "Blog", href: "/blog", isRoute: true, icon: "📝" },
+      ];
+    }
+    return [
+      { label: isEl ? "Παιχνίδια" : "Games", fullLabel: isEl ? "Παιχνίδια" : "Games", href: "#categories", icon: "🎮" },
+      { label: isEl ? "Ρεκόρ" : "Records", fullLabel: isEl ? "Τα Ρεκόρ μου" : "My Records", href: "/my-records", isRoute: true, icon: "🏆" },
+      { label: isEl ? "Η Τάξη μου" : "My Class", fullLabel: isEl ? "Η Τάξη μου" : "My Classroom", href: "/my-classroom", isRoute: true, icon: "🏫" },
+      { label: isEl ? "Blog" : "Blog", fullLabel: isEl ? "Blog" : "Blog", href: "/blog", isRoute: true, icon: "📝" },
+    ];
+  })();
 
   const scrollTo = (href, isRoute) => {
     setMobileOpen(false);

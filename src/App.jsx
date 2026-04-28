@@ -54,6 +54,7 @@ const ShopPage = React.lazy(() => import("./pages/ShopPage"));
 const CurriculumMapPage = React.lazy(() => import("./pages/CurriculumMapPage"));
 const BlogPage = React.lazy(() => import("./pages/BlogPage"));
 const ForTeachersPage = React.lazy(() => import("./pages/ForTeachersPage"));
+const ForParentsPage = React.lazy(() => import("./pages/ForParentsPage"));
 
 function PlayGate({ children }) {
   const { user, guest, loading, isGuestExpired, userProfile } = React.useContext(AuthContext);
@@ -195,6 +196,7 @@ export default function App() {
                 <Route path="/blog/:slug" element={<BlogPage />} />
                 <Route path="/blog" element={<BlogPage />} />
                 <Route path="/for-teachers" element={<ForTeachersPage />} />
+                <Route path="/for-parents" element={<ForParentsPage />} />
                 <Route path="/my-records" element={<LeaderboardPage />} />
                 <Route path="/weekly-report" element={<PlayGate><WeeklyReportPage /></PlayGate>} />
                 <Route path="/content-editor" element={<PlayGate><ContentEditorPage /></PlayGate>} />
