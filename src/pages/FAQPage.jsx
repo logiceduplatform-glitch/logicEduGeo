@@ -15,8 +15,8 @@ const FAQ_ITEMS = [
   {
     q: { en: "Is it free?", el: "Είναι δωρεάν;" },
     a: {
-      en: "Yes! The core platform is free to use. You can create an account or try as a guest. Some premium features may be available in the future, but the main learning experience remains free.",
-      el: "Ναι! Η βασική πλατφόρμα είναι δωρεάν. Μπορείτε να δημιουργήσετε λογαριασμό ή να δοκιμάσετε ως επισκέπτης. Μερικά premium χαρακτηριστικά μπορεί να προστεθούν στο μέλλον, αλλά η κύρια εκπαιδευτική εμπειρία παραμένει δωρεάν.",
+      en: "Yes! The core platform is free to use. Create an account or try as a guest. Optional Premium plans are available for additional features like unlimited games and advanced statistics, but the main learning experience remains free.",
+      el: "Ναι! Η βασική πλατφόρμα είναι δωρεάν. Δημιουργήστε λογαριασμό ή δοκιμάστε ως επισκέπτης. Προαιρετικά Premium πλάνα είναι διαθέσιμα για πρόσθετες δυνατότητες, αλλά η κύρια εκπαιδευτική εμπειρία παραμένει δωρεάν.",
     },
   },
   {

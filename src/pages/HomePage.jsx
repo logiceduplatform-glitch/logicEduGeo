@@ -20,6 +20,13 @@ import FooterSection from "../components/FooterSection";
 import OnboardingTour from "../components/OnboardingTour";
 import HomeRecommendations from "../components/HomeRecommendations";
 import DailyMissions from "../components/DailyMissions";
+import MissionBanner from "../components/MissionBanner";
+import RoleShowcase from "../components/RoleShowcase";
+import MilestonesSection from "../components/MilestonesSection";
+import UseCasesSection from "../components/UseCasesSection";
+import ParentPeaceSection from "../components/ParentPeaceSection";
+import BlogTipsSection from "../components/BlogTipsSection";
+import ValuePillarsSection from "../components/ValuePillarsSection";
 
 const CATEGORIES = [
   { key: "Age 2-3", icon: "👶", gradient: "from-rose-400 to-pink-400", route: "/play/2-3-school", desc: { el: "Πρώτα βήματα", en: "First steps" } },
@@ -73,6 +80,21 @@ export default function HomePage() {
       {/* STATS BAR */}
       <StatsBar />
 
+      {/* MISSION */}
+      <RevealSection>
+        <MissionBanner />
+      </RevealSection>
+
+      {/* VALUE PILLARS */}
+      <RevealSection>
+        <ValuePillarsSection />
+      </RevealSection>
+
+      {/* USE CASES */}
+      <RevealSection>
+        <UseCasesSection />
+      </RevealSection>
+
       {/* CATEGORIES */}
       <RevealSection>
       <section id="categories" className="mx-auto max-w-6xl px-4 py-14">
@@ -106,6 +128,52 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+      </RevealSection>
+
+      {/* ROLE SHOWCASE */}
+      <RevealSection>
+        <RoleShowcase />
+      </RevealSection>
+
+      {/* HOW IT WORKS */}
+      <RevealSection>
+      <section id="how-it-works" className="py-20 bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800">
+        <div className="mx-auto max-w-6xl px-4">
+          <div className="text-center mb-14">
+            <span className="inline-block px-4 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-sm font-semibold mb-4">
+              {isEl ? "Πώς λειτουργεί" : "How it works"}
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-800 dark:text-white">
+              {isEl ? "3 απλά βήματα" : "3 simple steps"}
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {howSteps.map((s, i) => (
+              <div key={i} className="relative text-center group">
+                {i < howSteps.length - 1 && (
+                  <div className="hidden md:block absolute top-12 left-[60%] w-[80%] h-0.5 bg-gradient-to-r from-purple-200 to-transparent" />
+                )}
+
+                <div className="relative inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/40 dark:to-pink-900/40 mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <span className="text-4xl">{s.icon}</span>
+                  <span className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-gradient-to-br from-purple-600 to-pink-600 text-white text-xs font-bold flex items-center justify-center shadow-md">
+                    {s.step}
+                  </span>
+                </div>
+
+                <h3 className="font-bold text-lg text-slate-800 dark:text-white mb-2">{s.title}</h3>
+                <p className="text-sm text-slate-500 dark:text-slate-400 max-w-xs mx-auto leading-relaxed">{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+      </RevealSection>
+
+      {/* PARENT PEACE OF MIND */}
+      <RevealSection>
+        <ParentPeaceSection />
       </RevealSection>
 
       {/* START HERE banner for anonymous visitors */}
@@ -174,45 +242,19 @@ export default function HomePage() {
       <GameShowcase lang={lang} />
       </RevealSection>
 
-      {/* HOW IT WORKS */}
+      {/* MILESTONES */}
       <RevealSection>
-      <section id="how-it-works" className="py-20 bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800">
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="text-center mb-14">
-            <span className="inline-block px-4 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-sm font-semibold mb-4">
-              {isEl ? "Πώς λειτουργεί" : "How it works"}
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-800 dark:text-white">
-              {isEl ? "3 απλά βήματα" : "3 simple steps"}
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {howSteps.map((s, i) => (
-              <div key={i} className="relative text-center group">
-                {i < howSteps.length - 1 && (
-                  <div className="hidden md:block absolute top-12 left-[60%] w-[80%] h-0.5 bg-gradient-to-r from-purple-200 to-transparent" />
-                )}
-
-                <div className="relative inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/40 dark:to-pink-900/40 mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <span className="text-4xl">{s.icon}</span>
-                  <span className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-gradient-to-br from-purple-600 to-pink-600 text-white text-xs font-bold flex items-center justify-center shadow-md">
-                    {s.step}
-                  </span>
-                </div>
-
-                <h3 className="font-bold text-lg text-slate-800 dark:text-white mb-2">{s.title}</h3>
-                <p className="text-sm text-slate-500 dark:text-slate-400 max-w-xs mx-auto leading-relaxed">{s.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <MilestonesSection />
       </RevealSection>
 
       {/* TESTIMONIALS */}
       <RevealSection>
       <TestimonialsSection lang={lang} />
+      </RevealSection>
+
+      {/* BLOG TIPS */}
+      <RevealSection>
+        <BlogTipsSection />
       </RevealSection>
 
       {/* TRUST SIGNALS */}

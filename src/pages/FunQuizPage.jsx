@@ -24,6 +24,8 @@ import GameRating from "../components/GameRating";
 import ShareScoreCard from "../components/ShareScoreCard";
 import Breadcrumb from "../components/Breadcrumb";
 import { GameSkeleton } from "../components/SkeletonLoader";
+import { AnalyticsService } from "../services/AnalyticsService";
+import { SoundService } from "../services/SoundService";
 import {
   FUN_AGE_CONFIG,
   GAME_ID_TO_COMPONENT,
@@ -210,12 +212,14 @@ export default function FunQuizPage({ ageGroup: ageGroupProp, mode }) {
   const currentDifficulty = activeGame ? DifficultyService.getDifficulty(activeGame) : 1;
 
   const startGame = useCallback((gameId) => {
+    AnalyticsService.gameStart(gameId, activeCategory || mode || "fun");
+    SoundService.gameStart();
     if (shouldShowTutorial(gameId)) {
       setTutorialGame(gameId);
     } else {
       setActiveGame(gameId);
     }
-  }, []);
+  }, [activeCategory, mode]);
 
   const handleTutorialStart = useCallback(() => {
     const id = tutorialGame;

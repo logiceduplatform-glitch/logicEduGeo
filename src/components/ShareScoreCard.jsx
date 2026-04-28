@@ -75,7 +75,7 @@ function drawScoreCard(canvas, { score, total, gameName, icon, lang }) {
   ctx.fillStyle = "rgba(255,255,255,0.5)";
   ctx.font = "13px system-ui, sans-serif";
   ctx.textAlign = "right";
-  ctx.fillText("geoloplatform.com", w - 20, h - 16);
+  ctx.fillText("geoloplatform.com — Δοκίμασε κι εσύ!", w - 20, h - 16);
 }
 
 export default function ShareScoreCard({ score = 0, total = 0, gameName = "", icon = "🎮" }) {
@@ -84,7 +84,7 @@ export default function ShareScoreCard({ score = 0, total = 0, gameName = "", ic
   const canvasRef = useRef(null);
   const [copied, setCopied] = useState(false);
 
-  const shareUrl = typeof window !== "undefined" ? window.location.origin : "https://geoloplatform.com";
+  const shareUrl = typeof window !== "undefined" ? window.location.href : "https://geoloplatform.com";
   const shareText = l.shareText(score, total, gameName);
 
   const generateCard = useCallback(() => {

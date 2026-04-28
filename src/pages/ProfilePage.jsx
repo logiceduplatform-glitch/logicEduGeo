@@ -12,6 +12,7 @@ import { NotificationService } from "../services/NotificationService";
 import { ProfileService } from "../services/ProfileService";
 import { StorageService } from "../services/StorageService";
 import ProfileSwitcher from "../components/ProfileSwitcher";
+import ReferralCard from "../components/ReferralCard";
 
 import {
   ageToQuizRoute,
@@ -293,7 +294,7 @@ export default function ProfilePage() {
 
   const isParent = userProfile?.role === "parent";
   const isTeacher = userProfile?.role === "teacher";
-  const activeChild = isTeacher ? null : ProfileService.getActive();
+  const activeChild = ProfileService.getActive();
   const isChildView = !!activeChild;
 
   const [parentUnlocked, setParentUnlocked] = useState(false);
@@ -510,22 +511,22 @@ export default function ProfilePage() {
           {l.back}
         </button>
 
-        {/* PIN setup reminder for parents */}
-        {isParent && !localStorage.getItem("geo:parentPin") && (
+        {/* PIN setup reminder for parents and teachers with children */}
+        {(isParent || (isTeacher && ProfileService.getAll().length > 0)) && !localStorage.getItem("geo:parentPin") && (
           <div className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-2 border-amber-200 dark:border-amber-700 rounded-2xl p-4 mb-6 flex items-start gap-3">
             <span className="text-2xl shrink-0">🔐</span>
             <div className="flex-1">
               <p className="text-sm font-bold text-amber-800 dark:text-amber-200">
-                {isEl ? "Ορίστε ένα PIN γονέα" : "Set a parent PIN"}
+                {isEl ? "Ορίστε ένα PIN" : "Set a PIN"}
               </p>
               <p className="text-xs text-amber-600 dark:text-amber-400 mt-0.5">
                 {isEl
-                  ? "Χωρίς PIN, τα παιδιά μπορούν να αλλάξουν ρυθμίσεις. Ορίστε ένα 4ψήφιο PIN στον Πίνακα Γονέα."
-                  : "Without a PIN, children can change settings. Set a 4-digit PIN in the Parent Dashboard."}
+                  ? "Χωρίς PIN, τα παιδιά μπορούν να αλλάξουν ρυθμίσεις. Ορίστε ένα 4ψήφιο PIN για ασφάλεια."
+                  : "Without a PIN, children can change settings. Set a 4-digit PIN for security."}
               </p>
             </div>
             <button
-              onClick={() => navigate("/parent-dashboard")}
+              onClick={() => navigate(isTeacher ? "/teacher-dashboard" : "/parent-dashboard")}
               className="shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-800/40 hover:bg-amber-200 dark:hover:bg-amber-800/60 transition-colors"
             >
               {isEl ? "Ρύθμιση →" : "Set up →"}
@@ -864,8 +865,8 @@ export default function ProfilePage() {
           <ChildProfilesManager lang={lang} isEl={isEl} />
         )}
 
-        {/* Child profiles section (for non-parent, non-teacher logged-in users) */}
-        {tab === "profile" && user && userProfile?.role !== "parent" && !isTeacher && (
+        {/* Child profiles section (for non-parent logged-in users, including teachers) */}
+        {tab === "profile" && user && userProfile?.role !== "parent" && (
           <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-xl p-6 sm:p-8 border border-slate-100 dark:border-slate-700 mt-6">
             <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-2 flex items-center gap-2">
               <span>👨‍👩‍👧‍👦</span>
@@ -932,6 +933,9 @@ export default function ProfilePage() {
             )}
           </div>
         )}
+
+        {/* Referral card */}
+        {tab === "account" && user && <ReferralCard />}
 
         {/* Account tab */}
         {tab === "account" && (

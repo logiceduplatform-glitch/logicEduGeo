@@ -11,6 +11,8 @@ import DifficultyNotification from "../components/DifficultyNotification";
 import ShareScoreCard from "../components/ShareScoreCard";
 import { DifficultyService } from "../services/DifficultyService";
 import { EmptySearchState } from "../components/SkeletonLoader";
+import { AnalyticsService } from "../services/AnalyticsService";
+import { SoundService } from "../services/SoundService";
 
 import MemoryMatch from "../components/games/exercises_2_3_1/MemoryMatch";
 import PatternMatch from "../components/games/exercises_2_3_1/PatternMatch";
@@ -204,6 +206,8 @@ export default function QuizPage_4_5_logic() {
   const currentDifficulty = activeGame ? DifficultyService.getDifficulty(activeGame) : 1;
 
   const startGame = useCallback((gameId) => {
+    AnalyticsService.gameStart(gameId, "4-5-logic");
+    SoundService.gameStart();
     if (shouldShowTutorial(gameId)) {
       setTutorialGame(gameId);
     } else {

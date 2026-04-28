@@ -2,11 +2,30 @@ import React, { useContext, useEffect, useState, useRef } from "react";
 import { LanguageContext } from "../i18n/LanguageContext";
 
 const STATS = [
-  { value: 100, suffix: "+", icon: "🎮", label: { el: "Παιχνίδια", en: "Games" } },
-  { value: 500, suffix: "+", icon: "❓", label: { el: "Ερωτήσεις", en: "Questions" } },
-  { value: 7, suffix: "", icon: "👥", label: { el: "Ηλικιακές Ομάδες", en: "Age Groups" } },
-  { value: 12, suffix: "+", icon: "📂", label: { el: "Κατηγορίες", en: "Categories" } },
-  { value: 0, suffix: "", icon: "🚫", label: { el: "Διαφημίσεις", en: "Ads" }, isZero: true },
+  {
+    value: 350, suffix: "+", icon: "🎮",
+    gradient: "from-purple-500 to-pink-500",
+    label: { el: "Εκπαιδευτικά Παιχνίδια", en: "Educational Games" },
+    desc: { el: "Για κάθε ηλικία και επίπεδο", en: "For every age and level" },
+  },
+  {
+    value: 7, suffix: "", icon: "👥",
+    gradient: "from-blue-500 to-cyan-500",
+    label: { el: "Ηλικιακές Ομάδες", en: "Age Groups" },
+    desc: { el: "Από 2 ετών έως ενήλικες", en: "From age 2 to adults" },
+  },
+  {
+    value: 0, suffix: "", icon: "🛡️", isZero: true,
+    gradient: "from-emerald-500 to-teal-500",
+    label: { el: "Διαφημίσεις", en: "Ads" },
+    desc: { el: "100% ασφαλές περιβάλλον", en: "100% safe environment" },
+  },
+  {
+    value: 100, suffix: "%", icon: "🎓",
+    gradient: "from-amber-500 to-orange-500",
+    label: { el: "Δωρεάν για Δασκάλους", en: "Free for Teachers" },
+    desc: { el: "Πλήρη εργαλεία τάξης", en: "Full classroom tools" },
+  },
 ];
 
 function AnimatedCounter({ target, suffix, trigger }) {
@@ -15,7 +34,7 @@ function AnimatedCounter({ target, suffix, trigger }) {
   useEffect(() => {
     if (!trigger) return;
     let frame;
-    const duration = 1500;
+    const duration = 1800;
     const start = performance.now();
     const step = (now) => {
       const progress = Math.min((now - start) / duration, 1);
@@ -28,7 +47,7 @@ function AnimatedCounter({ target, suffix, trigger }) {
   }, [trigger, target]);
 
   return (
-    <span className="text-3xl sm:text-4xl font-extrabold">
+    <span className="text-4xl sm:text-5xl font-extrabold tracking-tight">
       {count}{suffix}
     </span>
   );
@@ -45,37 +64,54 @@ export default function StatsBar() {
     if (!el) return;
     const obs = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
-      { threshold: 0.3 }
+      { threshold: 0.2 }
     );
     obs.observe(el);
     return () => obs.disconnect();
   }, []);
 
   return (
-    <section
-      ref={ref}
-      className="relative py-10 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 dark:from-purple-900 dark:via-indigo-900 dark:to-blue-900 overflow-hidden"
-    >
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute w-40 h-40 rounded-full bg-white -top-10 -left-10" />
-        <div className="absolute w-60 h-60 rounded-full bg-white -bottom-20 -right-20" />
-      </div>
+    <section ref={ref} className="py-14 sm:py-20 bg-slate-50 dark:bg-slate-900">
+      <div className="mx-auto max-w-6xl px-4">
+        <div className="text-center mb-12">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-sm font-semibold mb-4">
+            {isEl ? "Γιατί εμάς" : "Why us"}
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-800 dark:text-white">
+            {isEl ? "Αριθμοί που μιλάνε" : "Numbers that speak"}
+          </h2>
+        </div>
 
-      <div className="relative mx-auto max-w-6xl px-4">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 text-center text-white">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {STATS.map((s, i) => (
-            <div key={i} className="flex flex-col items-center gap-1">
-              <span className="text-2xl mb-1">{s.icon}</span>
-              <AnimatedCounter
-                target={s.value}
-                suffix={s.suffix}
-                trigger={visible}
-              />
-              <span className="text-sm font-medium text-white/80">
+            <div
+              key={i}
+              className="relative group bg-white dark:bg-slate-800 rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+            >
+              <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${s.gradient}`} />
+
+              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${s.gradient} flex items-center justify-center text-xl shadow-md mb-4 group-hover:scale-110 transition-transform`}>
+                {s.icon}
+              </div>
+
+              <div className="text-slate-800 dark:text-white mb-1">
+                {s.isZero ? (
+                  <span className="text-4xl sm:text-5xl font-extrabold tracking-tight">
+                    {visible ? "0" : "—"}
+                  </span>
+                ) : (
+                  <AnimatedCounter target={s.value} suffix={s.suffix} trigger={visible} />
+                )}
+              </div>
+
+              <h3 className="text-sm sm:text-base font-bold text-slate-700 dark:text-slate-200 mb-1">
                 {s.isZero
                   ? (isEl ? "Καμία Διαφήμιση" : "Zero Ads")
                   : s.label[isEl ? "el" : "en"]}
-              </span>
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-400 dark:text-slate-500">
+                {s.desc[isEl ? "el" : "en"]}
+              </p>
             </div>
           ))}
         </div>

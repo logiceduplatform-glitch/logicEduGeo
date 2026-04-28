@@ -18,6 +18,7 @@ import {
 import { ProgressService } from "../services/ProgressService";
 import Navbar from "../components/Navbar";
 import SEO from "../components/SEO";
+import { AnalyticsService } from "../services/AnalyticsService";
 
 const STORAGE_KEY = "geo:myClassrooms";
 
@@ -260,6 +261,7 @@ export default function MyClassroomPage() {
       setActiveCode(code);
       loadClassroom(code);
       setEnrollCode("");
+      AnalyticsService.classroomEnroll(code);
       setNotice(l.enrollSuccess);
       setTimeout(() => setNotice(null), 3000);
     } catch (e) {

@@ -3,14 +3,20 @@
   <url><loc>https://geoloplatform.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
   <url><loc>https://geoloplatform.com/auth</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://geoloplatform.com/subscription</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://geoloplatform.com/for-teachers</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://geoloplatform.com/about</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://geoloplatform.com/faq</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://geoloplatform.com/contact</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://geoloplatform.com/curriculum</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://geoloplatform.com/blog</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://geoloplatform.com/blog/math-magic-tricks</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://geoloplatform.com/blog/word-games-school-performance</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://geoloplatform.com/blog/puzzles-make-kids-smarter</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://geoloplatform.com/blog/teaching-kids-to-lose</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://geoloplatform.com/blog/school-readiness-checklist</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://geoloplatform.com/blog/fun-educational-holidays</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://geoloplatform.com/privacy</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://geoloplatform.com/terms</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://geoloplatform.com/achievements</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://geoloplatform.com/my-records</loc><changefreq>weekly</changefreq><priority>0.4</priority></url>
-  <url><loc>https://geoloplatform.com/play/board-games</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://geoloplatform.com/play/adult-games</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
   <url><loc>https://geoloplatform.com/online-multiplayer</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
 </urlset>

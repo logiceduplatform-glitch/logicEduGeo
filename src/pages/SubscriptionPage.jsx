@@ -5,6 +5,7 @@ import SEO from "../components/SEO";
 import { LanguageContext } from "../i18n/LanguageContext";
 import { AuthContext } from "../auth/AuthContext";
 import { useSubscription } from "../contexts/SubscriptionContext";
+import { AnalyticsService } from "../services/AnalyticsService";
 
 const T = {
   el: {
@@ -128,6 +129,10 @@ export default function SubscriptionPage() {
   const [showCancelled, setShowCancelled] = useState(false);
 
   useEffect(() => {
+    AnalyticsService.subscriptionView(tier);
+  }, [tier]);
+
+  useEffect(() => {
     if (searchParams.get("success") === "true") {
       setShowSuccess(true);
       setSearchParams({}, { replace: true });
@@ -201,7 +206,23 @@ export default function SubscriptionPage() {
             </svg>
           </div>
           <h1 className="text-3xl font-extrabold text-slate-800 dark:text-white mb-3">{l.successTitle}</h1>
-          <p className="text-slate-600 dark:text-slate-400 mb-8">{l.successMsg}</p>
+          <p className="text-slate-600 dark:text-slate-400 mb-4">{l.successMsg}</p>
+
+          <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-emerald-200 dark:border-emerald-800 mb-8 text-left">
+            <h3 className="text-sm font-bold text-emerald-700 dark:text-emerald-300 mb-3">
+              {isEl ? "🎉 Τι ξεκλείδωσες:" : "🎉 What you unlocked:"}
+            </h3>
+            <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
+              {[
+                isEl ? "✓ 350+ παιχνίδια χωρίς περιορισμούς" : "✓ 350+ games without limits",
+                isEl ? "✓ Χωρίς χρονικό όριο" : "✓ No time limits",
+                isEl ? "✓ Αναλυτικά στατιστικά" : "✓ Detailed statistics",
+                isEl ? "✓ Εβδομαδιαίες αναφορές" : "✓ Weekly reports",
+                isEl ? "✓ Προτεραιότητα υποστήριξης" : "✓ Priority support",
+              ].map((f, i) => <li key={i} className="font-medium">{f}</li>)}
+            </ul>
+          </div>
+
           <button
             onClick={() => { setShowSuccess(false); navigate("/"); }}
             className="px-8 py-3 rounded-2xl font-bold text-white bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 shadow-lg transition-all hover:scale-105 active:scale-95"

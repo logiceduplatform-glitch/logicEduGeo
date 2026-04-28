@@ -13,7 +13,7 @@ const T = {
     monthly: "Μηνιαία",
     saved: "Αποθηκεύτηκε!",
     save: "Αποθήκευση",
-    comingSoon: "Η αποστολή email θα είναι σύντομα διαθέσιμη",
+    comingSoon: "Οι ρυθμίσεις θα αποθηκευτούν και θα λάβετε αναφορές στο email σας",
   },
   en: {
     title: "Weekly Email Reports",
@@ -25,7 +25,7 @@ const T = {
     monthly: "Monthly",
     saved: "Saved!",
     save: "Save",
-    comingSoon: "Email delivery coming soon",
+    comingSoon: "Settings will be saved and you'll receive reports at your email",
   },
 };
 

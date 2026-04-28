@@ -3,20 +3,20 @@ import { LanguageContext } from "../i18n/LanguageContext";
 
 const FAQS = {
   el: [
-    { q: "Είναι δωρεάν;", a: "Ναι! Μπορείς να παίξεις 5 παιχνίδια ανά κατηγορία δωρεάν. Αναβάθμισε σε Premium για πλήρη πρόσβαση σε 350+ παιχνίδια." },
-    { q: "Για ποιες ηλικίες είναι;", a: "Η πλατφόρμα καλύπτει ηλικίες 2-12 ετών και ενήλικες, με ξεχωριστό περιεχόμενο ανά ηλικιακή ομάδα." },
-    { q: "Είναι ασφαλές για τα παιδιά;", a: "Απολύτως. Δεν υπάρχουν διαφημίσεις, δεν μοιραζόμαστε δεδομένα με τρίτους, και το περιεχόμενο είναι 100% εκπαιδευτικό." },
-    { q: "Μπορώ να ακυρώσω τη συνδρομή;", a: "Ναι, μπορείς να ακυρώσεις οποτεδήποτε. Υπάρχει 7-ημερη δωρεάν δοκιμή σε όλα τα πλάνα." },
-    { q: "Χρειάζεται εγκατάσταση;", a: "Όχι! Η πλατφόρμα λειτουργεί απευθείας στον browser — κινητό, tablet ή υπολογιστή. Μπορείς επίσης να την προσθέσεις ως εφαρμογή." },
-    { q: "Πώς παρακολουθώ την πρόοδο;", a: "Κάθε παιχνίδι καταγράφει σκορ, streaks και XP. Στο προφίλ σου βλέπεις στατιστικά, επιτεύγματα και εβδομαδιαίες αναφορές." },
+    { q: "Είναι δωρεάν;", a: "Ναι! Η βασική πλατφόρμα είναι δωρεάν. Δημιούργησε λογαριασμό ή δοκίμασε ως επισκέπτης. Για πρόσθετες δυνατότητες υπάρχουν προαιρετικά Premium πλάνα." },
+    { q: "Για ποιες ηλικίες είναι;", a: "Η πλατφόρμα καλύπτει ηλικίες 2-12 ετών και ενήλικες, με ξεχωριστό περιεχόμενο ανά ηλικιακή ομάδα (2-3, 4-5, 6, 7-8, 9-10, 11-12, ενήλικες)." },
+    { q: "Είναι ασφαλές για τα παιδιά;", a: "Απολύτως. Χωρίς διαφημίσεις, χωρίς κοινοποίηση δεδομένων σε τρίτους. 100% εκπαιδευτικό περιεχόμενο. Συμμόρφωση με GDPR." },
+    { q: "Πώς λειτουργεί για δασκάλους;", a: "Οι δάσκαλοι μπορούν δωρεάν να δημιουργούν quiz, να φτιάχνουν μόνιμες τάξεις, να αναθέτουν εργασίες και να παρακολουθούν στατιστικά μαθητών." },
+    { q: "Χρειάζεται εγκατάσταση;", a: "Όχι! Η πλατφόρμα λειτουργεί στον browser — κινητό, tablet ή υπολογιστή. Μπορείς επίσης να την προσθέσεις ως εφαρμογή (PWA)." },
+    { q: "Πώς παρακολουθώ την πρόοδο;", a: "Κάθε παιχνίδι καταγράφει σκορ, streaks και XP. Στο προφίλ σου βλέπεις στατιστικά, επιτεύγματα και εβδομαδιαίες αναφορές. Οι γονείς έχουν δικό τους dashboard." },
   ],
   en: [
-    { q: "Is it free?", a: "Yes! You can play 5 games per category for free. Upgrade to Premium for full access to 350+ games." },
-    { q: "What ages is it for?", a: "The platform covers ages 2-12 and adults, with dedicated content for each age group." },
-    { q: "Is it safe for kids?", a: "Absolutely. No ads, no data sharing with third parties, and 100% educational content." },
-    { q: "Can I cancel my subscription?", a: "Yes, you can cancel anytime. All paid plans include a 7-day free trial." },
-    { q: "Do I need to install anything?", a: "No! The platform works directly in your browser — phone, tablet, or computer. You can also add it as an app." },
-    { q: "How does progress tracking work?", a: "Every game records scores, streaks, and XP. Your profile shows statistics, achievements, and weekly reports." },
+    { q: "Is it free?", a: "Yes! The core platform is free. Create an account or try as guest. Optional Premium plans are available for additional features." },
+    { q: "What ages is it for?", a: "The platform covers ages 2-12 and adults, with dedicated content for each age group (2-3, 4-5, 6, 7-8, 9-10, 11-12, adults)." },
+    { q: "Is it safe for kids?", a: "Absolutely. No ads, no data sharing with third parties. 100% educational content. GDPR compliant." },
+    { q: "How does it work for teachers?", a: "Teachers can create quizzes, set up permanent classrooms, assign work, and track student statistics — all for free." },
+    { q: "Do I need to install anything?", a: "No! The platform works directly in your browser — phone, tablet, or computer. You can also add it as an app (PWA)." },
+    { q: "How does progress tracking work?", a: "Every game records scores, streaks, and XP. Your profile shows statistics, achievements, and weekly reports. Parents get their own dashboard." },
   ],
 };
 

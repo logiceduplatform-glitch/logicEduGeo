@@ -20,6 +20,8 @@ import {
   getActivitiesForAge,
 } from "../config/activityConfig";
 import { GameSkeleton } from "../components/SkeletonLoader";
+import { AnalyticsService } from "../services/AnalyticsService";
+import { SoundService } from "../services/SoundService";
 
 const sharedModules = import.meta.glob("../components/games/exercises_shared/*.jsx");
 const ageSpecificModules = import.meta.glob("../components/games/exercises_{7_8,4_5_1,6_1,7_8_1,9_10_1,11_12_1}/*.jsx");
@@ -123,6 +125,8 @@ export default function ActivityQuizPage({ ageGroup: ageGroupProp }) {
     : allActivities;
 
   const startActivity = useCallback((actId) => {
+    AnalyticsService.gameStart(actId, activeCategory || ageGroup);
+    SoundService.gameStart();
     if (shouldShowTutorial(actId)) {
       setTutorialGame(actId);
     } else {
@@ -130,7 +134,7 @@ export default function ActivityQuizPage({ ageGroup: ageGroupProp }) {
       setResetCounter((p) => p + 1);
       setShowCompletionModal(false);
     }
-  }, []);
+  }, [activeCategory, ageGroup]);
 
   const handleTutorialStart = useCallback(() => {
     const id = tutorialGame;

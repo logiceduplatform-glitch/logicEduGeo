@@ -15,6 +15,8 @@ import DifficultyNotification from "../components/DifficultyNotification";
 import { DifficultyService } from "../services/DifficultyService";
 import { shuffleArray } from "../utils/shuffle";
 import { EmptySearchState } from "../components/SkeletonLoader";
+import { AnalyticsService } from "../services/AnalyticsService";
+import { SoundService } from "../services/SoundService";
 
 import TapPuzzle from "../components/puzzles/TapPuzzle";
 import PuzzleBoard from "../components/puzzles/PuzzleBoard";
@@ -216,6 +218,8 @@ export default function QuizPage_2_3_unified({ mode = "fun" }) {
   };
 
   const handleGameStart = (gameId) => {
+    AnalyticsService.gameStart(gameId, "2-3");
+    SoundService.gameStart();
     const gameDef = games.find((g) => g.id === gameId);
     setActiveGame(gameId);
     setResetCounter((p) => p + 1);

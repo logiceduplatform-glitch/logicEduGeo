@@ -9,6 +9,7 @@ import ProfileSwitcher from "./ProfileSwitcher";
 import SearchOverlay from "./SearchOverlay";
 import { ProfileService } from "../services/ProfileService";
 import { CoinService } from "../services/CoinService";
+import { SoundService } from "../services/SoundService";
 import {
   ageToQuizRoute,
   adultObjectiveRoutes,
@@ -50,6 +51,7 @@ export default function Navbar() {
   const { user, guest, userProfile, userRole, logout } = useContext(AuthContext);
   const { dark, toggle: toggleTheme } = useTheme();
   const { isPremium, tier } = useSubscription();
+  const [soundOn, setSoundOn] = useState(() => SoundService.isEnabled());
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -145,7 +147,8 @@ export default function Navbar() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
-  const activeChild = userRole === "teacher" ? null : ProfileService.getActive();
+  const activeChild = ProfileService.getActive();
+  const teacherInChildMode = userRole === "teacher" && !!activeChild;
 
   const currentAge = activeChild?.age || guest?.age || userProfile?.age || null;
   const currentAgeIcon = currentAge ? AGE_ICONS[currentAge] : null;
@@ -195,14 +198,18 @@ export default function Navbar() {
     };
   }, []);
 
-  const NAV_LINKS = [
-    { label: isEl ? "Χαρακτ/κά" : "Features", fullLabel: isEl ? "Χαρακτηριστικά" : "Features", href: "#features" },
-    { label: isEl ? "Βήματα" : "Steps", fullLabel: isEl ? "Πώς λειτουργεί" : "How it works", href: "#how-it-works" },
-    { label: isEl ? "Κατηγορίες" : "Categories", fullLabel: isEl ? "Κατηγορίες" : "Categories", href: "#categories" },
-    { label: isEl ? "Παιχνίδια" : "Games", fullLabel: isEl ? "Παιχνίδια" : "Games", href: "#games" },
-    { label: isEl ? "Τιμές" : "Pricing", fullLabel: isEl ? "Πλάνα & Τιμές" : "Plans & Pricing", href: "#pricing" },
-    { label: isEl ? "Ρεκόρ" : "Records", fullLabel: isEl ? "Τα Ρεκόρ μου" : "My Records", href: "/my-records", isRoute: true },
-  ];
+  const NAV_LINKS = isLoggedIn
+    ? [
+        { label: isEl ? "Παιχνίδια" : "Games", fullLabel: isEl ? "Παιχνίδια" : "Games", href: "#categories", icon: "🎮" },
+        { label: isEl ? "Ρεκόρ" : "Records", fullLabel: isEl ? "Τα Ρεκόρ μου" : "My Records", href: "/my-records", isRoute: true, icon: "🏆" },
+        { label: isEl ? "Blog" : "Blog", fullLabel: isEl ? "Blog" : "Blog", href: "/blog", isRoute: true, icon: "📝" },
+      ]
+    : [
+        { label: isEl ? "Παιχνίδια" : "Games", fullLabel: isEl ? "Παιχνίδια" : "Games", href: "#categories", icon: "🎮" },
+        { label: isEl ? "Δάσκαλοι" : "Teachers", fullLabel: isEl ? "Για Εκπαιδευτικούς" : "For Teachers", href: "/for-teachers", isRoute: true, icon: "👨‍🏫" },
+        { label: isEl ? "Τιμές" : "Pricing", fullLabel: isEl ? "Πλάνα & Τιμές" : "Plans & Pricing", href: "#pricing", icon: "💎" },
+        { label: isEl ? "Blog" : "Blog", fullLabel: isEl ? "Blog" : "Blog", href: "/blog", isRoute: true, icon: "📝" },
+      ];
 
   const scrollTo = (href, isRoute) => {
     setMobileOpen(false);
@@ -400,8 +407,8 @@ export default function Navbar() {
             </div>
           )}
 
-          {/* Multi-child profile switcher (read-only for children, hidden for teachers) */}
-          {isLoggedIn && user && userRole !== "teacher" && (
+          {/* Multi-child profile switcher (read-only for children, teachers see only if they have children) */}
+          {isLoggedIn && user && (userRole !== "teacher" || ProfileService.getAll().length > 0) && (
             <ProfileSwitcher lang={lang} onSwitch={() => window.location.reload()} readOnly={!!activeChild} />
           )}
 
@@ -462,16 +469,21 @@ export default function Navbar() {
                         {isEl ? "Λειτουργία επισκέπτη" : "Guest mode"}
                       </p>
                     )}
-                    {userProfile?.age && userRole !== "teacher" && (
-                      <p className="text-xs text-slate-400 mt-0.5">{userProfile.age}</p>
+                    {userProfile?.age && (userRole !== "teacher" || teacherInChildMode) && (
+                      <p className="text-xs text-slate-400 mt-0.5">{teacherInChildMode ? activeChild.age : userProfile.age}</p>
                     )}
-                    {userRole && userRole !== "student" && (
+                    {userRole && userRole !== "student" && !teacherInChildMode && (
                       <span className={`inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${
                         userRole === "parent"
                           ? "bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400"
                           : "bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400"
                       }`}>
                         {userRole === "parent" ? (isEl ? "Γονέας" : "Parent") : (isEl ? "Δάσκαλος" : "Teacher")}
+                      </span>
+                    )}
+                    {teacherInChildMode && (
+                      <span className="inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400">
+                        {isEl ? "Λειτουργία παιδιού" : "Child mode"}
                       </span>
                     )}
                   </div>
@@ -550,7 +562,7 @@ export default function Navbar() {
                     </button>
                   )}
 
-                  {userRole === "teacher" && (
+                  {userRole === "teacher" && !teacherInChildMode && (
                     <button
                       onClick={() => { setProfileOpen(false); navigate("/teacher-dashboard"); }}
                       className="w-full text-left px-4 py-2.5 text-sm font-semibold text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/30 transition-colors flex items-center gap-2"
@@ -560,7 +572,17 @@ export default function Navbar() {
                     </button>
                   )}
 
-                  {userRole !== "teacher" && (
+                  {teacherInChildMode && (
+                    <button
+                      onClick={handleSwitchToParent}
+                      className="w-full text-left px-4 py-2.5 text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors flex items-center gap-2"
+                    >
+                      <span>🔒</span>
+                      {isEl ? "Επιστροφή στο δάσκαλο" : "Back to teacher"}
+                    </button>
+                  )}
+
+                  {(userRole !== "teacher" || teacherInChildMode) && (
                     <button
                       onClick={() => { setProfileOpen(false); navigate("/my-classroom"); }}
                       className="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-700 dark:hover:text-blue-400 transition-colors flex items-center gap-2 relative"
@@ -719,6 +741,12 @@ export default function Navbar() {
               >
                 {dark ? "☀️" : "🌙"} {dark ? (isEl ? "Φωτεινό θέμα" : "Light mode") : (isEl ? "Σκοτεινό θέμα" : "Dark mode")}
               </button>
+              <button
+                onClick={() => { const v = SoundService.toggle(); setSoundOn(v); }}
+                className="block w-full text-left px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 font-medium hover:bg-slate-50 dark:hover:bg-slate-700"
+              >
+                {soundOn ? "🔊" : "🔇"} {soundOn ? (isEl ? "Ήχοι ενεργοί" : "Sound on") : (isEl ? "Ήχοι ανενεργοί" : "Sound off")}
+              </button>
 
               {isLoggedIn ? (
                 <>
@@ -750,7 +778,7 @@ export default function Navbar() {
                   </div>
 
                   {/* Mobile age badge with category options */}
-                  {currentAgeIcon && userRole !== "teacher" && (
+                  {currentAgeIcon && (userRole !== "teacher" || teacherInChildMode) && (
                     <div>
                       <div className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 font-medium">
                         <span className="text-lg">{currentAgeIcon}</span>
@@ -850,7 +878,7 @@ export default function Navbar() {
                     </button>
                   )}
 
-                  {userRole === "teacher" && (
+                  {userRole === "teacher" && !teacherInChildMode && (
                     <button
                       onClick={() => { setMobileOpen(false); navigate("/teacher-dashboard"); }}
                       className="block w-full text-left px-4 py-3 rounded-xl text-amber-600 dark:text-amber-400 font-semibold hover:bg-amber-50 dark:hover:bg-amber-900/30"
@@ -859,7 +887,16 @@ export default function Navbar() {
                     </button>
                   )}
 
-                  {userRole !== "teacher" && (
+                  {teacherInChildMode && (
+                    <button
+                      onClick={() => { setMobileOpen(false); handleSwitchToParent(); }}
+                      className="block w-full text-left px-4 py-3 rounded-xl text-indigo-600 dark:text-indigo-400 font-semibold hover:bg-indigo-50 dark:hover:bg-indigo-900/30"
+                    >
+                      🔒 {isEl ? "Επιστροφή στο δάσκαλο" : "Back to teacher"}
+                    </button>
+                  )}
+
+                  {(userRole !== "teacher" || teacherInChildMode) && (
                     <button
                       onClick={() => { setMobileOpen(false); navigate("/my-classroom"); }}
                       className="block w-full text-left px-4 py-3 rounded-xl text-blue-600 dark:text-blue-400 font-medium hover:bg-blue-50 dark:hover:bg-blue-900/30 relative"

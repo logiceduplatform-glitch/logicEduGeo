@@ -20,36 +20,40 @@ service cloud.firestore {
                     && resource.data.teacherUid == request.auth.uid;
     }
 
-    // Classroom announcements: teacher creates, anyone can read
+    // Classroom announcements: teacher creates, authenticated users can read
     match /classroomAnnouncements/{announcementId} {
-      allow read: if true;
+      allow read: if request.auth != null;
       allow create: if request.auth != null
                     && request.resource.data.teacherUid == request.auth.uid;
       allow update, delete: if request.auth != null
                             && resource.data.teacherUid == request.auth.uid;
     }
 
-    // Classroom quiz results: anyone can submit, authenticated users can read
+    // Classroom quiz results: authenticated users can submit and read, teachers can add feedback
     match /classroomResults/{resultId} {
       allow read: if request.auth != null;
-      allow create: if true;
-      allow update, delete: if false;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null
+                    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["teacherFeedback"]);
+      allow delete: if false;
     }
 
-    // Classrooms: teacher creates/manages, anyone can read
+    // Classrooms: teacher creates/manages, authenticated users can read
     match /classrooms/{classroomId} {
-      allow read: if true;
+      allow read: if request.auth != null;
       allow create: if request.auth != null
                     && request.resource.data.teacherUid == request.auth.uid;
       allow update, delete: if request.auth != null
                             && resource.data.teacherUid == request.auth.uid;
     }
 
-    // Classroom members: anyone can join (create), authenticated can delete (teacher removes)
+    // Classroom members: authenticated users can join/read, only classroom teacher can delete
     match /classroomMembers/{memberId} {
-      allow read: if true;
-      allow create: if true;
-      allow delete: if request.auth != null;
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow delete: if request.auth != null
+                    && exists(/databases/$(database)/documents/classrooms/$(resource.data.classroomCode))
+                    && get(/databases/$(database)/documents/classrooms/$(resource.data.classroomCode)).data.teacherUid == request.auth.uid;
       allow update: if false;
     }
 

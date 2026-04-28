@@ -61,7 +61,7 @@ export default function TryFreeSection({ t }) {
         <p className="text-lg text-purple-200 mb-10 max-w-xl mx-auto leading-relaxed">
           {isLoggedIn
             ? (isEl ? "Συνέχισε από εκεί που σταμάτησες ή δες τα στατιστικά σου." : "Continue where you left off or check your stats.")
-            : t("tryFreeSub", "Enter your email to join and keep progress across devices.")}
+            : t("tryFreeSub", "Create a free account to save progress and play on any device.")}
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">

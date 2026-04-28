@@ -10,6 +10,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import CookieConsent from "./components/CookieConsent";
 import InstallPrompt from "./components/InstallPrompt";
 import SWUpdateBanner from "./components/SWUpdateBanner";
+import OfflineBanner from "./components/OfflineBanner";
 import { ToastProvider } from "./components/ToastNotification";
 import { AnalyticsService } from "./services/AnalyticsService";
 import TimeLimitOverlay from "./components/TimeLimitOverlay";
@@ -50,6 +51,9 @@ const JoinClassroomPage = React.lazy(() => import("./pages/JoinClassroomPage"));
 const MyClassroomPage = React.lazy(() => import("./pages/MyClassroomPage"));
 const AchievementsPage = React.lazy(() => import("./pages/AchievementsPage"));
 const ShopPage = React.lazy(() => import("./pages/ShopPage"));
+const CurriculumMapPage = React.lazy(() => import("./pages/CurriculumMapPage"));
+const BlogPage = React.lazy(() => import("./pages/BlogPage"));
+const ForTeachersPage = React.lazy(() => import("./pages/ForTeachersPage"));
 
 function PlayGate({ children }) {
   const { user, guest, loading, isGuestExpired, userProfile } = React.useContext(AuthContext);
@@ -187,6 +191,10 @@ export default function App() {
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/subscription" element={<SubscriptionPage />} />
+                <Route path="/curriculum" element={<CurriculumMapPage />} />
+                <Route path="/blog/:slug" element={<BlogPage />} />
+                <Route path="/blog" element={<BlogPage />} />
+                <Route path="/for-teachers" element={<ForTeachersPage />} />
                 <Route path="/my-records" element={<LeaderboardPage />} />
                 <Route path="/weekly-report" element={<PlayGate><WeeklyReportPage /></PlayGate>} />
                 <Route path="/content-editor" element={<PlayGate><ContentEditorPage /></PlayGate>} />
@@ -199,7 +207,6 @@ export default function App() {
                 <Route path="/play/2-3-school" element={<PlayGate><ErrorBoundary><QuizPage_2_3_unified mode="school" /></ErrorBoundary></PlayGate>} />
                 <Route path="/play/2-3-fun" element={<PlayGate><ErrorBoundary><QuizPage_2_3_unified mode="fun" /></ErrorBoundary></PlayGate>} />
                 <Route path="/play/2-3-logic" element={<PlayGate><ErrorBoundary><QuizPage_2_3_unified mode="logic" /></ErrorBoundary></PlayGate>} />
-                <Route path="/play/:ageGroup" element={<PlayGate><ErrorBoundary><ActivityQuizPage /></ErrorBoundary></PlayGate>} />
                 <Route path="/play/4-5-fun" element={<PlayGate><ErrorBoundary><FunQuizPage ageGroup="4-5" /></ErrorBoundary></PlayGate>} />
                 <Route path="/play/4-5-logic" element={<PlayGate><ErrorBoundary><QuizPage_4_5_logic /></ErrorBoundary></PlayGate>} />
                 <Route path="/play/6-fun" element={<PlayGate><ErrorBoundary><FunQuizPage ageGroup="6" mode="fun" /></ErrorBoundary></PlayGate>} />
@@ -214,6 +221,7 @@ export default function App() {
                 <Route path="/play/board-games" element={<PlayGate><ErrorBoundary><BoardGamesPage /></ErrorBoundary></PlayGate>} />
                 <Route path="/play/adult-games" element={<PlayGate><ErrorBoundary><AdultGamesPage /></ErrorBoundary></PlayGate>} />
                 <Route path="/play/adult-games/:category" element={<PlayGate><ErrorBoundary><AdultGamesPage /></ErrorBoundary></PlayGate>} />
+                <Route path="/play/:ageGroup" element={<PlayGate><ErrorBoundary><ActivityQuizPage /></ErrorBoundary></PlayGate>} />
                 <Route path="/parent-dashboard" element={<PlayGate><ErrorBoundary><ParentDashboard /></ErrorBoundary></PlayGate>} />
                 <Route path="/teacher-dashboard" element={<PlayGate><ErrorBoundary><TeacherDashboard /></ErrorBoundary></PlayGate>} />
                 <Route path="/join/:code" element={<PlayGate><ErrorBoundary><JoinClassroomPage /></ErrorBoundary></PlayGate>} />
@@ -229,6 +237,7 @@ export default function App() {
             <CookieConsent />
             <InstallPrompt />
             <SWUpdateBanner />
+            <OfflineBanner />
             </ToastProvider>
           </BrowserRouter>
         </ProgressProvider>

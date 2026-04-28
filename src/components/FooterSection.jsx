@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { LanguageContext } from "../i18n/LanguageContext";
+import NewsletterSignup from "./NewsletterSignup";
 
 export default function FooterSection({ t }) {
   const { lang } = useContext(LanguageContext);
@@ -36,17 +37,26 @@ export default function FooterSection({ t }) {
               <li><a href="/#games" className="hover:text-white transition-colors">{isEl ? "Παιχνίδια" : "Games"}</a></li>
               <li><a href="/#how-it-works" className="hover:text-white transition-colors">{isEl ? "Πώς λειτουργεί" : "How it works"}</a></li>
               <li><a href="/#pricing" className="hover:text-white transition-colors">{isEl ? "Τιμές" : "Pricing"}</a></li>
-              <li><a href="/#faq" className="hover:text-white transition-colors">{isEl ? "Συχνές Ερωτήσεις" : "FAQ"}</a></li>
+              <li><a href="/faq" className="hover:text-white transition-colors">{isEl ? "Συχνές Ερωτήσεις" : "FAQ"}</a></li>
+              <li><a href="/curriculum" className="hover:text-white transition-colors">{isEl ? "Χάρτης Μαθημάτων" : "Curriculum Map"}</a></li>
+              <li><a href="/blog" className="hover:text-white transition-colors">{isEl ? "Blog" : "Blog"}</a></li>
+              <li><a href="/for-teachers" className="hover:text-white transition-colors">{isEl ? "Για Εκπαιδευτικούς" : "For Teachers"}</a></li>
               <li><a href="/contact" className="hover:text-white transition-colors">{isEl ? "Επικοινωνία" : "Contact"}</a></li>
               <li><a href="/about" className="hover:text-white transition-colors">{isEl ? "Σχετικά" : "About"}</a></li>
             </ul>
           </div>
 
-          {/* Contact & Social */}
+          {/* Newsletter + Contact & Social */}
           <div>
             <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-3">
-              {isEl ? "Επικοινωνία" : "Contact"}
+              {isEl ? "Μείνε ενημερωμένος" : "Stay updated"}
             </h4>
+            <p className="text-xs text-slate-500 mb-3">
+              {isEl ? "Νέα παιχνίδια, συμβουλές & προσφορές στο inbox σου." : "New games, tips & offers in your inbox."}
+            </p>
+            <div className="mb-5">
+              <NewsletterSignup variant="footer" />
+            </div>
             <a href="mailto:info@geoloplatform.com" className="text-sm hover:text-white transition-colors block mb-4">
               info@geoloplatform.com
             </a>

@@ -1,10 +1,16 @@
 User-agent: *
 Allow: /
-Disallow: /play/
+
 Disallow: /profile
 Disallow: /parent-dashboard
+Disallow: /teacher-dashboard
 Disallow: /stats
 Disallow: /guest-setup
 Disallow: /onboarding
+Disallow: /my-games
+Disallow: /my-classroom
+Disallow: /weekly-report
+Disallow: /content-editor
+Disallow: /join
 
 Sitemap: https://geoloplatform.com/sitemap.xml

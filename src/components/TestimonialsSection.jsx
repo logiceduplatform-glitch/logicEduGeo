@@ -8,8 +8,7 @@ const TESTIMONIALS = {
       emoji: "👩‍👧‍👦",
       color: "bg-gradient-to-br from-purple-500 to-pink-500",
       stars: 5,
-      verified: true,
-      text: "Ο 6χρονος γιος μου πλέον ξέρει τα γράμματα μόνος του — σε 3 εβδομάδες χρήσης! Η μικρή μου (4) ζητάει κάθε βράδυ «τα παιχνιδάκια». Το dashboard γονέα με βοηθάει να βλέπω ακριβώς τι μαθαίνουν.",
+      text: "Ο γιος μου πλέον ξέρει τα γράμματα μόνος του — σε λίγες εβδομάδες χρήσης! Η μικρή μου ζητάει κάθε βράδυ «τα παιχνιδάκια». Το dashboard γονέα με βοηθάει να βλέπω ακριβώς τι μαθαίνουν.",
     },
     {
       name: "Γιώργος Π.",
@@ -17,8 +16,7 @@ const TESTIMONIALS = {
       emoji: "👨‍🏫",
       color: "bg-gradient-to-br from-emerald-500 to-teal-500",
       stars: 5,
-      verified: true,
-      text: "Χρησιμοποιώ την πλατφόρμα στην τάξη μου εδώ και 2 μήνες. Η προσαρμοστική δυσκολία βοηθάει τον κάθε μαθητή στο δικό του ρυθμό. Ακόμα και οι πιο αδιάφοροι μαθητές ζητάνε να παίξουν!",
+      text: "Χρησιμοποιώ την πλατφόρμα στην τάξη μου. Η προσαρμοστική δυσκολία βοηθάει τον κάθε μαθητή στο δικό του ρυθμό. Ακόμα και οι πιο αδιάφοροι μαθητές ζητάνε να παίξουν!",
     },
     {
       name: "Ελένη Δ.",
@@ -26,8 +24,7 @@ const TESTIMONIALS = {
       emoji: "👩‍⚕️",
       color: "bg-gradient-to-br from-pink-500 to-rose-500",
       stars: 5,
-      verified: true,
-      text: "Ως παιδίατρος, συστήνω screen time μόνο αν είναι εκπαιδευτικό. Αυτή η πλατφόρμα τικάρει όλα τα κουτάκια: ασφαλής, χωρίς διαφημίσεις, και τα παιδιά μαθαίνουν πραγματικά. Τα πιστοποιητικά είναι εξαιρετικό κίνητρο.",
+      text: "Ως παιδίατρος, συστήνω screen time μόνο αν είναι εκπαιδευτικό. Αυτή η πλατφόρμα τικάρει όλα τα κουτάκια: ασφαλής, χωρίς διαφημίσεις, και τα παιδιά μαθαίνουν πραγματικά.",
     },
   ],
   en: [
@@ -37,8 +34,7 @@ const TESTIMONIALS = {
       emoji: "👩‍👧‍👦",
       color: "bg-gradient-to-br from-purple-500 to-pink-500",
       stars: 5,
-      verified: true,
-      text: "My 6-year-old now recognizes all letters on his own — in just 3 weeks! My 4-year-old asks for 'the games' every evening. The parent dashboard lets me see exactly what they're learning.",
+      text: "My son now recognizes all letters on his own — in just a few weeks! My daughter asks for 'the games' every evening. The parent dashboard lets me see exactly what they're learning.",
     },
     {
       name: "George P.",
@@ -46,8 +42,7 @@ const TESTIMONIALS = {
       emoji: "👨‍🏫",
       color: "bg-gradient-to-br from-emerald-500 to-teal-500",
       stars: 5,
-      verified: true,
-      text: "I've been using the platform in my classroom for 2 months. The adaptive difficulty helps each student learn at their own pace. Even my most disengaged students are asking to play!",
+      text: "I use the platform in my classroom. The adaptive difficulty helps each student learn at their own pace. Even my most disengaged students are asking to play!",
     },
     {
       name: "Elena D.",
@@ -55,8 +50,7 @@ const TESTIMONIALS = {
       emoji: "👩‍⚕️",
       color: "bg-gradient-to-br from-pink-500 to-rose-500",
       stars: 5,
-      verified: true,
-      text: "As a pediatrician, I only recommend screen time that's truly educational. This platform checks every box: safe, ad-free, and kids actually learn. The certificates are a brilliant motivator.",
+      text: "As a pediatrician, I only recommend screen time that's truly educational. This platform checks every box: safe, ad-free, and kids actually learn.",
     },
   ],
 };
@@ -93,11 +87,6 @@ function TestimonialCard({ t }) {
         <div className="flex-1">
           <div className="flex items-center gap-1.5">
             <span className="font-semibold text-slate-800 dark:text-slate-100 text-sm">{t.name}</span>
-            {t.verified && (
-              <svg className="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-              </svg>
-            )}
           </div>
           <div className="text-xs text-slate-400 dark:text-slate-500">{t.role}</div>
         </div>
@@ -126,7 +115,7 @@ export default function TestimonialsSection({ lang }) {
             {isEl ? "Αξιολογήσεις" : "Testimonials"}
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-800 dark:text-white">
-            {isEl ? "Τι λένε οι γονείς" : "What parents say"}
+            {isEl ? "Τι λένε οι χρήστες μας" : "What our users say"}
           </h2>
         </div>
 
@@ -159,6 +148,18 @@ export default function TestimonialsSection({ lang }) {
               />
             ))}
           </div>
+        </div>
+
+        <div className="text-center mt-10">
+          <a
+            href="/contact"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-semibold text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-900/30 hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-colors"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+            {isEl ? "Μοιράσου τη δική σου εμπειρία" : "Share your experience"}
+          </a>
         </div>
       </div>
     </section>

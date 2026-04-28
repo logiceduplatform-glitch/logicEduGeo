@@ -77,6 +77,39 @@ export function GameSkeleton() {
   );
 }
 
+export function DashboardSkeleton() {
+  return (
+    <div className="space-y-6 animate-pulse">
+      <div className="flex gap-3">
+        {[1, 2, 3, 4].map((i) => (
+          <div key={i} className="flex-1 h-12 bg-slate-200 dark:bg-slate-700 rounded-xl" />
+        ))}
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        {[1, 2, 3, 4].map((i) => (
+          <div key={i} className="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm">
+            <div className="w-10 h-10 bg-slate-200 dark:bg-slate-700 rounded-xl mb-3" />
+            <div className="h-6 bg-slate-200 dark:bg-slate-700 rounded-lg w-16 mb-2" />
+            <div className="h-3 bg-slate-200 dark:bg-slate-700 rounded-lg w-20" />
+          </div>
+        ))}
+      </div>
+      <div className="space-y-3">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-8 h-8 bg-slate-200 dark:bg-slate-700 rounded-lg" />
+              <div className="h-5 bg-slate-200 dark:bg-slate-700 rounded-lg w-48" />
+            </div>
+            <div className="h-3 bg-slate-200 dark:bg-slate-700 rounded-lg w-full mb-2" />
+            <div className="h-3 bg-slate-200 dark:bg-slate-700 rounded-lg w-3/4" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function SkeletonList({ rows = 5 }) {
   return (
     <div className="space-y-3 animate-pulse">

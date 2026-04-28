@@ -7,6 +7,7 @@ import { db, auth } from "../auth/firebase";
 import { collection, doc, setDoc, getDoc, getDocs, deleteDoc, query, where, orderBy, addDoc } from "firebase/firestore";
 import Navbar from "../components/Navbar";
 import SEO from "../components/SEO";
+import { ProfileService } from "../services/ProfileService";
 
 const STORAGE_KEY = "geo:teacherQuizzes";
 const DIFFICULTY_OPTIONS = ["easy", "medium", "hard"];
@@ -245,6 +246,10 @@ const T = {
     correctAnswer: "Σωστή",
     studentAnswer: "Απ. μαθητή",
     questionLabel: "Ερώτηση",
+    teacherFeedback: "Σχόλιο δασκάλου",
+    feedbackPlaceholder: "Γράψτε σχόλιο για τον μαθητή...",
+    feedbackSaved: "Αποθηκεύτηκε!",
+    saveFeedback: "Αποθήκευση",
     shareCode: "Κοινοποίηση",
     shareLinkCopied: "Ο σύνδεσμος αντιγράφηκε!",
     shareMessage: "Μπες εδώ για να κάνεις το quiz «TITLE»:",
@@ -283,6 +288,9 @@ const T = {
     leaderboard: "Κατάταξη (Top 10)",
     rank: "Θέση",
     studentAvgScore: "Μέσος όρος %",
+    allStudentsTitle: "Όλοι οι μαθητές",
+    quizzesCompleted: "Quiz",
+    lastActivity: "Τελευταία δραστ.",
     scoreDistribution: "Κατανομή βαθμολογίας",
     dist0_20: "0–20%",
     dist21_40: "21–40%",
@@ -399,6 +407,10 @@ const T = {
     correctAnswer: "Correct",
     studentAnswer: "Student's answer",
     questionLabel: "Question",
+    teacherFeedback: "Teacher feedback",
+    feedbackPlaceholder: "Write feedback for the student...",
+    feedbackSaved: "Saved!",
+    saveFeedback: "Save",
     shareCode: "Share",
     shareLinkCopied: "Link copied!",
     shareMessage: "Join here to take the quiz «TITLE»:",
@@ -437,6 +449,9 @@ const T = {
     leaderboard: "Leaderboard (Top 10)",
     rank: "Rank",
     studentAvgScore: "Avg %",
+    allStudentsTitle: "All students",
+    quizzesCompleted: "Quizzes",
+    lastActivity: "Last activity",
     scoreDistribution: "Score distribution",
     dist0_20: "0–20%",
     dist21_40: "21–40%",
@@ -609,6 +624,11 @@ export default function TeacherDashboard() {
   const l = T[lang] || T.en;
   const isEl = lang === "el";
 
+  const childActive = ProfileService.getActive();
+  useEffect(() => {
+    if (childActive) navigate("/play", { replace: true });
+  }, [childActive, navigate]);
+
   const [tab, setTab] = useState("quizzes");
   const [quizzes, setQuizzes] = useState(() => getLocalQuizzes());
   const [editing, setEditing] = useState(null);
@@ -624,6 +644,8 @@ export default function TeacherDashboard() {
   const [results, setResults] = useState([]);
   const [resultsFilter, setResultsFilter] = useState("all");
   const [expandedResult, setExpandedResult] = useState(null);
+  const [teacherComment, setTeacherComment] = useState("");
+  const [savingComment, setSavingComment] = useState(false);
   const [classrooms, setClassrooms] = useState([]);
   const [newClassroomName, setNewClassroomName] = useState("");
   const [creatingClassroom, setCreatingClassroom] = useState(false);
@@ -1067,15 +1089,16 @@ export default function TeacherDashboard() {
     const byStudent = {};
     rlist.forEach((r) => {
       const name = (r.studentName || "").trim() || "—";
-      if (!byStudent[name]) byStudent[name] = { sum: 0, n: 0 };
+      if (!byStudent[name]) byStudent[name] = { sum: 0, n: 0, lastDate: "" };
       const pct = r.total > 0 ? (r.score / r.total) * 100 : 0;
       byStudent[name].sum += pct;
       byStudent[name].n += 1;
+      if ((r.completedAt || "") > byStudent[name].lastDate) byStudent[name].lastDate = r.completedAt || "";
     });
-    const leaderboard = Object.entries(byStudent)
-      .map(([name, { sum, n }]) => ({ name, avg: n ? sum / n : 0 }))
-      .sort((a, b) => b.avg - a.avg)
-      .slice(0, 10);
+    const allStudents = Object.entries(byStudent)
+      .map(([name, { sum, n, lastDate }]) => ({ name, avg: n ? sum / n : 0, quizCount: n, lastDate }))
+      .sort((a, b) => b.avg - a.avg);
+    const leaderboard = allStudents.slice(0, 10);
     const buckets = [0, 0, 0, 0, 0];
     rlist.forEach((r) => {
       const p = r.total > 0 ? (r.score / r.total) * 100 : 0;
@@ -1094,6 +1117,7 @@ export default function TeacherDashboard() {
       avgAll,
       perQuiz,
       leaderboard,
+      allStudents,
       buckets,
       maxB,
       quizTitles,
@@ -1201,7 +1225,7 @@ export default function TeacherDashboard() {
       <Navbar />
 
       <div className="pt-20 pb-12 px-4">
-        <div className={tab === "analytics" ? "mx-auto max-w-6xl" : "mx-auto max-w-4xl"}>
+        <div className="mx-auto max-w-5xl">
           <button onClick={() => editing ? setEditing(null) : navigate(-1)} className="mb-6 flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
             {l.back}
@@ -1645,6 +1669,44 @@ export default function TeacherDashboard() {
                       ))}
                     </div>
                   </div>
+
+                  {/* ALL STUDENTS TABLE */}
+                  {analytics.allStudents.length > 0 && (
+                    <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5">
+                      <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 mb-3 flex items-center gap-2">
+                        <span>👥</span> {l.allStudentsTitle} ({analytics.allStudents.length})
+                      </h3>
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-sm">
+                          <thead>
+                            <tr className="text-left text-xs font-semibold text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-600">
+                              <th className="py-2 pr-3">#</th>
+                              <th className="py-2 pr-3">{l.studentName}</th>
+                              <th className="py-2 pr-3 text-center">{l.quizzesCompleted}</th>
+                              <th className="py-2 pr-3 text-center">{l.studentAvgScore}</th>
+                              <th className="py-2 text-right">{l.lastActivity}</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {analytics.allStudents.map((s, i) => {
+                              const avgColor = s.avg >= 80 ? "text-emerald-600 dark:text-emerald-400" : s.avg >= 50 ? "text-amber-600 dark:text-amber-400" : "text-rose-600 dark:text-rose-400";
+                              return (
+                                <tr key={s.name + i} className="border-b border-slate-100 dark:border-slate-700 last:border-b-0 hover:bg-slate-50 dark:hover:bg-slate-700/40 transition-colors">
+                                  <td className="py-2.5 pr-3 font-mono text-slate-400 dark:text-slate-500 text-xs">{i + 1}</td>
+                                  <td className="py-2.5 pr-3 font-medium text-slate-800 dark:text-slate-100">{s.name}</td>
+                                  <td className="py-2.5 pr-3 text-center tabular-nums text-slate-600 dark:text-slate-300">{s.quizCount}</td>
+                                  <td className={`py-2.5 pr-3 text-center tabular-nums font-bold ${avgColor}`}>{Math.round(s.avg * 10) / 10}%</td>
+                                  <td className="py-2.5 text-right text-xs text-slate-500 dark:text-slate-400">
+                                    {s.lastDate ? new Date(s.lastDate).toLocaleDateString() : "—"}
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
                 </>
               )}
             </div>
@@ -1991,147 +2053,6 @@ export default function TeacherDashboard() {
                 )}
               </div>
 
-              {/* Share popup modal */}
-              {sharePopup && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={() => setSharePopup(null)}>
-                  <div onClick={(e) => e.stopPropagation()} className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-5 animate-in">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-bold text-slate-800 dark:text-white">{l.shareCode}</h3>
-                      <button onClick={() => setSharePopup(null)} className="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
-                        <svg className="w-5 h-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-                      </button>
-                    </div>
-
-                    {/* Direct link */}
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5">{lang === "el" ? "Άμεσος σύνδεσμος" : "Direct link"}</label>
-                      <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-700/50 rounded-xl p-3 border border-slate-200 dark:border-slate-600">
-                        <span className="flex-1 text-sm font-mono text-blue-600 dark:text-blue-400 break-all select-all">{sharePopup.link}</span>
-                        <button onClick={() => copyShareText(sharePopup.link)} className="shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-600 text-white hover:bg-blue-700 transition-colors">
-                          {lang === "el" ? "Αντιγραφή" : "Copy"}
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Ready-made message */}
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5">{lang === "el" ? "Έτοιμο μήνυμα" : "Ready-made message"}</label>
-                      <div className="bg-slate-50 dark:bg-slate-700/50 rounded-xl p-3 border border-slate-200 dark:border-slate-600">
-                        <p className="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-line mb-3">{sharePopup.message}</p>
-                        <button onClick={() => copyShareText(sharePopup.message)} className="w-full px-3 py-2 rounded-lg text-xs font-bold bg-purple-600 text-white hover:bg-purple-700 transition-colors">
-                          {lang === "el" ? "Αντιγραφή μηνύματος" : "Copy message"}
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Code only */}
-                    <div className="text-center pt-2 border-t border-slate-200 dark:border-slate-700">
-                      <p className="text-xs text-slate-400 dark:text-slate-500 mb-1">{lang === "el" ? "ή δώσε μόνο τον κωδικό" : "or give the code only"}</p>
-                      <span className="font-mono text-2xl font-extrabold tracking-[0.3em] text-amber-600 dark:text-amber-400">{sharePopup.code}</span>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Assign quiz to classroom modal */}
-              {assignPopup && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={() => setAssignPopup(null)}>
-                  <div onClick={(e) => e.stopPropagation()} className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-sm w-full p-6 space-y-4 animate-in">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-bold text-slate-800 dark:text-white">{l.assignQuiz}</h3>
-                      <button onClick={() => setAssignPopup(null)} className="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
-                        <svg className="w-5 h-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-                      </button>
-                    </div>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">{isEl ? `Ανάθεση «${assignPopup.title}» σε:` : `Assign "${assignPopup.title}" to:`}</p>
-                    <div className="space-y-2">
-                      {classrooms.map((cls) => (
-                        <button
-                          key={cls.code}
-                          onClick={() => handleAssignQuizToClassroom(assignPopup, cls.code)}
-                          className="w-full flex items-center gap-3 p-4 rounded-xl border-2 border-slate-200 dark:border-slate-600 hover:border-blue-400 dark:hover:border-blue-500 transition-all text-left"
-                        >
-                          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shrink-0">🏫</div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-bold text-slate-800 dark:text-slate-100 truncate">{cls.name}</p>
-                            <p className="text-xs text-slate-400 dark:text-slate-500">{cls.code}</p>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Results detail modal */}
-              {expandedResult && expandedResult.answers && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={() => setExpandedResult(null)}>
-                  <div
-                    className="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl w-full max-w-lg max-h-[85vh] overflow-hidden flex flex-col"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <div className="px-6 py-5 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between shrink-0">
-                      <div>
-                        <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">
-                          {expandedResult.studentName || (isEl ? "Ανώνυμος" : "Anonymous")}
-                        </h3>
-                        <p className="text-sm text-slate-500 dark:text-slate-400">
-                          {expandedResult.quizTitle} — {expandedResult.score}/{expandedResult.total} ({expandedResult.total > 0 ? Math.round((expandedResult.score / expandedResult.total) * 100) : 0}%)
-                        </p>
-                      </div>
-                      <button
-                        onClick={() => setExpandedResult(null)}
-                        className="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
-                      >
-                        <svg className="w-5 h-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-                      </button>
-                    </div>
-
-                    <div className="p-6 overflow-y-auto space-y-3">
-                      {expandedResult.answers.map((a, ai) => (
-                        <div
-                          key={ai}
-                          className={`flex items-start gap-3 p-4 rounded-2xl border ${
-                            a.isCorrect
-                              ? "bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800"
-                              : "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800"
-                          }`}
-                        >
-                          <span className="text-xl shrink-0 mt-0.5">{a.isCorrect ? "✅" : "❌"}</span>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-xs font-bold text-slate-400 dark:text-slate-500 mb-1">{l.questionLabel} {ai + 1}</p>
-                            <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 mb-2">{a.question}</p>
-                            {!a.isCorrect ? (
-                              <div className="space-y-1.5">
-                                <div className="flex items-start gap-2 text-sm">
-                                  <span className="w-5 h-5 rounded-full bg-red-100 dark:bg-red-900/40 flex items-center justify-center shrink-0 mt-0.5">
-                                    <span className="w-2 h-2 rounded-full bg-red-500" />
-                                  </span>
-                                  <div>
-                                    <span className="text-xs font-semibold text-red-600 dark:text-red-400 block">{l.studentAnswer}</span>
-                                    <span className="text-red-700 dark:text-red-300">{a.selected}</span>
-                                  </div>
-                                </div>
-                                <div className="flex items-start gap-2 text-sm">
-                                  <span className="w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center shrink-0 mt-0.5">
-                                    <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                                  </span>
-                                  <div>
-                                    <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 block">{l.correctAnswer}</span>
-                                    <span className="text-emerald-700 dark:text-emerald-300">{a.correct}</span>
-                                  </div>
-                                </div>
-                              </div>
-                            ) : (
-                              <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">{l.correctAnswer}: {a.correct}</p>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
           )}
 
@@ -2266,6 +2187,180 @@ export default function TeacherDashboard() {
           )}
         </div>
       </div>
+
+      {/* ═══ Global modals (visible on any tab) ═══ */}
+
+      {/* Share popup modal */}
+      {sharePopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={() => setSharePopup(null)}>
+          <div onClick={(e) => e.stopPropagation()} className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-5 animate-in">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-bold text-slate-800 dark:text-white">{l.shareCode}</h3>
+              <button onClick={() => setSharePopup(null)} className="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+                <svg className="w-5 h-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5">{lang === "el" ? "Άμεσος σύνδεσμος" : "Direct link"}</label>
+              <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-700/50 rounded-xl p-3 border border-slate-200 dark:border-slate-600">
+                <span className="flex-1 text-sm font-mono text-blue-600 dark:text-blue-400 break-all select-all">{sharePopup.link}</span>
+                <button onClick={() => copyShareText(sharePopup.link)} className="shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-600 text-white hover:bg-blue-700 transition-colors">
+                  {lang === "el" ? "Αντιγραφή" : "Copy"}
+                </button>
+              </div>
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5">{lang === "el" ? "Έτοιμο μήνυμα" : "Ready-made message"}</label>
+              <div className="bg-slate-50 dark:bg-slate-700/50 rounded-xl p-3 border border-slate-200 dark:border-slate-600">
+                <p className="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-line mb-3">{sharePopup.message}</p>
+                <button onClick={() => copyShareText(sharePopup.message)} className="w-full px-3 py-2 rounded-lg text-xs font-bold bg-purple-600 text-white hover:bg-purple-700 transition-colors">
+                  {lang === "el" ? "Αντιγραφή μηνύματος" : "Copy message"}
+                </button>
+              </div>
+            </div>
+            <div className="text-center pt-2 border-t border-slate-200 dark:border-slate-700">
+              <p className="text-xs text-slate-400 dark:text-slate-500 mb-1">{lang === "el" ? "ή δώσε μόνο τον κωδικό" : "or give the code only"}</p>
+              <span className="font-mono text-2xl font-extrabold tracking-[0.3em] text-amber-600 dark:text-amber-400">{sharePopup.code}</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Assign quiz to classroom modal */}
+      {assignPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={() => setAssignPopup(null)}>
+          <div onClick={(e) => e.stopPropagation()} className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-sm w-full p-6 space-y-4 animate-in">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-bold text-slate-800 dark:text-white">{l.assignQuiz}</h3>
+              <button onClick={() => setAssignPopup(null)} className="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+                <svg className="w-5 h-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
+            <p className="text-sm text-slate-500 dark:text-slate-400">{isEl ? `Ανάθεση «${assignPopup.title}» σε:` : `Assign "${assignPopup.title}" to:`}</p>
+            <div className="space-y-2">
+              {classrooms.map((cls) => (
+                <button
+                  key={cls.code}
+                  onClick={() => handleAssignQuizToClassroom(assignPopup, cls.code)}
+                  className="w-full flex items-center gap-3 p-4 rounded-xl border-2 border-slate-200 dark:border-slate-600 hover:border-blue-400 dark:hover:border-blue-500 transition-all text-left"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shrink-0">🏫</div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-bold text-slate-800 dark:text-slate-100 truncate">{cls.name}</p>
+                    <p className="text-xs text-slate-400 dark:text-slate-500">{cls.code}</p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Results detail modal */}
+      {expandedResult && expandedResult.answers && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={() => setExpandedResult(null)}>
+          <div
+            className="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl w-full max-w-lg max-h-[85vh] overflow-hidden flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="px-6 py-5 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between shrink-0">
+              <div>
+                <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">
+                  {expandedResult.studentName || (isEl ? "Ανώνυμος" : "Anonymous")}
+                </h3>
+                <p className="text-sm text-slate-500 dark:text-slate-400">
+                  {expandedResult.quizTitle} — {expandedResult.score}/{expandedResult.total} ({expandedResult.total > 0 ? Math.round((expandedResult.score / expandedResult.total) * 100) : 0}%)
+                </p>
+              </div>
+              <button
+                onClick={() => setExpandedResult(null)}
+                className="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
+              >
+                <svg className="w-5 h-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
+            <div className="p-6 overflow-y-auto space-y-3">
+              {expandedResult.answers.map((a, ai) => (
+                <div
+                  key={ai}
+                  className={`flex items-start gap-3 p-4 rounded-2xl border ${
+                    a.isCorrect
+                      ? "bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800"
+                      : "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800"
+                  }`}
+                >
+                  <span className="text-xl shrink-0 mt-0.5">{a.isCorrect ? "✅" : "❌"}</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-bold text-slate-400 dark:text-slate-500 mb-1">{l.questionLabel} {ai + 1}</p>
+                    <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 mb-2">{a.question}</p>
+                    {!a.isCorrect ? (
+                      <div className="space-y-1.5">
+                        <div className="flex items-start gap-2 text-sm">
+                          <span className="w-5 h-5 rounded-full bg-red-100 dark:bg-red-900/40 flex items-center justify-center shrink-0 mt-0.5">
+                            <span className="w-2 h-2 rounded-full bg-red-500" />
+                          </span>
+                          <div>
+                            <span className="text-xs font-semibold text-red-600 dark:text-red-400 block">{l.studentAnswer}</span>
+                            <span className="text-red-700 dark:text-red-300">{a.selected}</span>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-2 text-sm">
+                          <span className="w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center shrink-0 mt-0.5">
+                            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                          </span>
+                          <div>
+                            <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 block">{l.correctAnswer}</span>
+                            <span className="text-emerald-700 dark:text-emerald-300">{a.correct}</span>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">{l.correctAnswer}: {a.correct}</p>
+                    )}
+                  </div>
+                </div>
+              ))}
+
+              {/* Teacher feedback */}
+              <div className="mt-4 p-4 rounded-2xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800">
+                <label className="text-xs font-bold text-amber-700 dark:text-amber-400 block mb-2">📝 {l.teacherFeedback}</label>
+                {expandedResult.teacherFeedback && !teacherComment && (
+                  <p className="text-sm text-amber-800 dark:text-amber-200 mb-2 italic">"{expandedResult.teacherFeedback}"</p>
+                )}
+                <textarea
+                  value={teacherComment}
+                  onChange={(e) => setTeacherComment(e.target.value)}
+                  placeholder={l.feedbackPlaceholder}
+                  rows={2}
+                  className="w-full px-3 py-2 rounded-xl border border-amber-300 dark:border-amber-700 bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100 outline-none focus:border-amber-500 resize-none"
+                />
+                <div className="flex items-center gap-2 mt-2">
+                  <button
+                    disabled={!teacherComment.trim() || savingComment}
+                    onClick={async () => {
+                      if (!teacherComment.trim() || !expandedResult?.id) return;
+                      setSavingComment(true);
+                      try {
+                        const { updateDoc: ud, doc: d } = await import("firebase/firestore");
+                        await ud(d(db, "classroomResults", expandedResult.id), { teacherFeedback: teacherComment.trim() });
+                        setExpandedResult({ ...expandedResult, teacherFeedback: teacherComment.trim() });
+                        setResults((prev) => prev.map((r) => r.id === expandedResult.id ? { ...r, teacherFeedback: teacherComment.trim() } : r));
+                        setTeacherComment("");
+                        setActionNotice(l.feedbackSaved);
+                        setTimeout(() => setActionNotice(null), 2000);
+                      } catch {}
+                      setSavingComment(false);
+                    }}
+                    className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 disabled:opacity-40 transition-all"
+                  >
+                    {savingComment ? "..." : l.saveFeedback}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { updateProfile } from "firebase/auth";
 import SEO from "../components/SEO";
+import { AnalyticsService } from "../services/AnalyticsService";
 import { AuthContext } from "../auth/AuthContext";
 import { LanguageContext } from "../i18n/LanguageContext";
 import {
@@ -171,6 +172,7 @@ export default function OnboardingPage() {
   const l = TEXTS[lang] || TEXTS.en;
 
   const [step, setStep] = useState(1);
+  const [celebrating, setCelebrating] = useState(false);
   const [role, setRole] = useState("");
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
@@ -198,8 +200,12 @@ export default function OnboardingPage() {
   const currentStepKey = steps[step - 1] || "role";
   const progress = (step / totalSteps) * 100;
 
+  const doNavigate = (route) => {
+    setCelebrating(true);
+    setTimeout(() => navigate(route), 2000);
+  };
+
   const handleFinish = () => {
-    // Sync display name to Firebase Auth for all roles
     if (user && name.trim() && !user.displayName) {
       updateProfile(user, { displayName: name.trim() }).catch(() => {});
     }
@@ -228,7 +234,7 @@ export default function OnboardingPage() {
       };
       const map = routeMaps[childAge];
       const route = map?.[childObjective] || ageToQuizRoute[childAge] || "/play";
-      navigate(route);
+      doNavigate(route);
       return;
     }
 
@@ -238,21 +244,21 @@ export default function OnboardingPage() {
       if (user && name.trim()) {
         updateProfile(user, { displayName: name.trim() }).catch(() => {});
       }
-      navigate("/teacher-dashboard");
+      doNavigate("/teacher-dashboard");
       return;
     }
 
     const profile = { name: name.trim(), role: "student", age, objective };
     saveUserProfile(profile);
 
-    if (age === "Adult") { navigate(adultObjectiveRoutes[objective] || "/play/adult-games"); return; }
-    if (age === "Age 2-3" && age2_3ObjectiveRoutes[objective]) { navigate(age2_3ObjectiveRoutes[objective]); return; }
-    if (age === "Age 4-5" && age4_5ObjectiveRoutes[objective]) { navigate(age4_5ObjectiveRoutes[objective]); return; }
-    if (age === "Age 6" && age6ObjectiveRoutes[objective]) { navigate(age6ObjectiveRoutes[objective]); return; }
-    if (age === "Age 7-8" && age7_8ObjectiveRoutes[objective]) { navigate(age7_8ObjectiveRoutes[objective]); return; }
-    if (age === "Age 9-10" && age9_10ObjectiveRoutes[objective]) { navigate(age9_10ObjectiveRoutes[objective]); return; }
-    if (age === "Age 11–12" && age11_12ObjectiveRoutes[objective]) { navigate(age11_12ObjectiveRoutes[objective]); return; }
-    navigate(ageToQuizRoute[age] || "/play");
+    if (age === "Adult") { doNavigate(adultObjectiveRoutes[objective] || "/play/adult-games"); return; }
+    if (age === "Age 2-3" && age2_3ObjectiveRoutes[objective]) { doNavigate(age2_3ObjectiveRoutes[objective]); return; }
+    if (age === "Age 4-5" && age4_5ObjectiveRoutes[objective]) { doNavigate(age4_5ObjectiveRoutes[objective]); return; }
+    if (age === "Age 6" && age6ObjectiveRoutes[objective]) { doNavigate(age6ObjectiveRoutes[objective]); return; }
+    if (age === "Age 7-8" && age7_8ObjectiveRoutes[objective]) { doNavigate(age7_8ObjectiveRoutes[objective]); return; }
+    if (age === "Age 9-10" && age9_10ObjectiveRoutes[objective]) { doNavigate(age9_10ObjectiveRoutes[objective]); return; }
+    if (age === "Age 11–12" && age11_12ObjectiveRoutes[objective]) { doNavigate(age11_12ObjectiveRoutes[objective]); return; }
+    doNavigate(ageToQuizRoute[age] || "/play");
   };
 
   const canNext =
@@ -268,8 +274,10 @@ export default function OnboardingPage() {
 
   const handleNext = () => {
     if (step < totalSteps) {
+      AnalyticsService.onboardingStep(step + 1, role);
       setStep(step + 1);
     } else {
+      AnalyticsService.onboardingComplete(role);
       handleFinish();
     }
   };
@@ -321,6 +329,28 @@ export default function OnboardingPage() {
       default: return "";
     }
   };
+
+  if (celebrating) {
+    return (
+      <div id="main-content" className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center p-4">
+        <div className="text-center animate-[fadeInUp_0.5s_ease-out]">
+          <div className="text-7xl mb-6 animate-bounce">🎉</div>
+          <h1 className="text-3xl font-extrabold text-white mb-3">
+            {lang === "el" ? "Καλώς ήρθες!" : "Welcome!"}
+          </h1>
+          <p className="text-lg text-white/80 mb-2">{name}</p>
+          <p className="text-sm text-white/60">
+            {lang === "el" ? "Ετοιμάζουμε την εμπειρία σου..." : "Preparing your experience..."}
+          </p>
+          <div className="mt-8 flex justify-center gap-2">
+            {["🌟", "⭐", "✨", "💫", "🎊"].map((e, i) => (
+              <span key={i} className="text-3xl animate-bounce" style={{ animationDelay: `${i * 0.15}s` }}>{e}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div id="main-content" className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-900 flex items-center justify-center p-4">

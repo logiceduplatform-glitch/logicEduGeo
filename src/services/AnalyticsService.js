@@ -42,4 +42,40 @@ export const AnalyticsService = {
   favorite(gameId) {
     log("add_to_favorites", { game_id: gameId });
   },
+
+  onboardingStep(step, role) {
+    log("onboarding_step", { step, role });
+  },
+
+  onboardingComplete(role) {
+    log("onboarding_complete", { role });
+  },
+
+  classroomEnroll(classroomCode) {
+    log("classroom_enroll", { classroom_code: classroomCode });
+  },
+
+  classroomCreate(classroomCode) {
+    log("classroom_create", { classroom_code: classroomCode });
+  },
+
+  quizCreate(quizId) {
+    log("quiz_create", { quiz_id: quizId });
+  },
+
+  quizAssign(quizCode, classroomCode) {
+    log("quiz_assign", { quiz_code: quizCode, classroom_code: classroomCode });
+  },
+
+  subscriptionView(currentTier) {
+    log("subscription_view", { current_tier: currentTier });
+  },
+
+  referralShare(method) {
+    log("referral_share", { method });
+  },
+
+  featureUse(featureName) {
+    log("feature_use", { feature: featureName });
+  },
 };

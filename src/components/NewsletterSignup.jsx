@@ -6,19 +6,37 @@ export default function NewsletterSignup({ variant = "inline" }) {
   const isEl = lang === "el";
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email) return;
+    if (!email || sending) return;
+    setSending(true);
+    setError(false);
     try {
-      const existing = JSON.parse(localStorage.getItem("geo:newsletter") || "[]");
-      if (!existing.includes(email)) {
-        existing.push(email);
-        localStorage.setItem("geo:newsletter", JSON.stringify(existing));
+      const res = await fetch("https://formspree.io/f/xpwzgkdl", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ email, _subject: "Newsletter signup", type: "newsletter" }),
+      });
+      if (res.ok) {
+        try {
+          const existing = JSON.parse(localStorage.getItem("geo:newsletter") || "[]");
+          if (!existing.includes(email)) {
+            existing.push(email);
+            localStorage.setItem("geo:newsletter", JSON.stringify(existing));
+          }
+        } catch {}
+        setSubmitted(true);
+        setEmail("");
+      } else {
+        setError(true);
       }
-    } catch { /* storage unavailable */ }
-    setSubmitted(true);
-    setEmail("");
+    } catch {
+      setError(true);
+    }
+    setSending(false);
   };
 
   if (submitted) {
@@ -33,25 +51,31 @@ export default function NewsletterSignup({ variant = "inline" }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-2">
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder={isEl ? "Το email σου..." : "Your email..."}
-        required
-        className={`flex-1 min-w-0 px-4 py-2.5 rounded-xl text-sm outline-none transition-all ${
-          variant === "footer"
-            ? "bg-slate-800 border border-slate-700 text-white placeholder:text-slate-500 focus:border-purple-500"
-            : "bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white placeholder:text-slate-400 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 dark:focus:ring-purple-900"
-        }`}
-      />
-      <button
-        type="submit"
-        className="px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-md transition-all hover:scale-[1.02] shrink-0"
-      >
-        {isEl ? "Εγγραφή" : "Subscribe"}
-      </button>
+    <form onSubmit={handleSubmit} className="space-y-2">
+      <div className="flex gap-2">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder={isEl ? "Το email σου..." : "Your email..."}
+          required
+          className={`flex-1 min-w-0 px-4 py-2.5 rounded-xl text-sm outline-none transition-all ${
+            variant === "footer"
+              ? "bg-slate-800 border border-slate-700 text-white placeholder:text-slate-500 focus:border-purple-500"
+              : "bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white placeholder:text-slate-400 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 dark:focus:ring-purple-900"
+          }`}
+        />
+        <button
+          type="submit"
+          disabled={sending}
+          className="px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-md transition-all hover:scale-[1.02] shrink-0 disabled:opacity-60"
+        >
+          {sending ? "..." : isEl ? "Εγγραφή" : "Subscribe"}
+        </button>
+      </div>
+      {error && (
+        <p className="text-xs text-red-500">{isEl ? "Σφάλμα. Δοκιμάστε ξανά." : "Error. Please try again."}</p>
+      )}
     </form>
   );
 }

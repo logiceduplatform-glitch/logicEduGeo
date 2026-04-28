@@ -11,7 +11,7 @@ const DEFAULTS = {
   imageHeight: "630",
 };
 
-export default function SEO({ title, description, image, path }) {
+export default function SEO({ title, description, image, path, article }) {
   const location = useLocation();
   const fullTitle = title ? `${title} | ${DEFAULTS.siteName}` : DEFAULTS.siteName;
   const desc = description || DEFAULTS.description;
@@ -20,20 +20,51 @@ export default function SEO({ title, description, image, path }) {
   const canonicalUrl = `${DEFAULTS.url}${derivedPath === "/" ? "" : derivedPath}`;
 
   const isHome = derivedPath === "/" || derivedPath === "";
-  const jsonLd = isHome ? {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    name: DEFAULTS.siteName,
-    url: DEFAULTS.url,
-    description: DEFAULTS.description,
-    applicationCategory: "EducationalApplication",
-    operatingSystem: "Web",
-    offers: {
-      "@type": "Offer",
-      price: "0",
-      priceCurrency: "EUR",
-    },
-  } : null;
+
+  let jsonLd = null;
+  if (isHome) {
+    jsonLd = {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      name: DEFAULTS.siteName,
+      url: DEFAULTS.url,
+      description: DEFAULTS.description,
+      applicationCategory: "EducationalApplication",
+      operatingSystem: "Web",
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "EUR",
+      },
+    };
+  } else if (article) {
+    jsonLd = {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: title || DEFAULTS.siteName,
+      description: desc,
+      url: canonicalUrl,
+      image: ogImage,
+      author: {
+        "@type": "Organization",
+        name: DEFAULTS.siteName,
+        url: DEFAULTS.url,
+      },
+      publisher: {
+        "@type": "Organization",
+        name: DEFAULTS.siteName,
+        logo: {
+          "@type": "ImageObject",
+          url: `${DEFAULTS.url}/icons/icon-192.png`,
+        },
+      },
+      ...(article.datePublished && { datePublished: article.datePublished }),
+      ...(article.dateModified && { dateModified: article.dateModified }),
+      ...(article.readTime && { timeRequired: article.readTime }),
+    };
+  }
+
+  const ogType = article ? "article" : "website";
 
   return (
     <Helmet>
@@ -43,7 +74,7 @@ export default function SEO({ title, description, image, path }) {
 
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={desc} />
-      <meta property="og:type" content="website" />
+      <meta property="og:type" content={ogType} />
       <meta property="og:url" content={canonicalUrl} />
       <meta property="og:image" content={ogImage} />
       <meta property="og:image:width" content={DEFAULTS.imageWidth} />
