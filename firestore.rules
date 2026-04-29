@@ -38,6 +38,12 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // Premium content list - public read (so the gate can check), admin write
+    match /premiumContent/{itemId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
     // System announcements - public read, admin write
     match /systemAnnouncements/{annId} {
       allow read: if true;

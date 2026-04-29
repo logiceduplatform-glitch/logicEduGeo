@@ -17,7 +17,9 @@ import { AnalyticsService } from "./services/AnalyticsService";
 import TimeLimitOverlay from "./components/TimeLimitOverlay";
 import { CertificateService } from "./services/CertificateService";
 import { FeatureFlagService } from "./services/FeatureFlagService";
+import { PremiumContentService } from "./services/PremiumContentService";
 import FeatureGate from "./components/FeatureGate";
+import PremiumGate from "./components/PremiumGate";
 import { SkeletonCard } from "./components/SkeletonLoader";
 import SeasonalDecorations from "./components/SeasonalDecorations";
 import KeyboardShortcutsHandler from "./components/KeyboardShortcutsHandler";
@@ -190,6 +192,7 @@ function MilestoneListener() {
 export default function App() {
   useEffect(() => {
     FeatureFlagService.init();
+    PremiumContentService.init();
   }, []);
 
   return (
@@ -228,37 +231,37 @@ export default function App() {
                 <Route path="/for-teachers" element={<ForTeachersPage />} />
                 <Route path="/for-parents" element={<ForParentsPage />} />
                 <Route path="/my-records" element={<LeaderboardPage />} />
-                <Route path="/leaderboard" element={<FeatureGate flag="leaderboard"><GlobalLeaderboardPage /></FeatureGate>} />
-                <Route path="/events" element={<FeatureGate flag="events"><EventsPage /></FeatureGate>} />
-                <Route path="/trophy-room" element={<FeatureGate flag="trophyRoom"><TrophyRoomPage /></FeatureGate>} />
+                <Route path="/leaderboard" element={<FeatureGate flag="leaderboard"><PremiumGate id="feature_leaderboard"><GlobalLeaderboardPage /></PremiumGate></FeatureGate>} />
+                <Route path="/events" element={<FeatureGate flag="events"><PremiumGate id="feature_events"><EventsPage /></PremiumGate></FeatureGate>} />
+                <Route path="/trophy-room" element={<FeatureGate flag="trophyRoom"><PremiumGate id="feature_trophyRoom"><TrophyRoomPage /></PremiumGate></FeatureGate>} />
                 <Route path="/admin/*" element={<AuthGate><AdminDashboard /></AuthGate>} />
-                <Route path="/speedrun" element={<PlayGate><FeatureGate flag="speedrun"><SpeedrunPage /></FeatureGate></PlayGate>} />
-                <Route path="/mastery" element={<PlayGate><FeatureGate flag="masteryTracker"><SubjectMasteryPage /></FeatureGate></PlayGate>} />
-                <Route path="/study-buddy" element={<PlayGate><FeatureGate flag="aiTutor"><StudyBuddyPage /></FeatureGate></PlayGate>} />
+                <Route path="/speedrun" element={<PlayGate><FeatureGate flag="speedrun"><PremiumGate id="feature_speedrun"><SpeedrunPage /></PremiumGate></FeatureGate></PlayGate>} />
+                <Route path="/mastery" element={<PlayGate><FeatureGate flag="masteryTracker"><PremiumGate id="feature_masteryTracker"><SubjectMasteryPage /></PremiumGate></FeatureGate></PlayGate>} />
+                <Route path="/study-buddy" element={<PlayGate><FeatureGate flag="aiTutor"><PremiumGate id="feature_aiTutor"><StudyBuddyPage /></PremiumGate></FeatureGate></PlayGate>} />
                 <Route path="/weekly-report" element={<PlayGate><WeeklyReportPage /></PlayGate>} />
                 <Route path="/content-editor" element={<PlayGate><ContentEditorPage /></PlayGate>} />
                 <Route path="/online-multiplayer" element={<PlayGate><OnlineMultiplayerPage /></PlayGate>} />
-                <Route path="/ai-tutor" element={<PlayGate><FeatureGate flag="aiTutor"><AITutorPage /></FeatureGate></PlayGate>} />
+                <Route path="/ai-tutor" element={<PlayGate><FeatureGate flag="aiTutor"><PremiumGate id="feature_aiTutor"><AITutorPage /></PremiumGate></FeatureGate></PlayGate>} />
                 <Route path="/achievements" element={<PlayGate><AchievementsPage /></PlayGate>} />
-                <Route path="/shop" element={<PlayGate><FeatureGate flag="shop"><ShopPage /></FeatureGate></PlayGate>} />
+                <Route path="/shop" element={<PlayGate><FeatureGate flag="shop"><PremiumGate id="feature_shop"><ShopPage /></PremiumGate></FeatureGate></PlayGate>} />
                 <Route path="/guest-expired" element={<GuestExpiredPage />} />
                 <Route path="/play" element={<PlayGate><ErrorBoundary><QuizPage /></ErrorBoundary></PlayGate>} />
-                <Route path="/play/2-3-school" element={<PlayGate><FeatureGate flag="games_age_2_3_school"><ErrorBoundary><QuizPage_2_3_unified mode="school" /></ErrorBoundary></FeatureGate></PlayGate>} />
-                <Route path="/play/2-3-fun" element={<PlayGate><FeatureGate flag="games_age_2_3_fun"><ErrorBoundary><QuizPage_2_3_unified mode="fun" /></ErrorBoundary></FeatureGate></PlayGate>} />
-                <Route path="/play/2-3-logic" element={<PlayGate><FeatureGate flag="games_age_2_3_logic"><ErrorBoundary><QuizPage_2_3_unified mode="logic" /></ErrorBoundary></FeatureGate></PlayGate>} />
-                <Route path="/play/4-5-fun" element={<PlayGate><FeatureGate flag="games_age_4_5_fun"><ErrorBoundary><FunQuizPage ageGroup="4-5" /></ErrorBoundary></FeatureGate></PlayGate>} />
-                <Route path="/play/4-5-logic" element={<PlayGate><FeatureGate flag="games_age_4_5_logic"><ErrorBoundary><QuizPage_4_5_logic /></ErrorBoundary></FeatureGate></PlayGate>} />
-                <Route path="/play/6-fun" element={<PlayGate><FeatureGate flag="games_age_6_fun"><ErrorBoundary><FunQuizPage ageGroup="6" mode="fun" /></ErrorBoundary></FeatureGate></PlayGate>} />
-                <Route path="/play/6-logic" element={<PlayGate><FeatureGate flag="games_age_6_logic"><ErrorBoundary><FunQuizPage ageGroup="6" mode="logic" /></ErrorBoundary></FeatureGate></PlayGate>} />
-                <Route path="/play/7-8-fun" element={<PlayGate><FeatureGate flag="games_age_7_8_fun"><ErrorBoundary><FunQuizPage ageGroup="7-8" mode="fun" /></ErrorBoundary></FeatureGate></PlayGate>} />
-                <Route path="/play/7-8-logic" element={<PlayGate><FeatureGate flag="games_age_7_8_logic"><ErrorBoundary><FunQuizPage ageGroup="7-8" mode="logic" /></ErrorBoundary></FeatureGate></PlayGate>} />
-                <Route path="/play/9-10-fun" element={<PlayGate><FeatureGate flag="games_age_9_10_fun"><ErrorBoundary><FunQuizPage ageGroup="9-10" mode="fun" /></ErrorBoundary></FeatureGate></PlayGate>} />
-                <Route path="/play/9-10-logic" element={<PlayGate><FeatureGate flag="games_age_9_10_logic"><ErrorBoundary><FunQuizPage ageGroup="9-10" mode="logic" /></ErrorBoundary></FeatureGate></PlayGate>} />
-                <Route path="/play/11-12-school" element={<PlayGate><FeatureGate flag="games_age_11_12_school"><ErrorBoundary><QuizPage menuVariant="11-12" mode="school" /></ErrorBoundary></FeatureGate></PlayGate>} />
-                <Route path="/play/11-12-fun" element={<PlayGate><FeatureGate flag="games_age_11_12_fun"><ErrorBoundary><FunQuizPage ageGroup="11-12" mode="fun" /></ErrorBoundary></FeatureGate></PlayGate>} />
-                <Route path="/play/11-12-logic" element={<PlayGate><FeatureGate flag="games_age_11_12_logic"><ErrorBoundary><FunQuizPage ageGroup="11-12" mode="logic" /></ErrorBoundary></FeatureGate></PlayGate>} />
-                <Route path="/play/board-games" element={<PlayGate><FeatureGate flag="games_age_adult_board"><ErrorBoundary><BoardGamesPage /></ErrorBoundary></FeatureGate></PlayGate>} />
-                <Route path="/play/adult-games" element={<PlayGate><FeatureGate flag="games_age_adult_brain"><ErrorBoundary><AdultGamesPage /></ErrorBoundary></FeatureGate></PlayGate>} />
+                <Route path="/play/2-3-school" element={<PlayGate><FeatureGate flag="games_age_2_3_school"><PremiumGate id="games_age_2_3_school"><ErrorBoundary><QuizPage_2_3_unified mode="school" /></ErrorBoundary></PremiumGate></FeatureGate></PlayGate>} />
+                <Route path="/play/2-3-fun" element={<PlayGate><FeatureGate flag="games_age_2_3_fun"><PremiumGate id="games_age_2_3_fun"><ErrorBoundary><QuizPage_2_3_unified mode="fun" /></ErrorBoundary></PremiumGate></FeatureGate></PlayGate>} />
+                <Route path="/play/2-3-logic" element={<PlayGate><FeatureGate flag="games_age_2_3_logic"><PremiumGate id="games_age_2_3_logic"><ErrorBoundary><QuizPage_2_3_unified mode="logic" /></ErrorBoundary></PremiumGate></FeatureGate></PlayGate>} />
+                <Route path="/play/4-5-fun" element={<PlayGate><FeatureGate flag="games_age_4_5_fun"><PremiumGate id="games_age_4_5_fun"><ErrorBoundary><FunQuizPage ageGroup="4-5" /></ErrorBoundary></PremiumGate></FeatureGate></PlayGate>} />
+                <Route path="/play/4-5-logic" element={<PlayGate><FeatureGate flag="games_age_4_5_logic"><PremiumGate id="games_age_4_5_logic"><ErrorBoundary><QuizPage_4_5_logic /></ErrorBoundary></PremiumGate></FeatureGate></PlayGate>} />
+                <Route path="/play/6-fun" element={<PlayGate><FeatureGate flag="games_age_6_fun"><PremiumGate id="games_age_6_fun"><ErrorBoundary><FunQuizPage ageGroup="6" mode="fun" /></ErrorBoundary></PremiumGate></FeatureGate></PlayGate>} />
+                <Route path="/play/6-logic" element={<PlayGate><FeatureGate flag="games_age_6_logic"><PremiumGate id="games_age_6_logic"><ErrorBoundary><FunQuizPage ageGroup="6" mode="logic" /></ErrorBoundary></PremiumGate></FeatureGate></PlayGate>} />
+                <Route path="/play/7-8-fun" element={<PlayGate><FeatureGate flag="games_age_7_8_fun"><PremiumGate id="games_age_7_8_fun"><ErrorBoundary><FunQuizPage ageGroup="7-8" mode="fun" /></ErrorBoundary></PremiumGate></FeatureGate></PlayGate>} />
+                <Route path="/play/7-8-logic" element={<PlayGate><FeatureGate flag="games_age_7_8_logic"><PremiumGate id="games_age_7_8_logic"><ErrorBoundary><FunQuizPage ageGroup="7-8" mode="logic" /></ErrorBoundary></PremiumGate></FeatureGate></PlayGate>} />
+                <Route path="/play/9-10-fun" element={<PlayGate><FeatureGate flag="games_age_9_10_fun"><PremiumGate id="games_age_9_10_fun"><ErrorBoundary><FunQuizPage ageGroup="9-10" mode="fun" /></ErrorBoundary></PremiumGate></FeatureGate></PlayGate>} />
+                <Route path="/play/9-10-logic" element={<PlayGate><FeatureGate flag="games_age_9_10_logic"><PremiumGate id="games_age_9_10_logic"><ErrorBoundary><FunQuizPage ageGroup="9-10" mode="logic" /></ErrorBoundary></PremiumGate></FeatureGate></PlayGate>} />
+                <Route path="/play/11-12-school" element={<PlayGate><FeatureGate flag="games_age_11_12_school"><PremiumGate id="games_age_11_12_school"><ErrorBoundary><QuizPage menuVariant="11-12" mode="school" /></ErrorBoundary></PremiumGate></FeatureGate></PlayGate>} />
+                <Route path="/play/11-12-fun" element={<PlayGate><FeatureGate flag="games_age_11_12_fun"><PremiumGate id="games_age_11_12_fun"><ErrorBoundary><FunQuizPage ageGroup="11-12" mode="fun" /></ErrorBoundary></PremiumGate></FeatureGate></PlayGate>} />
+                <Route path="/play/11-12-logic" element={<PlayGate><FeatureGate flag="games_age_11_12_logic"><PremiumGate id="games_age_11_12_logic"><ErrorBoundary><FunQuizPage ageGroup="11-12" mode="logic" /></ErrorBoundary></PremiumGate></FeatureGate></PlayGate>} />
+                <Route path="/play/board-games" element={<PlayGate><FeatureGate flag="games_age_adult_board"><PremiumGate id="games_age_adult_board"><ErrorBoundary><BoardGamesPage /></ErrorBoundary></PremiumGate></FeatureGate></PlayGate>} />
+                <Route path="/play/adult-games" element={<PlayGate><FeatureGate flag="games_age_adult_brain"><PremiumGate id="games_age_adult_brain"><ErrorBoundary><AdultGamesPage /></ErrorBoundary></PremiumGate></FeatureGate></PlayGate>} />
                 <Route path="/play/adult-games/:category" element={<PlayGate><ErrorBoundary><AdultGamesPage /></ErrorBoundary></PlayGate>} />
                 <Route path="/play/:ageGroup" element={<PlayGate><ErrorBoundary><ActivityQuizPage /></ErrorBoundary></PlayGate>} />
                 <Route path="/parent-dashboard" element={<PlayGate><ErrorBoundary><ParentDashboard /></ErrorBoundary></PlayGate>} />
@@ -266,17 +269,17 @@ export default function App() {
                 <Route path="/join/:code" element={<PlayGate><ErrorBoundary><JoinClassroomPage /></ErrorBoundary></PlayGate>} />
                 <Route path="/join" element={<PlayGate><ErrorBoundary><JoinClassroomPage /></ErrorBoundary></PlayGate>} />
                 <Route path="/lesson/:code" element={<ErrorBoundary><LessonViewPage /></ErrorBoundary>} />
-                <Route path="/daily" element={<FeatureGate flag="dailyChallenge"><ErrorBoundary><DailyChallengePage /></ErrorBoundary></FeatureGate>} />
-                <Route path="/adventure" element={<FeatureGate flag="adventureMap"><ErrorBoundary><AdventureMapPage /></ErrorBoundary></FeatureGate>} />
-                <Route path="/avatar" element={<FeatureGate flag="avatarBuilder"><ErrorBoundary><AvatarBuilderPage /></ErrorBoundary></FeatureGate>} />
-                <Route path="/live-quiz" element={<FeatureGate flag="liveQuiz"><ErrorBoundary><LiveQuizPage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/daily" element={<FeatureGate flag="dailyChallenge"><PremiumGate id="feature_dailyChallenge"><ErrorBoundary><DailyChallengePage /></ErrorBoundary></PremiumGate></FeatureGate>} />
+                <Route path="/adventure" element={<FeatureGate flag="adventureMap"><PremiumGate id="feature_adventureMap"><ErrorBoundary><AdventureMapPage /></ErrorBoundary></PremiumGate></FeatureGate>} />
+                <Route path="/avatar" element={<FeatureGate flag="avatarBuilder"><PremiumGate id="feature_avatar"><ErrorBoundary><AvatarBuilderPage /></ErrorBoundary></PremiumGate></FeatureGate>} />
+                <Route path="/live-quiz" element={<FeatureGate flag="liveQuiz"><PremiumGate id="feature_liveQuiz"><ErrorBoundary><LiveQuizPage /></ErrorBoundary></PremiumGate></FeatureGate>} />
                 <Route path="/challenge" element={<ErrorBoundary><ChallengeFriendPage /></ErrorBoundary>} />
                 <Route path="/worksheets" element={<FeatureGate flag="worksheets"><ErrorBoundary><PrintableWorksheetsPage /></ErrorBoundary></FeatureGate>} />
-                <Route path="/battle" element={<FeatureGate flag="battleRoyale"><ErrorBoundary><BattleRoyalePage /></ErrorBoundary></FeatureGate>} />
-                <Route path="/pet" element={<FeatureGate flag="pet"><ErrorBoundary><PetPage /></ErrorBoundary></FeatureGate>} />
-                <Route path="/story" element={<FeatureGate flag="storyMode"><ErrorBoundary><StoryModePage /></ErrorBoundary></FeatureGate>} />
-                <Route path="/family-challenge" element={<FeatureGate flag="familyChallenge"><ErrorBoundary><FamilyChallengePage /></ErrorBoundary></FeatureGate>} />
-                <Route path="/cards" element={<FeatureGate flag="cards"><ErrorBoundary><CollectibleCardsPage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/battle" element={<FeatureGate flag="battleRoyale"><PremiumGate id="feature_battleRoyale"><ErrorBoundary><BattleRoyalePage /></ErrorBoundary></PremiumGate></FeatureGate>} />
+                <Route path="/pet" element={<FeatureGate flag="pet"><PremiumGate id="feature_pet"><ErrorBoundary><PetPage /></ErrorBoundary></PremiumGate></FeatureGate>} />
+                <Route path="/story" element={<FeatureGate flag="storyMode"><PremiumGate id="feature_storyMode"><ErrorBoundary><StoryModePage /></ErrorBoundary></PremiumGate></FeatureGate>} />
+                <Route path="/family-challenge" element={<FeatureGate flag="familyChallenge"><PremiumGate id="feature_familyChallenge"><ErrorBoundary><FamilyChallengePage /></ErrorBoundary></PremiumGate></FeatureGate>} />
+                <Route path="/cards" element={<FeatureGate flag="cards"><PremiumGate id="feature_cards"><ErrorBoundary><CollectibleCardsPage /></ErrorBoundary></PremiumGate></FeatureGate>} />
                 <Route path="/my-classroom/:code" element={<PlayGate><ErrorBoundary><MyClassroomPage /></ErrorBoundary></PlayGate>} />
                 <Route path="/my-classroom" element={<PlayGate><ErrorBoundary><MyClassroomPage /></ErrorBoundary></PlayGate>} />
                 <Route path="*" element={<NotFoundPage />} />

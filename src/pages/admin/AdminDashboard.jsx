@@ -7,6 +7,7 @@ import SEO from "../../components/SEO";
 import AdminOverview from "../../components/admin/AdminOverview";
 import AdminUsers from "../../components/admin/AdminUsers";
 import AdminFlags from "../../components/admin/AdminFlags";
+import AdminPremium from "../../components/admin/AdminPremium";
 import AdminContent from "../../components/admin/AdminContent";
 import AdminModeration from "../../components/admin/AdminModeration";
 import AdminSubscriptions from "../../components/admin/AdminSubscriptions";
@@ -21,6 +22,7 @@ const T = {
     overview: "Επισκόπηση",
     users: "Χρήστες",
     flags: "Feature Flags",
+    premium: "Premium",
     content: "Περιεχόμενο",
     moderation: "Moderation",
     subs: "Subscriptions",
@@ -34,6 +36,7 @@ const T = {
     overview: "Overview",
     users: "Users",
     flags: "Feature Flags",
+    premium: "Premium",
     content: "Content",
     moderation: "Moderation",
     subs: "Subscriptions",
@@ -46,9 +49,10 @@ const TABS = [
   { id: "overview",    icon: "📊", key: "overview",    Comp: AdminOverview },
   { id: "users",       icon: "👥", key: "users",       Comp: AdminUsers },
   { id: "flags",       icon: "🎛️", key: "flags",       Comp: AdminFlags },
+  { id: "premium",     icon: "💎", key: "premium",     Comp: AdminPremium },
   { id: "content",     icon: "📝", key: "content",     Comp: AdminContent },
   { id: "moderation",  icon: "🛡️", key: "moderation",  Comp: AdminModeration },
-  { id: "subs",        icon: "💎", key: "subs",        Comp: AdminSubscriptions },
+  { id: "subs",        icon: "💰", key: "subs",        Comp: AdminSubscriptions },
   { id: "system",      icon: "⚙️", key: "system",      Comp: AdminSystem },
   { id: "logs",        icon: "📋", key: "logs",        Comp: AdminLogs },
 ];
