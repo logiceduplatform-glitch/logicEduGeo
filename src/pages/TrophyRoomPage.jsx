@@ -237,15 +237,24 @@ export default function TrophyRoomPage() {
                 <EmptyState icon="📜" text={l.none} cta={l.play} />
               ) : (
                 <ul className="space-y-3">
-                  {certificates.map((c, i) => (
-                    <li key={c.id || i} className="flex items-center gap-4 p-4 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 border border-blue-200 dark:border-blue-800">
-                      <span className="text-4xl">📜</span>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-bold text-slate-800 dark:text-slate-100 truncate">{c.title || c.name || "Certificate"}</p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">{c.earnedAt ? new Date(c.earnedAt).toLocaleDateString() : ""}</p>
-                      </div>
-                    </li>
-                  ))}
+                  {certificates.map((c, i) => {
+                    const title = typeof c.title === "object" && c.title !== null
+                      ? (c.title[lang] || c.title.en || "")
+                      : (c.title || c.name || "Certificate");
+                    const desc = typeof c.desc === "object" && c.desc !== null
+                      ? (c.desc[lang] || c.desc.en || "")
+                      : (c.desc || c.description || "");
+                    return (
+                      <li key={c.id || i} className="flex items-center gap-4 p-4 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 border border-blue-200 dark:border-blue-800">
+                        <span className="text-4xl">{c.icon || "📜"}</span>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-bold text-slate-800 dark:text-slate-100 truncate">{title}</p>
+                          {desc && <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{desc}</p>}
+                          <p className="text-[10px] text-slate-400">{c.earnedAt ? new Date(c.earnedAt).toLocaleDateString() : ""}</p>
+                        </div>
+                      </li>
+                    );
+                  })}
                 </ul>
               )}
             </>

@@ -237,18 +237,25 @@ export default function Navbar() {
       ];
     }
     return [
+      // Primary (πάντα ορατά - μόνο 4)
       { label: isEl ? "Παιχνίδια" : "Games", fullLabel: isEl ? "Παιχνίδια" : "Games", href: "#categories", icon: "🎮" },
-      { label: isEl ? "Πρόκληση" : "Daily", fullLabel: isEl ? "Ημερήσια Πρόκληση" : "Daily Challenge", href: "/daily", isRoute: true, icon: "🎯" },
-      { label: isEl ? "Χάρτης" : "Map", fullLabel: isEl ? "Χάρτης Περιπέτειας" : "Adventure Map", href: "/adventure", isRoute: true, icon: "🗺️" },
-      { label: isEl ? "Events" : "Events", fullLabel: isEl ? "Events & Τουρνουά" : "Events & Tournaments", href: "/events", isRoute: true, icon: "🏆" },
-      { label: isEl ? "Top" : "Top", fullLabel: isEl ? "Παγκόσμια Κατάταξη" : "Global Leaderboard", href: "/leaderboard", isRoute: true, icon: "🌍" },
-      { label: isEl ? "Trophy" : "Trophy", fullLabel: isEl ? "Trophy Room" : "Trophy Room", href: "/trophy-room", isRoute: true, icon: "🏆" },
-      { label: isEl ? "Speed" : "Speed", fullLabel: isEl ? "Speedrun" : "Speedrun", href: "/speedrun", isRoute: true, icon: "⚡" },
-      { label: isEl ? "Mastery" : "Mastery", fullLabel: isEl ? "Mastery Tracker" : "Mastery Tracker", href: "/mastery", isRoute: true, icon: "🔥" },
-      { label: isEl ? "AI" : "AI", fullLabel: isEl ? "Study Buddy AI" : "Study Buddy AI", href: "/study-buddy", isRoute: true, icon: "🤖" },
-      { label: isEl ? "Battle" : "Battle", fullLabel: isEl ? "Battle Royale" : "Battle Royale", href: "/battle", isRoute: true, icon: "⚔️" },
-      { label: isEl ? "Pet" : "Pet", fullLabel: isEl ? "Το Pet μου" : "My Pet", href: "/pet", isRoute: true, icon: "🐾" },
       { label: isEl ? "Η Τάξη μου" : "My Class", fullLabel: isEl ? "Η Τάξη μου" : "My Classroom", href: "/my-classroom", isRoute: true, icon: "🏫" },
+      { label: isEl ? "Πρόκληση" : "Daily", fullLabel: isEl ? "Ημερήσια Πρόκληση" : "Daily Challenge", href: "/daily", isRoute: true, icon: "🎯" },
+      { label: isEl ? "AI" : "AI", fullLabel: isEl ? "Study Buddy AI" : "Study Buddy AI", href: "/study-buddy", isRoute: true, icon: "🤖" },
+
+      // 🎮 Παίξε
+      { label: isEl ? "Χάρτης Περιπέτειας" : "Adventure Map", fullLabel: isEl ? "Χάρτης Περιπέτειας" : "Adventure Map", href: "/adventure", isRoute: true, icon: "🗺️", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play" },
+      { label: isEl ? "Battle Royale" : "Battle Royale", fullLabel: isEl ? "Battle Royale" : "Battle Royale", href: "/battle", isRoute: true, icon: "⚔️", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play" },
+      { label: isEl ? "Speedrun" : "Speedrun", fullLabel: isEl ? "Speedrun" : "Speedrun", href: "/speedrun", isRoute: true, icon: "⚡", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play" },
+      { label: isEl ? "Το Pet μου" : "My Pet", fullLabel: isEl ? "Το Pet μου" : "My Pet", href: "/pet", isRoute: true, icon: "🐾", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play" },
+
+      // 🏆 Συναγωνισμός
+      { label: isEl ? "Events & Τουρνουά" : "Events & Tournaments", fullLabel: isEl ? "Events & Τουρνουά" : "Events & Tournaments", href: "/events", isRoute: true, icon: "🏆", group: "more", section: isEl ? "🏆 Συναγωνισμός" : "🏆 Compete" },
+      { label: isEl ? "Παγκόσμια Κατάταξη" : "Global Leaderboard", fullLabel: isEl ? "Παγκόσμια Κατάταξη" : "Global Leaderboard", href: "/leaderboard", isRoute: true, icon: "🌍", group: "more", section: isEl ? "🏆 Συναγωνισμός" : "🏆 Compete" },
+
+      // 📊 Πρόοδος
+      { label: isEl ? "Trophy Room" : "Trophy Room", fullLabel: isEl ? "Trophy Room" : "Trophy Room", href: "/trophy-room", isRoute: true, icon: "🏆", group: "more", section: isEl ? "📊 Πρόοδος" : "📊 Progress" },
+      { label: isEl ? "Mastery Tracker" : "Mastery Tracker", fullLabel: isEl ? "Mastery Tracker" : "Mastery Tracker", href: "/mastery", isRoute: true, icon: "🔥", group: "more", section: isEl ? "📊 Πρόοδος" : "📊 Progress" },
     ];
   })();
 
@@ -318,11 +325,11 @@ export default function Navbar() {
 
         {/* Desktop nav - left-aligned after logo */}
         <div className="hidden lg:flex items-center gap-1">
-          {NAV_LINKS.map((link) => (
+          {NAV_LINKS.filter((link) => link.group !== "more").map((link) => (
             <button
               key={link.href}
               onClick={() => scrollTo(link.href, link.isRoute)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
+              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
                 scrolled
                   ? "text-slate-600 dark:text-slate-300 hover:text-purple-700 dark:hover:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/30"
                   : "text-slate-700 dark:text-slate-300 hover:text-purple-700 dark:hover:text-purple-400 hover:bg-white/50 dark:hover:bg-white/10"
@@ -331,6 +338,12 @@ export default function Navbar() {
               {link.label}
             </button>
           ))}
+          <MoreMenu
+            links={NAV_LINKS.filter((link) => link.group === "more")}
+            scrollTo={scrollTo}
+            scrolled={scrolled}
+            label={isEl ? "Περισσότερα" : "More"}
+          />
         </div>
 
         {/* Spacer to push right side */}
@@ -797,15 +810,45 @@ export default function Navbar() {
       {mobileOpen && (
         <div className="lg:hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg border-t border-slate-100 dark:border-slate-700 shadow-xl max-h-[calc(100vh-64px)] overflow-y-auto">
           <div className="px-4 py-4 space-y-1">
-            {NAV_LINKS.map((link) => (
+            {/* Primary links */}
+            {NAV_LINKS.filter((link) => link.group !== "more").map((link) => (
               <button
                 key={link.href}
                 onClick={() => scrollTo(link.href, link.isRoute)}
-                className="block w-full text-left px-4 py-3 rounded-xl text-slate-700 dark:text-slate-200 font-medium hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:text-purple-700 dark:hover:text-purple-400 transition-colors"
+                className="flex items-center gap-3 w-full text-left px-4 py-3 rounded-xl text-slate-700 dark:text-slate-200 font-medium hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:text-purple-700 dark:hover:text-purple-400 transition-colors"
               >
-                {link.fullLabel}
+                <span aria-hidden className="text-lg">{link.icon}</span>
+                <span className="truncate">{link.fullLabel}</span>
               </button>
             ))}
+
+            {/* Grouped 'more' links by section */}
+            {(() => {
+              const moreLinks = NAV_LINKS.filter((link) => link.group === "more");
+              const sections = moreLinks.reduce((acc, link) => {
+                const s = link.section || "";
+                if (!acc[s]) acc[s] = [];
+                acc[s].push(link);
+                return acc;
+              }, {});
+              return Object.entries(sections).map(([sectionTitle, items]) => (
+                <div key={sectionTitle} className="pt-2 mt-2 border-t border-slate-100 dark:border-slate-700">
+                  {sectionTitle && (
+                    <div className="px-4 py-1.5 text-[11px] font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400">{sectionTitle}</div>
+                  )}
+                  {items.map((link) => (
+                    <button
+                      key={link.href}
+                      onClick={() => scrollTo(link.href, link.isRoute)}
+                      className="flex items-center gap-3 w-full text-left px-4 py-3 rounded-xl text-slate-700 dark:text-slate-200 font-medium hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:text-purple-700 dark:hover:text-purple-400 transition-colors"
+                    >
+                      <span aria-hidden className="text-lg">{link.icon}</span>
+                      <span className="truncate">{link.fullLabel}</span>
+                    </button>
+                  ))}
+                </div>
+              ));
+            })()}
 
             <div className="border-t border-slate-100 dark:border-slate-700 pt-3 mt-3 space-y-2">
               <button
@@ -1129,5 +1172,83 @@ export default function Navbar() {
         );
       })()}
     </nav>
+  );
+}
+
+function MoreMenu({ links, scrollTo, scrolled, label }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const onClick = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    };
+    const onKey = (e) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, []);
+
+  if (!links || links.length === 0) return null;
+
+  // Group by section
+  const sections = links.reduce((acc, link) => {
+    const s = link.section || "";
+    if (!acc[s]) acc[s] = [];
+    acc[s].push(link);
+    return acc;
+  }, {});
+
+  return (
+    <div className="relative" ref={ref}>
+      <button
+        onClick={() => setOpen((v) => !v)}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap inline-flex items-center gap-1 ${
+          scrolled
+            ? "text-slate-600 dark:text-slate-300 hover:text-purple-700 dark:hover:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/30"
+            : "text-slate-700 dark:text-slate-300 hover:text-purple-700 dark:hover:text-purple-400 hover:bg-white/50 dark:hover:bg-white/10"
+        } ${open ? "bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300" : ""}`}
+      >
+        {label}
+        <svg className={`w-3.5 h-3.5 transition-transform ${open ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {open && (
+        <div
+          role="menu"
+          className="absolute left-0 top-full mt-2 min-w-[260px] bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 p-2 z-50 max-h-[80vh] overflow-y-auto"
+        >
+          {Object.entries(sections).map(([sectionTitle, items], idx) => (
+            <div key={sectionTitle || idx} className={idx > 0 ? "mt-2 pt-2 border-t border-slate-100 dark:border-slate-700" : ""}>
+              {sectionTitle && (
+                <div className="px-3 py-1 text-[11px] font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  {sectionTitle}
+                </div>
+              )}
+              {items.map((link) => (
+                <button
+                  key={link.href}
+                  role="menuitem"
+                  onClick={() => { setOpen(false); scrollTo(link.href, link.isRoute); }}
+                  className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:text-purple-700 dark:hover:text-purple-300 text-left transition-colors"
+                >
+                  <span className="text-lg" aria-hidden>{link.icon}</span>
+                  <span className="truncate">{link.fullLabel || link.label}</span>
+                </button>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
