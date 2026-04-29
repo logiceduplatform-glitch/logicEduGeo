@@ -56,6 +56,7 @@ const CATEGORY_LABELS = {
   progress:  { el: "📊 Πρόοδος & Συναγωνισμός", en: "📊 Progress & Competition" },
   teachers:  { el: "👨‍🏫 Δάσκαλοι", en: "👨‍🏫 Teachers" },
   parents:   { el: "👨‍👩‍👧 Γονείς", en: "👨‍👩‍👧 Parents" },
+  ux:        { el: "🎨 UX & Theme", en: "🎨 UX & Theme" },
   marketing: { el: "📈 Marketing", en: "📈 Marketing" },
 };
 
@@ -74,6 +75,7 @@ const CATEGORY_ORDER = [
   "progress",
   "teachers",
   "parents",
+  "ux",
   "marketing",
 ];
 

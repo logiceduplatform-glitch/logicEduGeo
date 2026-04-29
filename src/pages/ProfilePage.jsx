@@ -15,6 +15,7 @@ import ProfileSwitcher from "../components/ProfileSwitcher";
 import ReferralCard from "../components/ReferralCard";
 import AchievementShowcase from "../components/AchievementShowcase";
 import SeasonalThemeSelector from "../components/SeasonalThemeSelector";
+import { FeatureFlagService } from "../services/FeatureFlagService";
 import OfflineDownloadCard from "../components/OfflineDownloadCard";
 import CountryPicker from "../components/CountryPicker";
 
@@ -942,7 +943,7 @@ export default function ProfilePage() {
         {tab === "account" && user && <div className="mb-6"><AchievementShowcase /></div>}
 
         {/* Seasonal Theme */}
-        {tab === "account" && user && <div className="mb-6"><SeasonalThemeSelector /></div>}
+        {tab === "account" && user && FeatureFlagService.isEnabled("seasonalThemes") && <div className="mb-6"><SeasonalThemeSelector /></div>}
 
         {/* Offline Download */}
         {tab === "account" && user && <div className="mb-6"><OfflineDownloadCard /></div>}

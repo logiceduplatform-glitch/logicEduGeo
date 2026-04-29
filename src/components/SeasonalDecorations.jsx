@@ -1,8 +1,16 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { SeasonalThemeService } from "../services/SeasonalThemeService";
+import { FeatureFlagService } from "../services/FeatureFlagService";
 
 // Floating decorations across the screen for the active seasonal theme.
 export default function SeasonalDecorations() {
+  // Globally disabled by admin?
+  if (!FeatureFlagService.isEnabled("seasonalDecorations")) return null;
+
+  return <SeasonalDecorationsInner />;
+}
+
+function SeasonalDecorationsInner() {
   const [theme, setTheme] = useState(() => SeasonalThemeService.getActive());
 
   useEffect(() => {
@@ -18,7 +26,7 @@ export default function SeasonalDecorations() {
   }, []);
 
   const decorations = useMemo(() => {
-    if (!theme || theme.id === "auto" || !theme.decorations || theme.decorations.length === 0) return [];
+    if (!theme || theme.id === "auto" || theme.id === "none" || !theme.decorations || theme.decorations.length === 0) return [];
     if (reduceMotion) return [];
     const count = 12;
     const items = [];

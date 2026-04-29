@@ -109,6 +109,10 @@ export const DEFAULT_FLAGS = {
   multiChild:         { enabled: true, label: { el: "Σύγκριση Πολλαπλών Παιδιών", en: "Multi-Child Comparison" }, category: "parents" },
   homeworkHelper:     { enabled: true, label: { el: "Homework Helper", en: "Homework Helper" }, category: "parents" },
 
+  // ─── UX / Theme ─────────────────────────────────────
+  seasonalDecorations: { enabled: false, label: { el: "Εποχιακές διακοσμήσεις (animations)", en: "Seasonal decorations (animations)" }, category: "ux" },
+  seasonalThemes:      { enabled: true,  label: { el: "Εποχιακά θέματα (επιλογή χρήστη)", en: "Seasonal themes (user selectable)" }, category: "ux" },
+
   // ─── Marketing ────────────────────────────────────────
   referrals:      { enabled: true, label: { el: "Σύστημα Παραπομπών", en: "Referrals" }, category: "marketing" },
   newsletter:     { enabled: true, label: { el: "Newsletter", en: "Newsletter" }, category: "marketing" },

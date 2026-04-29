@@ -2,12 +2,31 @@
 // allows manual override. Adds emoji confetti decorations across the app.
 
 const KEY = "geo:seasonalTheme";
+const MIGRATION_KEY = "geo:seasonalTheme:migration_v2";
+
+// One-time migration: reset everyone to "none" since users found falling
+// emoji animations annoying. Runs only once per browser.
+function migrateOnce() {
+  try {
+    if (localStorage.getItem(MIGRATION_KEY)) return;
+    localStorage.setItem(KEY, "none");
+    localStorage.setItem(MIGRATION_KEY, "1");
+  } catch {}
+}
 
 export const SEASONAL_THEMES = [
   {
+    id: "none",
+    icon: "🚫",
+    name: { el: "Χωρίς διακόσμηση", en: "No decorations" },
+    desc: { el: "Καθαρή εμφάνιση, χωρίς animations", en: "Clean look, no animations" },
+    accent: null,
+    decorations: [],
+  },
+  {
     id: "auto",
     icon: "✨",
-    name: { el: "Αυτόματο", en: "Auto" },
+    name: { el: "Αυτόματο (εποχιακό)", en: "Auto (seasonal)" },
     desc: { el: "Αυτόματη εποχή ανάλογα με την ημερομηνία", en: "Auto season based on date" },
     accent: null,
     decorations: [],
@@ -98,7 +117,8 @@ export function detectAutoTheme(date = new Date()) {
 
 export const SeasonalThemeService = {
   get() {
-    try { return localStorage.getItem(KEY) || "auto"; } catch { return "auto"; }
+    migrateOnce();
+    try { return localStorage.getItem(KEY) || "none"; } catch { return "none"; }
   },
   set(themeId) {
     try { localStorage.setItem(KEY, themeId); } catch {}
@@ -106,7 +126,8 @@ export const SeasonalThemeService = {
   },
   getActive() {
     const stored = this.get();
+    if (stored === "none") return SEASONAL_THEMES.find(t => t.id === "none");
     const id = stored === "auto" ? detectAutoTheme() : stored;
-    return SEASONAL_THEMES.find(t => t.id === id) || SEASONAL_THEMES[0];
+    return SEASONAL_THEMES.find(t => t.id === id) || SEASONAL_THEMES.find(t => t.id === "none");
   },
 };
