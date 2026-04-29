@@ -10,6 +10,7 @@ import SearchOverlay from "./SearchOverlay";
 import { ProfileService } from "../services/ProfileService";
 import { CoinService } from "../services/CoinService";
 import { SoundService } from "../services/SoundService";
+import { AdminService } from "../services/AdminService";
 import AvatarDisplay, { getAvatarData } from "./AvatarDisplay";
 import NotificationBell from "./NotificationBell";
 import VoiceCommandButton from "./VoiceCommandButton";
@@ -68,6 +69,16 @@ export default function Navbar() {
   const profileRef = useRef(null);
   const ageCatRef = useRef(null);
   const isEl = lang === "el";
+  const [isAdmin, setIsAdmin] = useState(false);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      if (!user) { setIsAdmin(false); return; }
+      const ok = await AdminService.isAdmin(user);
+      if (!cancelled) setIsAdmin(ok);
+    })();
+    return () => { cancelled = true; };
+  }, [user]);
 
   const classroomHasNew = (() => {
     try {
@@ -737,6 +748,19 @@ export default function Navbar() {
                       >
                         <span>🔐</span>
                         {isEl ? "Περιοχή γονέα" : "Parent area"}
+                      </button>
+                    </>
+                  )}
+
+                  {isAdmin && (
+                    <>
+                      <div className="border-t border-slate-100 dark:border-slate-700 my-1" />
+                      <button
+                        onClick={() => { setProfileOpen(false); navigate("/admin"); }}
+                        className="w-full text-left px-4 py-2.5 text-sm text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-900/30 transition-colors flex items-center gap-2 font-bold"
+                      >
+                        <span>🛠️</span>
+                        {isEl ? "Admin Dashboard" : "Admin Dashboard"}
                       </button>
                     </>
                   )}

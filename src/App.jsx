@@ -11,10 +11,12 @@ import CookieConsent from "./components/CookieConsent";
 import InstallPrompt from "./components/InstallPrompt";
 import SWUpdateBanner from "./components/SWUpdateBanner";
 import OfflineBanner from "./components/OfflineBanner";
+import SystemAnnouncementBanner from "./components/SystemAnnouncementBanner";
 import { ToastProvider } from "./components/ToastNotification";
 import { AnalyticsService } from "./services/AnalyticsService";
 import TimeLimitOverlay from "./components/TimeLimitOverlay";
 import { CertificateService } from "./services/CertificateService";
+import { FeatureFlagService } from "./services/FeatureFlagService";
 import { SkeletonCard } from "./components/SkeletonLoader";
 import SeasonalDecorations from "./components/SeasonalDecorations";
 import KeyboardShortcutsHandler from "./components/KeyboardShortcutsHandler";
@@ -50,6 +52,7 @@ const TrophyRoomPage = React.lazy(() => import("./pages/TrophyRoomPage"));
 const SpeedrunPage = React.lazy(() => import("./pages/SpeedrunPage"));
 const SubjectMasteryPage = React.lazy(() => import("./pages/SubjectMasteryPage"));
 const StudyBuddyPage = React.lazy(() => import("./pages/StudyBuddyPage"));
+const AdminDashboard = React.lazy(() => import("./pages/admin/AdminDashboard"));
 const WeeklyReportPage = React.lazy(() => import("./pages/WeeklyReportPage"));
 const ContentEditorPage = React.lazy(() => import("./pages/ContentEditorPage"));
 const OnlineMultiplayerPage = React.lazy(() => import("./pages/OnlineMultiplayerPage"));
@@ -184,6 +187,10 @@ function MilestoneListener() {
 }
 
 export default function App() {
+  useEffect(() => {
+    FeatureFlagService.init();
+  }, []);
+
   return (
     <HelmetProvider>
     <ThemeProvider>
@@ -223,6 +230,7 @@ export default function App() {
                 <Route path="/leaderboard" element={<GlobalLeaderboardPage />} />
                 <Route path="/events" element={<EventsPage />} />
                 <Route path="/trophy-room" element={<TrophyRoomPage />} />
+                <Route path="/admin/*" element={<AuthGate><AdminDashboard /></AuthGate>} />
                 <Route path="/speedrun" element={<PlayGate><SpeedrunPage /></PlayGate>} />
                 <Route path="/mastery" element={<PlayGate><SubjectMasteryPage /></PlayGate>} />
                 <Route path="/study-buddy" element={<PlayGate><StudyBuddyPage /></PlayGate>} />
@@ -280,6 +288,7 @@ export default function App() {
             <InstallPrompt />
             <SWUpdateBanner />
             <OfflineBanner />
+            <SystemAnnouncementBanner />
             </ToastProvider>
           </BrowserRouter>
         </ProgressProvider>
