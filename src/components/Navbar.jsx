@@ -12,6 +12,7 @@ import { CoinService } from "../services/CoinService";
 import { SoundService } from "../services/SoundService";
 import AvatarDisplay, { getAvatarData } from "./AvatarDisplay";
 import NotificationBell from "./NotificationBell";
+import GlobalSearch from "./GlobalSearch";
 import {
   ageToQuizRoute,
   adultObjectiveRoutes,
@@ -230,6 +231,7 @@ export default function Navbar() {
       return [
         { label: isEl ? "Παιχνίδια" : "Games", fullLabel: isEl ? "Παιχνίδια" : "Games", href: "#categories", icon: "🎮" },
         { label: isEl ? "Dashboard" : "Dashboard", fullLabel: isEl ? "Γονικός Πίνακας" : "Parent Dashboard", href: "/parent-dashboard", isRoute: true, icon: "📊" },
+        { label: isEl ? "Οικ. Quiz" : "Family Quiz", fullLabel: isEl ? "Οικογενειακή Πρόκληση" : "Family Challenge", href: "/family-challenge", isRoute: true, icon: "👨‍👩‍👧" },
         { label: isEl ? "Αναφορές" : "Reports", fullLabel: isEl ? "Εβδομαδιαίες Αναφορές" : "Weekly Reports", href: "/weekly-report", isRoute: true, icon: "📋" },
         { label: isEl ? "Blog" : "Blog", fullLabel: isEl ? "Blog" : "Blog", href: "/blog", isRoute: true, icon: "📝" },
       ];
@@ -238,7 +240,8 @@ export default function Navbar() {
       { label: isEl ? "Παιχνίδια" : "Games", fullLabel: isEl ? "Παιχνίδια" : "Games", href: "#categories", icon: "🎮" },
       { label: isEl ? "Πρόκληση" : "Daily", fullLabel: isEl ? "Ημερήσια Πρόκληση" : "Daily Challenge", href: "/daily", isRoute: true, icon: "🎯" },
       { label: isEl ? "Χάρτης" : "Map", fullLabel: isEl ? "Χάρτης Περιπέτειας" : "Adventure Map", href: "/adventure", isRoute: true, icon: "🗺️" },
-      { label: isEl ? "Φίλοι" : "Challenge", fullLabel: isEl ? "Προκάλεσε Φίλο" : "Challenge Friend", href: "/challenge", isRoute: true, icon: "⚔️" },
+      { label: isEl ? "Battle" : "Battle", fullLabel: isEl ? "Battle Royale" : "Battle Royale", href: "/battle", isRoute: true, icon: "⚔️" },
+      { label: isEl ? "Pet" : "Pet", fullLabel: isEl ? "Το Pet μου" : "My Pet", href: "/pet", isRoute: true, icon: "🐾" },
       { label: isEl ? "Η Τάξη μου" : "My Class", fullLabel: isEl ? "Η Τάξη μου" : "My Classroom", href: "/my-classroom", isRoute: true, icon: "🏫" },
     ];
   })();
@@ -347,6 +350,8 @@ export default function Navbar() {
               {/Mac|iPhone|iPad/.test(navigator.userAgent) ? "⌘K" : "Ctrl+K"}
             </kbd>
           </button>
+          {/* Global search (Cmd+K) */}
+          <GlobalSearch />
           {/* Notification bell */}
           {isLoggedIn && <NotificationBell />}
           {/* Theme toggle */}
@@ -571,6 +576,30 @@ export default function Navbar() {
                   >
                     <span>🎭</span>
                     {isEl ? "Το Avatar μου" : "My Avatar"}
+                  </button>
+
+                  <button
+                    onClick={() => { setProfileOpen(false); navigate("/story"); }}
+                    className="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:text-purple-700 dark:hover:text-purple-400 transition-colors flex items-center gap-2"
+                  >
+                    <span>📖</span>
+                    {isEl ? "Ιστορίες" : "Stories"}
+                  </button>
+
+                  <button
+                    onClick={() => { setProfileOpen(false); navigate("/cards"); }}
+                    className="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:text-purple-700 dark:hover:text-purple-400 transition-colors flex items-center gap-2"
+                  >
+                    <span>🎴</span>
+                    {isEl ? "Συλλογή Καρτών" : "Card Collection"}
+                  </button>
+
+                  <button
+                    onClick={() => { setProfileOpen(false); navigate("/challenge"); }}
+                    className="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:text-purple-700 dark:hover:text-purple-400 transition-colors flex items-center gap-2"
+                  >
+                    <span>⚡</span>
+                    {isEl ? "Προκάλεσε Φίλο" : "Challenge a Friend"}
                   </button>
 
                   {userRole === "parent" && user && !activeChild && (

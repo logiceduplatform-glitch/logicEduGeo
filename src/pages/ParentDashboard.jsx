@@ -14,6 +14,12 @@ import BadgeCollection from "../components/rewards/BadgeCollection";
 import Certificate from "../components/rewards/Certificate";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
 import { TimeLimitService } from "../services/TimeLimitService";
+import WeeklyDigestPanel from "../components/parent/WeeklyDigestPanel";
+import ParentTeacherMessages from "../components/parent/ParentTeacherMessages";
+import MilestonesFeed from "../components/parent/MilestonesFeed";
+import MultiChildCompare from "../components/parent/MultiChildCompare";
+import HomeworkHelper from "../components/parent/HomeworkHelper";
+import { Link } from "react-router-dom";
 
 async function hashPin(pin) {
   const encoded = new TextEncoder().encode(pin + "edu-salt-2026");
@@ -61,6 +67,7 @@ export default function ParentDashboard() {
   const [pinError, setPinError] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedChildId, setSelectedChildId] = useState(null);
+  const [view, setView] = useState("child"); // child | digest | messages | milestones | compare | homework | family
   const isEl = lang === "el";
 
   const storedPin = localStorage.getItem("geo:parentPin");
@@ -164,6 +171,51 @@ export default function ParentDashboard() {
           </div>
         ) : (
           <>
+            {/* Top-level View Tabs */}
+            <div className="mb-6 flex flex-wrap gap-2 overflow-x-auto">
+              {[
+                { id: "child",      icon: "👤", label: isEl ? "Παιδί"            : "Child" },
+                { id: "compare",    icon: "📊", label: isEl ? "Σύγκριση"        : "Compare" },
+                { id: "milestones", icon: "🏆", label: isEl ? "Ορόσημα"         : "Milestones" },
+                { id: "homework",   icon: "📋", label: isEl ? "Εργασίες"        : "Homework" },
+                { id: "messages",   icon: "💬", label: isEl ? "Μηνύματα"        : "Messages" },
+                { id: "digest",     icon: "📧", label: isEl ? "Εβδ. Αναφορά"   : "Weekly" },
+                { id: "family",     icon: "👨‍👩‍👧", label: isEl ? "Οικ. Πρόκληση" : "Family Quiz" },
+              ].map(v => (
+                <button
+                  key={v.id}
+                  onClick={() => setView(v.id)}
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold transition whitespace-nowrap ${view === v.id ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-md" : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-purple-50 dark:hover:bg-purple-900/20"}`}
+                >
+                  <span>{v.icon}</span> {v.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Family-level views */}
+            {view === "compare" && <MultiChildCompare />}
+            {view === "milestones" && <MilestonesFeed />}
+            {view === "homework" && <HomeworkHelper children={children} />}
+            {view === "messages" && <ParentTeacherMessages children={children} />}
+            {view === "digest" && <WeeklyDigestPanel />}
+            {view === "family" && (
+              <div className="bg-gradient-to-br from-pink-100 via-purple-100 to-fuchsia-100 dark:from-pink-900/30 dark:via-purple-900/30 dark:to-fuchsia-900/30 rounded-2xl p-8 text-center border border-pink-200 dark:border-pink-800">
+                <span className="text-5xl block mb-3">👨‍👩‍👧</span>
+                <h2 className="text-2xl font-extrabold text-slate-800 dark:text-white mb-2">{isEl ? "Οικογενειακή Πρόκληση" : "Family Challenge"}</h2>
+                <p className="text-sm text-slate-600 dark:text-slate-300 mb-5">
+                  {isEl ? "Παίξε ένα fun quiz μαζί με το παιδί σου - ποιος θα κερδίσει;" : "Play a fun quiz together with your child - who wins?"}
+                </p>
+                <Link
+                  to="/family-challenge"
+                  className="inline-block px-8 py-3 rounded-xl bg-gradient-to-r from-pink-500 via-purple-500 to-fuchsia-500 text-white font-extrabold shadow-md hover:shadow-xl transition"
+                >
+                  🚀 {isEl ? "Ξεκίνα" : "Start"}
+                </Link>
+              </div>
+            )}
+
+            {view !== "child" ? null : (
+            <>
             {/* Child Selector */}
             <div className="mb-6">
               <p className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">
@@ -214,6 +266,8 @@ export default function ParentDashboard() {
                   {isEl ? "Επιλέξτε ένα παιδί για να δείτε την πρόοδό του" : "Select a child to view their progress"}
                 </p>
               </div>
+            )}
+            </>
             )}
           </>
         )}

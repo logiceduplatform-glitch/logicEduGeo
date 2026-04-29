@@ -314,6 +314,10 @@ export const ProgressService = {
       CoinService.setLastXPMilestone(newMilestone);
     }
 
+    try {
+      import("../config/petConfig").then(m => { try { m.awardPetXP(Math.max(1, Math.round(earned / 4))); } catch {} });
+    } catch {}
+
     return { earned, totalXP: xpData.totalXP, level: xpData.level };
   },
 

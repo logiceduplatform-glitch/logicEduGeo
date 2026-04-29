@@ -62,6 +62,11 @@ const AvatarBuilderPage = React.lazy(() => import("./pages/AvatarBuilderPage"));
 const LiveQuizPage = React.lazy(() => import("./pages/LiveQuizPage"));
 const ChallengeFriendPage = React.lazy(() => import("./pages/ChallengeFriendPage"));
 const PrintableWorksheetsPage = React.lazy(() => import("./pages/PrintableWorksheetsPage"));
+const BattleRoyalePage = React.lazy(() => import("./pages/BattleRoyalePage"));
+const PetPage = React.lazy(() => import("./pages/PetPage"));
+const StoryModePage = React.lazy(() => import("./pages/StoryModePage"));
+const CollectibleCardsPage = React.lazy(() => import("./pages/CollectibleCardsPage"));
+const FamilyChallengePage = React.lazy(() => import("./pages/FamilyChallengePage"));
 
 function PlayGate({ children }) {
   const { user, guest, loading, isGuestExpired, userProfile } = React.useContext(AuthContext);
@@ -242,6 +247,11 @@ export default function App() {
                 <Route path="/live-quiz" element={<ErrorBoundary><LiveQuizPage /></ErrorBoundary>} />
                 <Route path="/challenge" element={<ErrorBoundary><ChallengeFriendPage /></ErrorBoundary>} />
                 <Route path="/worksheets" element={<ErrorBoundary><PrintableWorksheetsPage /></ErrorBoundary>} />
+                <Route path="/battle" element={<ErrorBoundary><BattleRoyalePage /></ErrorBoundary>} />
+                <Route path="/pet" element={<ErrorBoundary><PetPage /></ErrorBoundary>} />
+                <Route path="/story" element={<ErrorBoundary><StoryModePage /></ErrorBoundary>} />
+                <Route path="/family-challenge" element={<ErrorBoundary><FamilyChallengePage /></ErrorBoundary>} />
+                <Route path="/cards" element={<ErrorBoundary><CollectibleCardsPage /></ErrorBoundary>} />
                 <Route path="/my-classroom/:code" element={<PlayGate><ErrorBoundary><MyClassroomPage /></ErrorBoundary></PlayGate>} />
                 <Route path="/my-classroom" element={<PlayGate><ErrorBoundary><MyClassroomPage /></ErrorBoundary></PlayGate>} />
                 <Route path="*" element={<NotFoundPage />} />

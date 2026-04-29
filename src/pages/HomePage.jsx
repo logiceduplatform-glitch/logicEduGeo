@@ -9,6 +9,8 @@ import HeroSection from "../components/HeroSection";
 import StatsBar from "../components/StatsBar";
 import RevealSection from "../components/RevealSection";
 import DailyChallenge from "../components/DailyChallenge";
+import FunZoneSection from "../components/FunZoneSection";
+import PetWidget from "../components/PetWidget";
 import FeaturesSection from "../components/FeaturesSection";
 import GameShowcase from "../components/GameShowcase";
 import TestimonialsSection from "../components/TestimonialsSection";
@@ -223,11 +225,25 @@ export default function HomePage() {
         </RevealSection>
       )}
 
+      {/* PET WIDGET for logged-in users */}
+      {(user || guest) && (
+        <RevealSection>
+          <div className="mx-auto max-w-md px-4 pb-4">
+            <PetWidget />
+          </div>
+        </RevealSection>
+      )}
+
       {/* DAILY CHALLENGE */}
       <RevealSection>
       <div className="mx-auto max-w-6xl px-4 pb-8">
         <DailyChallenge />
       </div>
+      </RevealSection>
+
+      {/* FUN ZONE - Battle / Pet / Stories / Cards */}
+      <RevealSection>
+        <FunZoneSection />
       </RevealSection>
 
       {/* FEATURES */}

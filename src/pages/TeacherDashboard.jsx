@@ -10,6 +10,10 @@ import SEO from "../components/SEO";
 import { ProfileService } from "../services/ProfileService";
 import TeacherLessons from "../components/TeacherLessons";
 import TeacherHomework from "../components/TeacherHomework";
+import TeacherAIGenerator from "../components/TeacherAIGenerator";
+import TeacherLessonPlans from "../components/TeacherLessonPlans";
+import ClassReports from "../components/ClassReports";
+import CoTeacherManager from "../components/CoTeacherManager";
 
 const STORAGE_KEY = "geo:teacherQuizzes";
 const DIFFICULTY_OPTIONS = ["easy", "medium", "hard"];
@@ -187,6 +191,10 @@ const T = {
     tabLessons: "Μαθήματα",
     tabHomework: "Εργασίες",
     tabLiveQuiz: "Live Quiz",
+    tabAIGen: "AI Quiz",
+    tabPlans: "Σχέδια",
+    tabReports: "Αναφορές",
+    tabCoTeacher: "Συν-διδασκαλία",
     createNew: "Νέο Quiz",
     noQuizzes: "Δεν έχεις δημιουργήσει quiz ακόμα",
     quizTitle: "Τίτλος quiz",
@@ -351,6 +359,10 @@ const T = {
     tabLessons: "Lessons",
     tabHomework: "Homework",
     tabLiveQuiz: "Live Quiz",
+    tabAIGen: "AI Quiz",
+    tabPlans: "Lesson Plans",
+    tabReports: "Reports",
+    tabCoTeacher: "Co-Teach",
     createNew: "New Quiz",
     noQuizzes: "You haven't created any quizzes yet",
     quizTitle: "Quiz title",
@@ -1209,12 +1221,16 @@ export default function TeacherDashboard() {
 
   const TABS = [
     { key: "quizzes", label: l.tabQuizzes, icon: "📝" },
+    { key: "aigen", label: l.tabAIGen, icon: "✨" },
+    { key: "plans", label: l.tabPlans, icon: "📚" },
     { key: "lessons", label: l.tabLessons, icon: "📖" },
     { key: "homework", label: l.tabHomework, icon: "📋" },
     { key: "liveQuiz", label: l.tabLiveQuiz, icon: "🎮" },
     { key: "classroom", label: l.tabClassroom, icon: "🏫" },
     { key: "analytics", label: l.tabAnalytics, icon: "📈" },
-    { key: "resources", label: l.tabResources, icon: "📚" },
+    { key: "reports", label: l.tabReports, icon: "📊" },
+    { key: "coteacher", label: l.tabCoTeacher, icon: "👥" },
+    { key: "resources", label: l.tabResources, icon: "📂" },
   ];
 
   if (playing) {
@@ -1256,12 +1272,12 @@ export default function TeacherDashboard() {
           </div>
 
           {/* Tabs */}
-          <div className="flex gap-1 mb-6 bg-white dark:bg-slate-800 rounded-2xl p-1.5 border border-slate-200 dark:border-slate-700">
+          <div className="flex gap-1 mb-6 bg-white dark:bg-slate-800 rounded-2xl p-1.5 border border-slate-200 dark:border-slate-700 overflow-x-auto scrollbar-thin">
             {TABS.map((t) => (
               <button
                 key={t.key}
                 onClick={() => setTab(t.key)}
-                className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+                className={`flex-shrink-0 flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap ${
                   tab === t.key
                     ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md"
                     : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700"
@@ -1560,6 +1576,20 @@ export default function TeacherDashboard() {
                 )}
               </div>
             )
+          )}
+
+          {/* AI QUIZ GENERATOR TAB */}
+          {tab === "aigen" && (
+            <TeacherAIGenerator lang={lang} onSaved={(quiz) => {
+              setQuizzes((prev) => [...prev, quiz]);
+              setActionNotice({ type: "success", text: l.saved });
+              setTimeout(() => setActionNotice(null), 3000);
+            }} />
+          )}
+
+          {/* LESSON PLANS TAB */}
+          {tab === "plans" && (
+            <TeacherLessonPlans />
           )}
 
           {/* LESSONS TAB */}
@@ -2089,6 +2119,21 @@ export default function TeacherDashboard() {
               </div>
 
             </div>
+          )}
+
+          {/* REPORTS TAB */}
+          {tab === "reports" && (
+            <ClassReports
+              classrooms={classrooms}
+              classroomMembers={classroomMembers}
+              results={results}
+              teacherName={user?.displayName || user?.email || ""}
+            />
+          )}
+
+          {/* CO-TEACHER TAB */}
+          {tab === "coteacher" && (
+            <CoTeacherManager classrooms={classrooms} />
           )}
 
           {/* RESOURCES TAB */}
