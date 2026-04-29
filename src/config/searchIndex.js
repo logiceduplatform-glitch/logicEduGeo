@@ -68,6 +68,18 @@ function tokenize(s) {
     .filter(t => t && t.length > 1 && !STOP_WORDS.includes(t));
 }
 
+// Backward-compat alias used by older SearchOverlay component (returns items with `route`)
+export function searchGames(query, lang = "el", limit = 10) {
+  const items = searchIndex(query, lang, limit);
+  return items.map(it => ({
+    ...it,
+    route: it.path,
+    section: it.category,
+    name: it.title.el,
+    nameEn: it.title.en,
+  }));
+}
+
 export function searchIndex(query, lang = "el", limit = 10) {
   const q = (query || "").trim().toLowerCase();
   if (!q) return [];

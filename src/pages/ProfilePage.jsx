@@ -13,6 +13,10 @@ import { ProfileService } from "../services/ProfileService";
 import { StorageService } from "../services/StorageService";
 import ProfileSwitcher from "../components/ProfileSwitcher";
 import ReferralCard from "../components/ReferralCard";
+import AchievementShowcase from "../components/AchievementShowcase";
+import SeasonalThemeSelector from "../components/SeasonalThemeSelector";
+import OfflineDownloadCard from "../components/OfflineDownloadCard";
+import CountryPicker from "../components/CountryPicker";
 
 import {
   ageToQuizRoute,
@@ -933,6 +937,18 @@ export default function ProfilePage() {
             )}
           </div>
         )}
+
+        {/* Achievement Showcase */}
+        {tab === "account" && user && <div className="mb-6"><AchievementShowcase /></div>}
+
+        {/* Seasonal Theme */}
+        {tab === "account" && user && <div className="mb-6"><SeasonalThemeSelector /></div>}
+
+        {/* Offline Download */}
+        {tab === "account" && user && <div className="mb-6"><OfflineDownloadCard /></div>}
+
+        {/* Country picker */}
+        {tab === "account" && user && <div className="mb-6"><CountryPicker /></div>}
 
         {/* Referral card */}
         {tab === "account" && user && <ReferralCard />}

@@ -14,6 +14,10 @@ import TeacherAIGenerator from "../components/TeacherAIGenerator";
 import TeacherLessonPlans from "../components/TeacherLessonPlans";
 import ClassReports from "../components/ClassReports";
 import CoTeacherManager from "../components/CoTeacherManager";
+import HintButton from "../components/HintButton";
+import ReadAloudButton from "../components/ReadAloudButton";
+import { SpacedRepetitionService } from "../services/SpacedRepetitionService";
+import { MasteryService } from "../services/MasteryService";
 
 const STORAGE_KEY = "geo:teacherQuizzes";
 const DIFFICULTY_OPTIONS = ["easy", "medium", "hard"];
@@ -526,12 +530,14 @@ function QuizPlayer({ quiz, lang, onBack }) {
   const [feedback, setFeedback] = useState(null);
   const [finished, setFinished] = useState(false);
   const [fillText, setFillText] = useState("");
+  const [eliminatedIdx, setEliminatedIdx] = useState([]);
 
   const q = quiz.questions[idx];
   const qType = q ? getQuestionType(q) : "multiple_choice";
 
   useEffect(() => {
     setFillText("");
+    setEliminatedIdx([]);
   }, [idx, quiz?.id]);
 
   if (!q && !finished) return null;
@@ -541,6 +547,22 @@ function QuizPlayer({ quiz, lang, onBack }) {
     const isCorrect = isAnswerCorrect(q, opt);
     setFeedback({ correct: isCorrect, selected: opt });
     setScore((s) => (isCorrect ? s + 1 : s));
+    try {
+      const subject = quiz?.subject || "general";
+      MasteryService.record(subject, isCorrect);
+      if (isCorrect) {
+        SpacedRepetitionService.recordCorrect(q.question, subject);
+      } else {
+        SpacedRepetitionService.recordWrong({
+          question: q.question,
+          options: q.options || [],
+          correct: q.correct,
+          explanation: q.explanation || "",
+          subject,
+          source: `quiz:${quiz?.id || ""}`,
+        });
+      }
+    } catch {}
     setTimeout(() => {
       setFeedback(null);
       if (idx + 1 >= quiz.questions.length) setFinished(true);
@@ -575,12 +597,22 @@ function QuizPlayer({ quiz, lang, onBack }) {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-4 gap-2">
         <button onClick={onBack} className="text-sm text-slate-500 dark:text-slate-400 hover:text-purple-600 flex items-center gap-1">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
           {l.back}
         </button>
-        <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 bg-white dark:bg-slate-700 px-3 py-1.5 rounded-full border border-slate-100 dark:border-slate-600">{idx + 1} / {quiz.questions.length}</span>
+        <div className="flex items-center gap-2">
+          {!feedback && qType !== "fill_in" && (
+            <HintButton
+              question={q.question}
+              options={optionsForDisplay}
+              correctAnswer={q.correct}
+              onEliminate={(indices) => setEliminatedIdx((prev) => [...new Set([...prev, ...indices])])}
+            />
+          )}
+          <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 bg-white dark:bg-slate-700 px-3 py-1.5 rounded-full border border-slate-100 dark:border-slate-600">{idx + 1} / {quiz.questions.length}</span>
+        </div>
       </div>
       <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
         {q.imageUrl && q.imageUrl.trim() && (
@@ -588,7 +620,10 @@ function QuizPlayer({ quiz, lang, onBack }) {
             <img src={q.imageUrl} alt="" className="w-full max-h-56 object-contain" />
           </div>
         )}
-        <p className="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-5">{q.question}</p>
+        <div className="flex items-start gap-3 mb-5">
+          <p className="flex-1 text-lg font-semibold text-slate-800 dark:text-slate-100">{q.question}</p>
+          <ReadAloudButton text={q.question} size="md" />
+        </div>
         {qType === "fill_in" ? (
           <div className="space-y-3">
             <input
@@ -612,15 +647,18 @@ function QuizPlayer({ quiz, lang, onBack }) {
         ) : (
           <div className="grid gap-3 sm:grid-cols-2">
             {optionsForDisplay.map((opt, oi) => {
+              const isEliminated = eliminatedIdx.includes(oi);
               let cls = "px-4 py-3.5 rounded-xl border-2 text-left text-sm font-medium transition-all ";
-              if (feedback) {
+              if (isEliminated) {
+                cls += "bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 opacity-30 line-through pointer-events-none text-slate-400";
+              } else if (feedback) {
                 if (opt === q.correct) cls += "bg-emerald-50 dark:bg-emerald-900/30 border-emerald-400 text-emerald-800 dark:text-emerald-200";
                 else if (opt === feedback.selected) cls += "bg-red-50 dark:bg-red-900/30 border-red-400 text-red-800 dark:text-red-200";
                 else cls += "bg-slate-50 dark:bg-slate-700/30 border-slate-100 dark:border-slate-700 opacity-50 text-slate-400";
               } else {
                 cls += "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-purple-300 dark:hover:border-purple-500 cursor-pointer text-slate-700 dark:text-slate-200";
               }
-              return <button key={oi} type="button" onClick={() => handleAnswer(opt)} disabled={!!feedback} className={cls}><span className="font-bold mr-2 text-slate-400">{String.fromCharCode(65 + oi)}.</span>{opt}</button>;
+              return <button key={oi} type="button" onClick={() => !isEliminated && handleAnswer(opt)} disabled={!!feedback || isEliminated} className={cls}><span className="font-bold mr-2 text-slate-400">{String.fromCharCode(65 + oi)}.</span>{opt}</button>;
             })}
           </div>
         )}

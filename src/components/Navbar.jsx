@@ -12,7 +12,7 @@ import { CoinService } from "../services/CoinService";
 import { SoundService } from "../services/SoundService";
 import AvatarDisplay, { getAvatarData } from "./AvatarDisplay";
 import NotificationBell from "./NotificationBell";
-import GlobalSearch from "./GlobalSearch";
+import VoiceCommandButton from "./VoiceCommandButton";
 import {
   ageToQuizRoute,
   adultObjectiveRoutes,
@@ -240,6 +240,12 @@ export default function Navbar() {
       { label: isEl ? "Παιχνίδια" : "Games", fullLabel: isEl ? "Παιχνίδια" : "Games", href: "#categories", icon: "🎮" },
       { label: isEl ? "Πρόκληση" : "Daily", fullLabel: isEl ? "Ημερήσια Πρόκληση" : "Daily Challenge", href: "/daily", isRoute: true, icon: "🎯" },
       { label: isEl ? "Χάρτης" : "Map", fullLabel: isEl ? "Χάρτης Περιπέτειας" : "Adventure Map", href: "/adventure", isRoute: true, icon: "🗺️" },
+      { label: isEl ? "Events" : "Events", fullLabel: isEl ? "Events & Τουρνουά" : "Events & Tournaments", href: "/events", isRoute: true, icon: "🏆" },
+      { label: isEl ? "Top" : "Top", fullLabel: isEl ? "Παγκόσμια Κατάταξη" : "Global Leaderboard", href: "/leaderboard", isRoute: true, icon: "🌍" },
+      { label: isEl ? "Trophy" : "Trophy", fullLabel: isEl ? "Trophy Room" : "Trophy Room", href: "/trophy-room", isRoute: true, icon: "🏆" },
+      { label: isEl ? "Speed" : "Speed", fullLabel: isEl ? "Speedrun" : "Speedrun", href: "/speedrun", isRoute: true, icon: "⚡" },
+      { label: isEl ? "Mastery" : "Mastery", fullLabel: isEl ? "Mastery Tracker" : "Mastery Tracker", href: "/mastery", isRoute: true, icon: "🔥" },
+      { label: isEl ? "AI" : "AI", fullLabel: isEl ? "Study Buddy AI" : "Study Buddy AI", href: "/study-buddy", isRoute: true, icon: "🤖" },
       { label: isEl ? "Battle" : "Battle", fullLabel: isEl ? "Battle Royale" : "Battle Royale", href: "/battle", isRoute: true, icon: "⚔️" },
       { label: isEl ? "Pet" : "Pet", fullLabel: isEl ? "Το Pet μου" : "My Pet", href: "/pet", isRoute: true, icon: "🐾" },
       { label: isEl ? "Η Τάξη μου" : "My Class", fullLabel: isEl ? "Η Τάξη μου" : "My Classroom", href: "/my-classroom", isRoute: true, icon: "🏫" },
@@ -350,8 +356,8 @@ export default function Navbar() {
               {/Mac|iPhone|iPad/.test(navigator.userAgent) ? "⌘K" : "Ctrl+K"}
             </kbd>
           </button>
-          {/* Global search (Cmd+K) */}
-          <GlobalSearch />
+          {/* Voice command */}
+          <VoiceCommandButton />
           {/* Notification bell */}
           {isLoggedIn && <NotificationBell />}
           {/* Theme toggle */}

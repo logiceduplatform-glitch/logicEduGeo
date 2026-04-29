@@ -16,6 +16,8 @@ import { AnalyticsService } from "./services/AnalyticsService";
 import TimeLimitOverlay from "./components/TimeLimitOverlay";
 import { CertificateService } from "./services/CertificateService";
 import { SkeletonCard } from "./components/SkeletonLoader";
+import SeasonalDecorations from "./components/SeasonalDecorations";
+import KeyboardShortcutsHandler from "./components/KeyboardShortcutsHandler";
 
 const MilestoneCertificate = React.lazy(() => import("./components/rewards/MilestoneCertificate"));
 
@@ -42,6 +44,12 @@ const ContactPage = React.lazy(() => import("./pages/ContactPage"));
 const AboutPage = React.lazy(() => import("./pages/AboutPage"));
 const SubscriptionPage = React.lazy(() => import("./pages/SubscriptionPage"));
 const LeaderboardPage = React.lazy(() => import("./pages/LeaderboardPage"));
+const GlobalLeaderboardPage = React.lazy(() => import("./pages/GlobalLeaderboardPage"));
+const EventsPage = React.lazy(() => import("./pages/EventsPage"));
+const TrophyRoomPage = React.lazy(() => import("./pages/TrophyRoomPage"));
+const SpeedrunPage = React.lazy(() => import("./pages/SpeedrunPage"));
+const SubjectMasteryPage = React.lazy(() => import("./pages/SubjectMasteryPage"));
+const StudyBuddyPage = React.lazy(() => import("./pages/StudyBuddyPage"));
 const WeeklyReportPage = React.lazy(() => import("./pages/WeeklyReportPage"));
 const ContentEditorPage = React.lazy(() => import("./pages/ContentEditorPage"));
 const OnlineMultiplayerPage = React.lazy(() => import("./pages/OnlineMultiplayerPage"));
@@ -188,6 +196,8 @@ export default function App() {
             <OnboardingGuard />
             <ToastProvider>
             <SkipLink />
+            <SeasonalDecorations />
+            <KeyboardShortcutsHandler />
             <ErrorBoundary>
             <Suspense fallback={<PageLoader />}>
               <Routes>
@@ -210,6 +220,12 @@ export default function App() {
                 <Route path="/for-teachers" element={<ForTeachersPage />} />
                 <Route path="/for-parents" element={<ForParentsPage />} />
                 <Route path="/my-records" element={<LeaderboardPage />} />
+                <Route path="/leaderboard" element={<GlobalLeaderboardPage />} />
+                <Route path="/events" element={<EventsPage />} />
+                <Route path="/trophy-room" element={<TrophyRoomPage />} />
+                <Route path="/speedrun" element={<PlayGate><SpeedrunPage /></PlayGate>} />
+                <Route path="/mastery" element={<PlayGate><SubjectMasteryPage /></PlayGate>} />
+                <Route path="/study-buddy" element={<PlayGate><StudyBuddyPage /></PlayGate>} />
                 <Route path="/weekly-report" element={<PlayGate><WeeklyReportPage /></PlayGate>} />
                 <Route path="/content-editor" element={<PlayGate><ContentEditorPage /></PlayGate>} />
                 <Route path="/online-multiplayer" element={<PlayGate><OnlineMultiplayerPage /></PlayGate>} />

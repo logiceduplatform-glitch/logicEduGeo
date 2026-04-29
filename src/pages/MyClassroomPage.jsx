@@ -16,8 +16,12 @@ import {
   orderBy,
 } from "firebase/firestore";
 import { ProgressService } from "../services/ProgressService";
+import { SpacedRepetitionService } from "../services/SpacedRepetitionService";
+import { MasteryService } from "../services/MasteryService";
 import Navbar from "../components/Navbar";
 import SEO from "../components/SEO";
+import ReadAloudButton from "../components/ReadAloudButton";
+import HintButton from "../components/HintButton";
 import { AnalyticsService } from "../services/AnalyticsService";
 
 const STORAGE_KEY = "geo:myClassrooms";
@@ -53,7 +57,6 @@ const T = {
     homework: "Εργασίες",
     noHomework: "Δεν υπάρχουν εργασίες ακόμα",
     dueDate: "Προθεσμία",
-    expired: "Έληξε",
     start: "Ξεκίνα",
     notFound: "Δεν βρέθηκε τάξη με αυτόν τον κωδικό",
     alreadyEnrolled: "Είσαι ήδη εγγεγραμμένος!",
@@ -95,7 +98,6 @@ const T = {
     homework: "Homework",
     noHomework: "No homework yet",
     dueDate: "Due date",
-    expired: "Expired",
     start: "Start",
     notFound: "No classroom found with this code",
     alreadyEnrolled: "You're already enrolled!",
@@ -170,6 +172,7 @@ export default function MyClassroomPage() {
   const [qAnswers, setQAnswers] = useState([]);
   const [resultSaved, setResultSaved] = useState(false);
   const [fillText, setFillText] = useState("");
+  const [eliminatedIdx, setEliminatedIdx] = useState([]);
   const [lastSeenTs, setLastSeenTs] = useState("");
 
   const loadClassroom = useCallback(async (code) => {
@@ -370,6 +373,7 @@ export default function MyClassroomPage() {
 
   useEffect(() => {
     setFillText("");
+    setEliminatedIdx([]);
   }, [qIdx, playingQuiz?.code]);
 
   const handleAnswer = (opt) => {
@@ -382,6 +386,22 @@ export default function MyClassroomPage() {
     const rec = { question: q.question, selected: opt, correct: q.correct, isCorrect };
     const updAnswers = [...qAnswers, rec];
     setQAnswers(updAnswers);
+    try {
+      const subject = playingQuiz?.subject || "classroom";
+      MasteryService.record(subject, isCorrect);
+      if (isCorrect) {
+        SpacedRepetitionService.recordCorrect(q.question, subject);
+      } else {
+        SpacedRepetitionService.recordWrong({
+          question: q.question,
+          options: q.options || [],
+          correct: q.correct,
+          explanation: q.explanation || "",
+          subject,
+          source: `classroom:${playingQuiz?.code || ""}`,
+        });
+      }
+    } catch {}
     setTimeout(() => {
       setQFeedback(null);
       if (qIdx + 1 >= playingQuiz.questions.length) {
@@ -442,11 +462,19 @@ export default function MyClassroomPage() {
         <Navbar />
         <div className="pt-20 pb-12 px-4">
           <div className="mx-auto max-w-xl">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-4 gap-2">
               <button onClick={() => setPlayingQuiz(null)} className="text-sm text-slate-500 hover:text-indigo-600 flex items-center gap-1">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
                 {l.back}
               </button>
+              {!qFeedback && qt !== "fill_in" && optionsForDisplay.length >= 3 && (
+                <HintButton
+                  question={currentQ.question}
+                  options={optionsForDisplay}
+                  correctAnswer={currentQ.correct}
+                  onEliminate={(indices) => setEliminatedIdx((prev) => [...new Set([...prev, ...indices])])}
+                />
+              )}
               <span className="text-xs font-semibold text-slate-400 bg-white dark:bg-slate-700 px-3 py-1.5 rounded-full border border-slate-100 dark:border-slate-600">{qIdx + 1} / {playingQuiz.questions.length}</span>
             </div>
             <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
@@ -455,7 +483,10 @@ export default function MyClassroomPage() {
                   <img src={currentQ.imageUrl} alt="" className="w-full max-h-56 object-contain" />
                 </div>
               )}
-              <p className="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-5">{currentQ.question}</p>
+              <div className="flex items-start gap-3 mb-5">
+                <p className="flex-1 text-lg font-semibold text-slate-800 dark:text-slate-100">{currentQ.question}</p>
+                <ReadAloudButton text={currentQ.question} size="md" />
+              </div>
               {qt === "fill_in" ? (
                 <div className="space-y-3">
                   <input
@@ -482,8 +513,11 @@ export default function MyClassroomPage() {
               ) : (
                 <div className="grid gap-3 sm:grid-cols-2">
                   {optionsForDisplay.map((opt, oi) => {
+                    const isEliminated = eliminatedIdx.includes(oi);
                     let cls = "px-4 py-3.5 rounded-xl border-2 text-left text-sm font-medium transition-all ";
-                    if (qFeedback) {
+                    if (isEliminated) {
+                      cls += "bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 opacity-30 line-through pointer-events-none text-slate-400";
+                    } else if (qFeedback) {
                       if (opt === currentQ.correct) cls += "bg-emerald-50 dark:bg-emerald-900/30 border-emerald-400 text-emerald-800 dark:text-emerald-200";
                       else if (opt === qFeedback.selected) cls += "bg-red-50 dark:bg-red-900/30 border-red-400 text-red-800 dark:text-red-200";
                       else cls += "bg-slate-50 dark:bg-slate-700/30 border-slate-100 dark:border-slate-700 opacity-50 text-slate-400";
@@ -491,7 +525,7 @@ export default function MyClassroomPage() {
                       cls += "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-indigo-300 cursor-pointer text-slate-700 dark:text-slate-200";
                     }
                     return (
-                      <button key={oi} type="button" onClick={() => handleAnswer(opt)} disabled={!!qFeedback} className={cls}>
+                      <button key={oi} type="button" onClick={() => !isEliminated && handleAnswer(opt)} disabled={!!qFeedback || isEliminated} className={cls}>
                         <span className="font-bold mr-2 text-slate-400">{String.fromCharCode(65 + oi)}.</span>
                         {opt}
                       </button>

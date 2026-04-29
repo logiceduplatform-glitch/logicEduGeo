@@ -127,6 +127,17 @@ service cloud.firestore {
                     && resource.data.inviterUid == request.auth.uid;
     }
 
+    // Global leaderboard: anyone authed can read; users can submit only their own
+    match /globalLeaderboard/{entryId} {
+      allow read: if true;
+      allow create: if request.auth != null
+                    && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.score is number
+                    && request.resource.data.score >= 0;
+      allow update, delete: if request.auth != null
+                              && resource.data.uid == request.auth.uid;
+    }
+
     // Block everything else
     match /{document=**} {
       allow read, write: if false;
