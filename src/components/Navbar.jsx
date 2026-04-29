@@ -11,6 +11,7 @@ import { ProfileService } from "../services/ProfileService";
 import { CoinService } from "../services/CoinService";
 import { SoundService } from "../services/SoundService";
 import { AdminService } from "../services/AdminService";
+import { FeatureFlagService } from "../services/FeatureFlagService";
 import AvatarDisplay, { getAvatarData } from "./AvatarDisplay";
 import NotificationBell from "./NotificationBell";
 import VoiceCommandButton from "./VoiceCommandButton";
@@ -528,7 +529,7 @@ export default function Navbar() {
 
               {/* Dropdown */}
               {profileOpen && (
-                <div className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 py-2 z-50">
+                <div className="absolute right-0 top-full mt-2 w-64 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 py-2 z-50 max-h-[calc(100vh-80px)] overflow-y-auto scrollbar-thin">
                   {/* User info */}
                   <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
                     <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 truncate">{displayName}</p>
@@ -729,7 +730,7 @@ export default function Navbar() {
                     {isEl ? "Quiz Battle" : "Quiz Battle"}
                   </button>
 
-                  {!isPremium && (
+                  {!isPremium && FeatureFlagService.isEnabled("subs_enabled") && FeatureFlagService.isEnabled("subs_premium") && (
                     <button
                       onClick={() => { setProfileOpen(false); navigate("/subscription"); }}
                       className="w-full text-left px-4 py-2.5 text-sm font-semibold text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/30 transition-colors flex items-center gap-2"
@@ -1082,7 +1083,7 @@ export default function Navbar() {
                     🎮 {isEl ? "Quiz Battle" : "Quiz Battle"}
                   </button>
 
-                  {!isPremium && (
+                  {!isPremium && FeatureFlagService.isEnabled("subs_enabled") && FeatureFlagService.isEnabled("subs_premium") && (
                     <button
                       onClick={() => { setMobileOpen(false); navigate("/subscription"); }}
                       className="block w-full text-left px-4 py-3 rounded-xl text-amber-600 dark:text-amber-400 font-semibold hover:bg-amber-50 dark:hover:bg-amber-900/30"

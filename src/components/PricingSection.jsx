@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { LanguageContext } from "../i18n/LanguageContext";
 import { AuthContext } from "../auth/AuthContext";
 import { useSubscription } from "../contexts/SubscriptionContext";
+import { FeatureFlagService } from "../services/FeatureFlagService";
 
 const PLANS = [
   {
@@ -51,6 +52,22 @@ export default function PricingSection() {
   const isEl = lang === "el";
   const l = LABELS[isEl ? "el" : "en"];
 
+  // Hide entire pricing section if subscriptions disabled or pricing page disabled
+  if (!FeatureFlagService.isEnabled("subs_enabled")) return null;
+  if (!FeatureFlagService.isEnabled("subs_pricingPage")) return null;
+
+  // Filter plans by their flag
+  const visiblePlans = PLANS.filter((plan) => {
+    if (plan.id === "free")    return FeatureFlagService.isEnabled("subs_free");
+    if (plan.id === "premium") return FeatureFlagService.isEnabled("subs_premium");
+    if (plan.id === "family")  return FeatureFlagService.isEnabled("subs_family");
+    return true;
+  });
+
+  if (visiblePlans.length === 0) return null;
+
+  const showTrial = FeatureFlagService.isEnabled("subs_trial");
+
   return (
     <section id="pricing" className="py-20 bg-gradient-to-b from-white to-slate-50 dark:from-slate-800 dark:to-slate-900">
       <div className="mx-auto max-w-5xl px-4">
@@ -66,8 +83,8 @@ export default function PricingSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {PLANS.map((plan) => {
+        <div className={`grid grid-cols-1 ${visiblePlans.length === 1 ? "max-w-sm mx-auto" : visiblePlans.length === 2 ? "md:grid-cols-2 max-w-3xl mx-auto" : "md:grid-cols-3"} gap-6`}>
+          {visiblePlans.map((plan) => {
             const isActive = tier === plan.id;
             const name = l[plan.id];
             const features = plan.features[isEl ? "el" : "en"];
@@ -139,7 +156,7 @@ export default function PricingSection() {
           })}
         </div>
 
-        <p className="text-center text-sm text-slate-400 dark:text-slate-500 mt-8">{l.trial}</p>
+        {showTrial && <p className="text-center text-sm text-slate-400 dark:text-slate-500 mt-8">{l.trial}</p>}
       </div>
     </section>
   );

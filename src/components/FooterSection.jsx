@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { LanguageContext } from "../i18n/LanguageContext";
 import NewsletterSignup from "./NewsletterSignup";
+import { FeatureFlagService } from "../services/FeatureFlagService";
 
 export default function FooterSection({ t }) {
   const { lang } = useContext(LanguageContext);
@@ -56,7 +57,7 @@ export default function FooterSection({ t }) {
               {isEl ? "Νέα παιχνίδια, συμβουλές & προσφορές στο inbox σου." : "New games, tips & offers in your inbox."}
             </p>
             <div className="mb-5">
-              <NewsletterSignup variant="footer" />
+              {FeatureFlagService.isEnabled("newsletter") && <NewsletterSignup variant="footer" />}
             </div>
             <a href="mailto:info@geoloplatform.com" className="text-sm hover:text-white transition-colors block mb-4">
               info@geoloplatform.com

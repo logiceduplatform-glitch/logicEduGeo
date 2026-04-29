@@ -6,6 +6,7 @@ import { LanguageContext } from "../i18n/LanguageContext";
 import { AuthContext } from "../auth/AuthContext";
 import { useSubscription } from "../contexts/SubscriptionContext";
 import { AnalyticsService } from "../services/AnalyticsService";
+import { FeatureFlagService } from "../services/FeatureFlagService";
 
 const T = {
   el: {
@@ -176,13 +177,26 @@ export default function SubscriptionPage() {
       gradient: "from-purple-500 to-pink-500",
       features: l.familyFeatures,
     },
-  ];
+  ].filter((plan) => {
+    if (plan.id === "free")    return FeatureFlagService.isEnabled("subs_free");
+    if (plan.id === "premium") return FeatureFlagService.isEnabled("subs_premium");
+    if (plan.id === "family")  return FeatureFlagService.isEnabled("subs_family");
+    return true;
+  });
+
+  const paymentEnabled = FeatureFlagService.isEnabled("subs_payment");
 
   const handleChoose = (planId) => {
     if (!user) return;
     if (planId === "free") {
       unsubscribe();
     } else {
+      if (!paymentEnabled) {
+        alert(lang === "el"
+          ? "🚧 Οι πληρωμές είναι προσωρινά απενεργοποιημένες. Δοκίμασε ξανά αργότερα."
+          : "🚧 Payments are temporarily disabled. Please try again later.");
+        return;
+      }
       startCheckout(planId, period);
     }
   };
