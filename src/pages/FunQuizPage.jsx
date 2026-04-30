@@ -13,6 +13,8 @@ import { checkNewAchievements } from "../services/RewardsService";
 import Navbar from "../components/Navbar";
 import SEO from "../components/SEO";
 import { useSubscription } from "../contexts/SubscriptionContext";
+import { PremiumContentService } from "../services/PremiumContentService";
+import { FeatureFlagService } from "../services/FeatureFlagService";
 import { useFocusTrap } from "../hooks/useFocusTrap";
 import LockedGameOverlay from "../components/LockedGameOverlay";
 import PaywallModal from "../components/PaywallModal";
@@ -146,7 +148,14 @@ export default function FunQuizPage({ ageGroup: ageGroupProp, mode }) {
   const [diffNotif, setDiffNotif] = useState(null);
   const { lang } = useContext(LanguageContext);
   const { guest, incrementGuestPlay } = useContext(AuthContext);
-  const { isGameFree } = useSubscription();
+  const { isPremium } = useSubscription();
+  const subsEnabled = FeatureFlagService.isEnabled("subs_enabled");
+  const ageKey = (ageGroup || "").replace(/-/g, "_");
+  const isGameLocked = useCallback((gameId) => {
+    if (!subsEnabled) return false;
+    if (isPremium) return false;
+    return PremiumContentService.isGameLocked(ageKey, mode || "fun", gameId);
+  }, [subsEnabled, isPremium, ageKey, mode]);
   const progress = useProgress();
   const navigate = useNavigate();
   const sessionStartRef = useRef(null);
@@ -525,8 +534,8 @@ export default function FunQuizPage({ ageGroup: ageGroupProp, mode }) {
 
               {/* Game grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {allGames?.map((game, idx) => {
-                  const locked = !isGameFree(idx);
+                {allGames?.map((game) => {
+                  const locked = isGameLocked(game.id);
                   return (
                   <div
                     key={game.id}

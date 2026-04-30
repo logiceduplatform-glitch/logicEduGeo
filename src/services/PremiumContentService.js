@@ -1,9 +1,39 @@
 import { db } from "../auth/firebase";
 import { collection, doc, getDocs, setDoc, deleteDoc } from "firebase/firestore";
+import { getGamesCatalog, gameItemId, AGE_LABELS, MODE_LABELS } from "../config/gamesCatalog";
+
+// Build per-game premium items from the games catalog (one entry per individual game).
+function buildPerGameItems() {
+  const out = [];
+  const catalog = getGamesCatalog();
+  for (const e of catalog) {
+    const age = AGE_LABELS[e.ageGroup] || { el: e.ageGroup, en: e.ageGroup };
+    const mode = MODE_LABELS[e.mode] || { el: e.mode, en: e.mode };
+    const title = (typeof e.label === "object" && e.label) ? e.label : { el: String(e.label || e.gameId), en: String(e.label || e.gameId) };
+    out.push({
+      id: gameItemId(e.ageGroup, e.mode, e.gameId),
+      label: {
+        el: `${e.icon || "🎮"} ${title.el || title.en} · ${age.el} · ${mode.el}`,
+        en: `${e.icon || "🎮"} ${title.en || title.el} · ${age.en} · ${mode.en}`,
+      },
+      category: `games_age_${e.ageGroup}`,
+      subCategory: e.mode,
+      ageGroup: e.ageGroup,
+      mode: e.mode,
+      gameId: e.gameId,
+      perGame: true,
+    });
+  }
+  return out;
+}
 
 // All gateable items. id => label/category.
 // Categories: games (per age/objective) + features (key premium features).
 export const PREMIUM_ITEMS = [
+  // Per-individual-game entries (admin can toggle each game separately)
+  ...buildPerGameItems(),
+
+  // Whole-category-per-age entries (kept for backward-compat presets / quick toggle)
   // Games - per age/objective (matches FeatureFlagService game flag IDs)
   { id: "games_age_2_3_school",   label: { el: "🏫 Σχολικά · 2-3 ετών",    en: "🏫 School · Age 2-3" },    category: "games_age_2_3" },
   { id: "games_age_2_3_fun",      label: { el: "🎉 Διασκέδαση · 2-3 ετών",  en: "🎉 Fun · Age 2-3" },       category: "games_age_2_3" },
@@ -89,6 +119,21 @@ export const PremiumContentService = {
   isPremiumOnly(id) {
     const cache = loadCache();
     return cache[id] === true;
+  },
+
+  /**
+   * Check if a specific game is premium-locked.
+   * Looks for both per-game flag (game_<age>_<mode>_<gameId>) and the broader
+   * category flag (games_age_<age>_<mode>) — either being ON marks the game as premium.
+   */
+  isGameLocked(ageGroup, mode, gameId) {
+    if (!ageGroup || !mode || !gameId) return false;
+    const cache = loadCache();
+    const perGame = `game_${ageGroup}_${mode}_${gameId}`;
+    if (cache[perGame] === true) return true;
+    const catId = `games_age_${ageGroup}_${mode}`;
+    if (cache[catId] === true) return true;
+    return false;
   },
 
   getAll() {

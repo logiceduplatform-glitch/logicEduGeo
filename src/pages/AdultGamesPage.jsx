@@ -11,6 +11,8 @@ import Breadcrumb from "../components/Breadcrumb";
 import DifficultyBadge from "../components/DifficultyBadge";
 import { ProgressService } from "../services/ProgressService";
 import { ADULT_GAME_CATEGORIES } from "../config/adultGameConfig";
+import { PremiumContentService } from "../services/PremiumContentService";
+import { FeatureFlagService } from "../services/FeatureFlagService";
 import { GameSkeleton } from "../components/SkeletonLoader";
 
 // Lazy load all game components
@@ -264,7 +266,7 @@ export default function AdultGamesPage() {
   const [activeGame, setActiveGame] = useState(null);
   const [activeQuiz, setActiveQuiz] = useState(null);
   const [showPaywall, setShowPaywall] = useState(false);
-  const { isGameFree } = useSubscription();
+  const { isPremium } = useSubscription();
   const [favorites, setFavorites] = useState(() => {
     try { return JSON.parse(localStorage.getItem("geo:progress:favorites")) || []; } catch { return []; }
   });
@@ -308,6 +310,15 @@ export default function AdultGamesPage() {
   const GameComponent = activeGame ? GAME_COMPONENTS[activeGame] : null;
   const currentGameMeta = activeGame ? ALL_GAMES.find(g => g.id === activeGame) : null;
   const currentCat = activeCategory ? ADULT_GAME_CATEGORIES.find(c => c.id === activeCategory) : null;
+
+  const ADULT_MODE_MAP = { brainTraining: "brain", funGames: "fun", logicThinking: "logic" };
+  const subsEnabled = FeatureFlagService.isEnabled("subs_enabled");
+  const isGameLocked = (gameId) => {
+    if (!subsEnabled) return false;
+    if (isPremium) return false;
+    const mode = ADULT_MODE_MAP[currentCat?.id] || "brain";
+    return PremiumContentService.isGameLocked("adult", mode, gameId);
+  };
   const currentQuizMeta = activeQuiz ? QUIZ_CATEGORIES.find(q => q.id === activeQuiz) : null;
 
   if (!activeCategory) {
@@ -510,8 +521,7 @@ export default function AdultGamesPage() {
                           </h3>
                           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             {sgGames.map(game => {
-                              const idx = currentCat.games.indexOf(game);
-                              const locked = !isGameFree(idx);
+                              const locked = isGameLocked(game.id);
                               return (
                                 <button key={game.id} onClick={() => locked ? setShowPaywall(true) : handleSelectGame(game.id)}
                                   className="relative bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-md border border-slate-200 dark:border-slate-700 hover:shadow-xl hover:-translate-y-1 transition-all text-left group overflow-hidden">
@@ -549,8 +559,8 @@ export default function AdultGamesPage() {
                     })
                   ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {currentCat?.games.map((game, idx) => {
-                        const locked = !isGameFree(idx);
+                      {currentCat?.games.map((game) => {
+                        const locked = isGameLocked(game.id);
                         return (
                           <button key={game.id} onClick={() => locked ? setShowPaywall(true) : handleSelectGame(game.id)}
                             className="relative bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-md border border-slate-200 dark:border-slate-700 hover:shadow-xl hover:-translate-y-1 transition-all text-left group overflow-hidden">

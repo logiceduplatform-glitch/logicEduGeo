@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 import { LanguageContext } from "../../i18n/LanguageContext";
 import { PremiumContentService, PREMIUM_ITEMS } from "../../services/PremiumContentService";
 import { FeatureFlagService } from "../../services/FeatureFlagService";
+import { MODE_LABELS } from "../../config/gamesCatalog";
 
 const T = {
   el: {
@@ -89,6 +90,13 @@ export default function AdminPremium() {
     for (const c of CATEGORY_ORDER) {
       if (c.startsWith("games_age_")) init[c] = true;
     }
+    // Pre-collapse all sub-mode groups inside game-age categories
+    for (const c of CATEGORY_ORDER) {
+      if (!c.startsWith("games_age_")) continue;
+      for (const m of ["school", "fun", "logic", "brain", "board"]) {
+        init[`${c}__${m}`] = true;
+      }
+    }
     return init;
   });
 
@@ -101,12 +109,15 @@ export default function AdminPremium() {
 
   useEffect(() => { load(); }, []);
 
+  // Group: category → (subCategory|"_") → items[]
   const grouped = useMemo(() => {
     const out = {};
     for (const item of PREMIUM_ITEMS) {
       const cat = item.category;
-      if (!out[cat]) out[cat] = [];
-      out[cat].push({ ...item, premium: !!premium[item.id] });
+      const sub = item.subCategory || "_";
+      if (!out[cat]) out[cat] = {};
+      if (!out[cat][sub]) out[cat][sub] = [];
+      out[cat][sub].push({ ...item, premium: !!premium[item.id] });
     }
     return out;
   }, [premium]);
@@ -116,16 +127,23 @@ export default function AdminPremium() {
 
   const filteredCats = useMemo(() => {
     const q = search.trim().toLowerCase();
+    const filterItem = (it) =>
+      !q ||
+      (it.label?.[lang] || it.label?.en || "").toLowerCase().includes(q) ||
+      it.id.toLowerCase().includes(q) ||
+      (it.gameId || "").toLowerCase().includes(q);
     const result = [];
     for (const cat of CATEGORY_ORDER) {
       if (!grouped[cat]) continue;
-      const items = q
-        ? grouped[cat].filter((it) =>
-            (it.label?.[lang] || it.label?.en || "").toLowerCase().includes(q) ||
-            it.id.toLowerCase().includes(q)
-          )
-        : grouped[cat];
-      if (items.length > 0) result.push([cat, items]);
+      const subs = [];
+      let totalItems = 0;
+      for (const [sub, list] of Object.entries(grouped[cat])) {
+        const items = list.filter(filterItem);
+        if (items.length === 0) continue;
+        subs.push([sub, items]);
+        totalItems += items.length;
+      }
+      if (totalItems > 0) result.push([cat, subs, totalItems]);
     }
     return result;
   }, [grouped, search, lang]);
@@ -143,9 +161,9 @@ export default function AdminPremium() {
     setBusy(null);
   };
 
-  const bulk = async (cat, items, makePremium) => {
+  const bulk = async (busyKey, items, makePremium) => {
     if (!window.confirm(l.confirmBulk)) return;
-    setBusy("bulk_" + cat);
+    setBusy(busyKey);
     try {
       const ids = items.map((it) => it.id).filter((id) => !!premium[id] !== makePremium);
       await PremiumContentService.setBulk(ids, makePremium);
@@ -244,48 +262,81 @@ export default function AdminPremium() {
       </section>
 
       <div className="space-y-3">
-        {filteredCats.map(([cat, items]) => {
+        {filteredCats.map(([cat, subs, totalItems]) => {
           const isCollapsed = !!collapsed[cat] && !search.trim();
-          const onItems = items.filter((it) => it.premium).length;
-          const bulkBusy = busy === "bulk_" + cat;
+          const allItems = subs.flatMap(([, items]) => items);
+          const onItems = allItems.filter((it) => it.premium).length;
+          const catBusyKey = "bulk_" + cat;
+          const catBusy = busy === catBusyKey;
           return (
             <section key={cat} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
               <header className="px-5 py-3 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between gap-2 flex-wrap">
                 <button onClick={() => setCollapsed((c) => ({ ...c, [cat]: !c[cat] }))} className="flex items-center gap-2 text-left flex-1 min-w-0" aria-expanded={!isCollapsed}>
                   <span className={`text-xs transition-transform ${isCollapsed ? "" : "rotate-90"}`}>▶</span>
                   <h3 className="font-bold text-slate-800 dark:text-slate-100 truncate">{CATEGORY_LABELS[cat]?.[lang] || CATEGORY_LABELS[cat]?.en || cat}</h3>
-                  <span className="text-xs text-slate-500 shrink-0">({onItems}/{items.length} 💎)</span>
+                  <span className="text-xs text-slate-500 shrink-0">({onItems}/{totalItems} 💎)</span>
                 </button>
                 <div className="flex gap-1 shrink-0">
-                  <button disabled={bulkBusy} onClick={() => bulk(cat, items, true)} className="text-[10px] font-bold px-2 py-1 rounded-md bg-amber-50 dark:bg-amber-900/30 border border-amber-300 dark:border-amber-700 text-amber-700 dark:text-amber-300 disabled:opacity-30">
+                  <button disabled={catBusy} onClick={() => bulk(catBusyKey, allItems, true)} className="text-[10px] font-bold px-2 py-1 rounded-md bg-amber-50 dark:bg-amber-900/30 border border-amber-300 dark:border-amber-700 text-amber-700 dark:text-amber-300 disabled:opacity-30">
                     {l.enableAll}
                   </button>
-                  <button disabled={bulkBusy} onClick={() => bulk(cat, items, false)} className="text-[10px] font-bold px-2 py-1 rounded-md bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-300 dark:border-emerald-700 text-emerald-700 dark:text-emerald-300 disabled:opacity-30">
+                  <button disabled={catBusy} onClick={() => bulk(catBusyKey, allItems, false)} className="text-[10px] font-bold px-2 py-1 rounded-md bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-300 dark:border-emerald-700 text-emerald-700 dark:text-emerald-300 disabled:opacity-30">
                     {l.disableAll}
                   </button>
                 </div>
               </header>
               {!isCollapsed && (
-                <ul className="divide-y divide-slate-100 dark:divide-slate-700">
-                  {items.map((it) => {
-                    const label = it.label?.[lang] || it.label?.en || it.id;
+                <div className="divide-y divide-slate-100 dark:divide-slate-700">
+                  {subs.map(([subKey, items]) => {
+                    const subLabel = subKey === "_"
+                      ? null
+                      : (MODE_LABELS[subKey]?.[lang] || MODE_LABELS[subKey]?.en || subKey);
+                    const subOn = items.filter((it) => it.premium).length;
+                    const subBusyKey = `bulk_${cat}_${subKey}`;
+                    const subBusy = busy === subBusyKey;
+                    const subCollapseKey = `${cat}__${subKey}`;
+                    const subIsCollapsed = !!collapsed[subCollapseKey] && !search.trim();
                     return (
-                      <li key={it.id} className="px-5 py-3 flex items-center justify-between gap-3">
-                        <div className="min-w-0">
-                          <p className="font-semibold text-slate-800 dark:text-slate-100 truncate">{label}</p>
-                          <p className="text-xs text-slate-500 font-mono">{it.id}</p>
-                        </div>
-                        <div className="flex items-center gap-2 shrink-0">
-                          {savedId === it.id && <span className="text-[10px] font-bold text-emerald-600">{l.saved}</span>}
-                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${it.premium ? "bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300" : "bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300"}`}>
-                            {it.premium ? l.premiumOn : l.free}
-                          </span>
-                          <Toggle on={it.premium} disabled={busy === it.id} onClick={() => toggle(it.id, it.premium)} />
-                        </div>
-                      </li>
+                      <div key={subKey}>
+                        {subLabel && (
+                          <div className="px-5 py-2 bg-slate-50 dark:bg-slate-900/50 flex items-center justify-between gap-2 flex-wrap">
+                            <button onClick={() => setCollapsed((c) => ({ ...c, [subCollapseKey]: !c[subCollapseKey] }))} className="flex items-center gap-2 text-left flex-1 min-w-0" aria-expanded={!subIsCollapsed}>
+                              <span className={`text-[10px] transition-transform ${subIsCollapsed ? "" : "rotate-90"}`}>▶</span>
+                              <span className="text-xs font-extrabold text-slate-600 dark:text-slate-300 uppercase tracking-wide truncate">{subLabel}</span>
+                              <span className="text-[10px] text-slate-500 shrink-0">({subOn}/{items.length} 💎)</span>
+                            </button>
+                            <div className="flex gap-1 shrink-0">
+                              <button disabled={subBusy} onClick={() => bulk(subBusyKey, items, true)} className="text-[10px] font-semibold px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 disabled:opacity-30">💎</button>
+                              <button disabled={subBusy} onClick={() => bulk(subBusyKey, items, false)} className="text-[10px] font-semibold px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 disabled:opacity-30">🆓</button>
+                            </div>
+                          </div>
+                        )}
+                        {!subIsCollapsed && (
+                          <ul className="divide-y divide-slate-100 dark:divide-slate-700">
+                            {items.map((it) => {
+                              const label = it.label?.[lang] || it.label?.en || it.id;
+                              return (
+                                <li key={it.id} className="px-5 py-2.5 flex items-center justify-between gap-3">
+                                  <div className="min-w-0">
+                                    <p className="font-medium text-slate-800 dark:text-slate-100 truncate text-sm">{label}</p>
+                                    <p className="text-[10px] text-slate-400 font-mono truncate">{it.id}</p>
+                                  </div>
+                                  <div className="flex items-center gap-2 shrink-0">
+                                    {savedId === it.id && <span className="text-[10px] font-bold text-emerald-600">{l.saved}</span>}
+                                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${it.premium ? "bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300" : "bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300"}`}>
+                                      {it.premium ? l.premiumOn : l.free}
+                                    </span>
+                                    <Toggle on={it.premium} disabled={busy === it.id} onClick={() => toggle(it.id, it.premium)} />
+                                  </div>
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        )}
+                      </div>
                     );
                   })}
-                </ul>
+                </div>
               )}
             </section>
           );

@@ -6,6 +6,8 @@ import BoardGamesSidebar, { GAMES, CATEGORIES } from "../components/games/board/
 import GameLobby from "../components/games/board/GameLobby";
 import { LanguageContext } from "../i18n/LanguageContext";
 import { useSubscription } from "../contexts/SubscriptionContext";
+import { PremiumContentService } from "../services/PremiumContentService";
+import { FeatureFlagService } from "../services/FeatureFlagService";
 import PaywallModal from "../components/PaywallModal";
 import Breadcrumb from "../components/Breadcrumb";
 import { GameSkeleton } from "../components/SkeletonLoader";
@@ -62,7 +64,13 @@ export default function BoardGamesPage() {
   const [gameConfig, setGameConfig] = useState(null);
   const [showPaywall, setShowPaywall] = useState(false);
   const [mobileCatOpen, setMobileCatOpen] = useState(false);
-  const { isGameFree } = useSubscription();
+  const { isPremium } = useSubscription();
+  const subsEnabled = FeatureFlagService.isEnabled("subs_enabled");
+  const isGameLocked = (gameId) => {
+    if (!subsEnabled) return false;
+    if (isPremium) return false;
+    return PremiumContentService.isGameLocked("adult", "board", gameId);
+  };
 
   useEffect(() => {
     const fromUrl = searchParams.get("game");
@@ -114,9 +122,9 @@ export default function BoardGamesPage() {
                   {cat.icon} {cat.title[isEl ? "el" : "en"]}
                 </p>
                 <div className="flex gap-2 flex-wrap">
-                  {cat.games.map(({ id, icon, label, gradient }, idx) => {
+                  {cat.games.map(({ id, icon, label, gradient }) => {
                     const isActive = activeGame === id;
-                    const locked = !isGameFree(idx);
+                    const locked = isGameLocked(id);
                     return (
                       <button
                         key={id}

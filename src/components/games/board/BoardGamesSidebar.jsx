@@ -2,6 +2,8 @@ import React, { useContext, useState } from "react";
 import { LanguageContext } from "../../../i18n/LanguageContext";
 import { useSubscription } from "../../../contexts/SubscriptionContext";
 import { ProgressService } from "../../../services/ProgressService";
+import { PremiumContentService } from "../../../services/PremiumContentService";
+import { FeatureFlagService } from "../../../services/FeatureFlagService";
 
 const CATEGORIES = [
   {
@@ -50,7 +52,13 @@ const GAMES = CATEGORIES.flatMap(cat => cat.games);
 export default function BoardGamesSidebar({ active, onSelect, onLockedClick }) {
   const { lang } = useContext(LanguageContext);
   const isEl = lang === "el";
-  const { isGameFree } = useSubscription();
+  const { isPremium } = useSubscription();
+  const subsEnabled = FeatureFlagService.isEnabled("subs_enabled");
+  const isGameLocked = (gameId) => {
+    if (!subsEnabled) return false;
+    if (isPremium) return false;
+    return PremiumContentService.isGameLocked("adult", "board", gameId);
+  };
   const [favorites, setFavorites] = useState(() => ProgressService.getFavorites());
 
   const handleToggleFav = (e, gameId) => {
@@ -69,9 +77,9 @@ export default function BoardGamesSidebar({ active, onSelect, onLockedClick }) {
               {cat.title[isEl ? "el" : "en"]}
             </h2>
             <nav className="space-y-1.5 mt-1">
-              {cat.games.map(({ id, icon, label, gradient }, idx) => {
+              {cat.games.map(({ id, icon, label, gradient }) => {
                 const isActive = active === id;
-                const locked = !isGameFree(idx);
+                const locked = isGameLocked(id);
                 return (
                   <button
                     key={id}

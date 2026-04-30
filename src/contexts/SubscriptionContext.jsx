@@ -68,12 +68,14 @@ export function SubscriptionProvider({ children }) {
   }, [user?.uid]);
 
   const isGameFree = useCallback(
-    (index) => {
-      if (isPremium) return true;
-      if (typeof index !== "number") return true;
-      return index < FREE_GAMES_PER_CATEGORY;
+    (_index) => {
+      // The legacy "first N games per category are free" rule has been replaced by the
+      // explicit per-item Premium Content management in the Admin Dashboard.
+      // We therefore default to "free" here. Per-game premium gating is enforced by
+      // <PremiumGate> + PremiumContentService.isPremiumOnly() at the route/component level.
+      return true;
     },
-    [isPremium]
+    []
   );
 
   const [checkoutError, setCheckoutError] = useState(null);
