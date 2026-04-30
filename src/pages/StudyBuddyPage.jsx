@@ -194,7 +194,7 @@ export default function StudyBuddyPage() {
                 <div className="text-7xl mb-3">🎉</div>
                 <p className="font-bold text-slate-800 dark:text-slate-100">{l.none}</p>
                 <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{l.noneSub}</p>
-                <Link to="/quiz" className="inline-block mt-5 px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold text-sm">
+                <Link to="/play" className="inline-block mt-5 px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold text-sm">
                   {lang === "el" ? "Παίξε ένα κουίζ" : "Play a quiz"}
                 </Link>
               </div>

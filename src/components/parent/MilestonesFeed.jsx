@@ -136,7 +136,7 @@ export default function MilestonesFeed() {
     setNotifPerm(result);
     if (result === "granted") {
       try {
-        new Notification("GeoLearn", {
+        new Notification("Kibloo", {
           body: isEl ? "Οι ειδοποιήσεις ενεργοποιήθηκαν!" : "Notifications enabled!",
           icon: "/favicon.svg",
         });

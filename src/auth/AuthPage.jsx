@@ -219,12 +219,12 @@ export default function AuthPage() {
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-1/3 -translate-x-1/3" />
 
           <div className="relative z-10">
-            <div className="text-4xl mb-2">🎮</div>
-            <h2 className="text-3xl font-bold mb-2">GeoLo Platform</h2>
+            <div className="text-4xl mb-2">🎈</div>
+            <h2 className="text-3xl font-bold mb-2">Kibloo</h2>
             <p className="text-purple-200 text-sm">
               {lang === "el"
-                ? "Εκπαιδευτική Πλατφόρμα Παιχνιδιών"
-                : "Educational Gaming Platform"}
+                ? "Όπου η περιέργεια ανθίζει"
+                : "Where curiosity blooms"}
             </p>
           </div>
 
@@ -252,8 +252,8 @@ export default function AuthPage() {
         <div className="p-8 sm:p-10">
           {/* Mobile logo */}
           <div className="lg:hidden text-center mb-6">
-            <span className="text-4xl">🎮</span>
-            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100 mt-1">GeoLo Platform</h2>
+            <span className="text-4xl">🎈</span>
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100 mt-1">Kibloo</h2>
           </div>
 
           {/* Header */}

@@ -93,7 +93,7 @@ const T = {
     xpEarned: "XP",
     coinsEarned: "coins",
     share: "Μοιράσου",
-    shareText: "Ημερήσια Πρόκληση GeoLearn",
+    shareText: "Ημερήσια Πρόκληση Kibloo",
     playAgain: "Αύριο ξανά!",
     back: "Πίσω",
     alreadyPlayed: "Έχεις ήδη ολοκληρώσει τη σημερινή πρόκληση!",
@@ -122,7 +122,7 @@ const T = {
     xpEarned: "XP",
     coinsEarned: "coins",
     share: "Share",
-    shareText: "GeoLearn Daily Challenge",
+    shareText: "Kibloo Daily Challenge",
     playAgain: "Come back tomorrow!",
     back: "Back",
     alreadyPlayed: "You've already completed today's challenge!",
@@ -206,7 +206,7 @@ export default function DailyChallengePage() {
       const res = getResult(todayKey);
       return "🟩";
     }).join("");
-    const text = `${l.shareText} ${todayKey}\n${finalScore}/5 ${"⭐".repeat(finalScore)}${"☆".repeat(5 - finalScore)}\n\nhttps://geoloplatform.com/daily`;
+    const text = `${l.shareText} ${todayKey}\n${finalScore}/5 ${"⭐".repeat(finalScore)}${"☆".repeat(5 - finalScore)}\n\nhttps://kibloo.app/daily`;
     if (navigator.share) {
       navigator.share({ text }).catch(() => {});
     } else {

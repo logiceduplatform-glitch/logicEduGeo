@@ -94,3 +94,147 @@ html.dark body {
     scroll-behavior: auto !important;
   }
 }
+
+/* ════════════════════════════════════════════════════════════════
+   ♿ ACCESSIBILITY SETTINGS
+   Applied via classes on <html> by AccessibilityService.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* OpenDyslexic — bundled via CDN. The font is hosted on jsdelivr
+   so we don't ship the whole file; only loaded when class is applied. */
+@font-face {
+  font-family: "OpenDyslexic";
+  src: url("https://cdn.jsdelivr.net/gh/antijingoist/open-dyslexic/compiled/OpenDyslexic-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "OpenDyslexic";
+  src: url("https://cdn.jsdelivr.net/gh/antijingoist/open-dyslexic/compiled/OpenDyslexic-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+html.a11y-dyslexia,
+html.a11y-dyslexia body,
+html.a11y-dyslexia * {
+  font-family: "OpenDyslexic", "Comic Sans MS", system-ui, sans-serif !important;
+  letter-spacing: 0.04em !important;
+  word-spacing: 0.16em !important;
+  line-height: 1.7 !important;
+}
+html.a11y-dyslexia p,
+html.a11y-dyslexia li {
+  max-width: 70ch;
+}
+
+/* Large text mode: bumps base font-size */
+html.a11y-large-text {
+  font-size: 18px !important;
+}
+html.a11y-large-text body {
+  font-size: 1.125rem !important;
+}
+html.a11y-large-text h1 { font-size: 2.5rem !important; }
+html.a11y-large-text h2 { font-size: 2rem !important; }
+html.a11y-large-text h3 { font-size: 1.5rem !important; }
+
+/* Reduced motion (manual override) */
+html.a11y-reduced-motion *,
+html.a11y-reduced-motion *::before,
+html.a11y-reduced-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Underline all links */
+html.a11y-underline-links a {
+  text-decoration: underline !important;
+}
+
+/* Simplified UI: hide decorative-only elements (use data-decorative="true") */
+html.a11y-simplified [data-decorative="true"] {
+  display: none !important;
+}
+html.a11y-simplified .seasonal-decorations,
+html.a11y-simplified .confetti,
+html.a11y-simplified .floating-emoji {
+  display: none !important;
+}
+
+/* High-contrast mode: black/white/yellow */
+html.a11y-high-contrast {
+  background: #000 !important;
+  color: #fff !important;
+}
+html.a11y-high-contrast body {
+  background: #000 !important;
+  color: #fff !important;
+}
+html.a11y-high-contrast button,
+html.a11y-high-contrast a,
+html.a11y-high-contrast [role="button"] {
+  border: 2px solid #ffeb3b !important;
+  background: #000 !important;
+  color: #ffeb3b !important;
+}
+html.a11y-high-contrast a:hover,
+html.a11y-high-contrast button:hover {
+  background: #ffeb3b !important;
+  color: #000 !important;
+}
+html.a11y-high-contrast input,
+html.a11y-high-contrast textarea,
+html.a11y-high-contrast select {
+  background: #000 !important;
+  color: #fff !important;
+  border: 2px solid #fff !important;
+}
+html.a11y-high-contrast img,
+html.a11y-high-contrast svg {
+  filter: contrast(1.5) brightness(1.2);
+}
+html.a11y-high-contrast .bg-white,
+html.a11y-high-contrast [class*="bg-slate-"],
+html.a11y-high-contrast [class*="bg-amber-"],
+html.a11y-high-contrast [class*="bg-emerald-"],
+html.a11y-high-contrast [class*="bg-violet-"],
+html.a11y-high-contrast [class*="bg-rose-"],
+html.a11y-high-contrast [class*="bg-blue-"],
+html.a11y-high-contrast [class*="bg-cyan-"],
+html.a11y-high-contrast [class*="bg-fuchsia-"],
+html.a11y-high-contrast [class*="bg-pink-"],
+html.a11y-high-contrast [class*="bg-indigo-"],
+html.a11y-high-contrast [class*="bg-orange-"],
+html.a11y-high-contrast [class*="bg-purple-"],
+html.a11y-high-contrast [class*="bg-teal-"] {
+  background: #111 !important;
+}
+html.a11y-high-contrast [class*="bg-gradient"] {
+  background: #111 !important;
+  background-image: none !important;
+}
+html.a11y-high-contrast h1,
+html.a11y-high-contrast h2,
+html.a11y-high-contrast h3,
+html.a11y-high-contrast p,
+html.a11y-high-contrast span:not([class*="emoji"]),
+html.a11y-high-contrast div {
+  color: inherit;
+}
+
+/* Color-blind filters via SVG. We use CSS filter: url(#filterId).
+   The SVG defs are injected globally by the AccessibilityService component. */
+html.a11y-cb-deuteranopia { filter: url(#a11y-cb-deuteranopia); }
+html.a11y-cb-protanopia { filter: url(#a11y-cb-protanopia); }
+html.a11y-cb-tritanopia { filter: url(#a11y-cb-tritanopia); }
+html.a11y-cb-achromatopsia { filter: grayscale(100%); }
+
+/* Sign language indicator — make sure all sign-language buttons have the right size */
+html.a11y-sign-language [data-sign-button] {
+  display: inline-flex !important;
+}

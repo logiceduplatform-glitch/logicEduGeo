@@ -29,6 +29,11 @@ export const NotificationService = {
     return typeof window !== "undefined" && "Notification" in window;
   },
 
+  /** Returns true if notifications are supported AND permission is granted. */
+  isEnabled() {
+    return this.isSupported() && Notification.permission === "granted";
+  },
+
   permission() {
     if (!this.isSupported()) return "unsupported";
     return Notification.permission;
@@ -44,6 +49,28 @@ export const NotificationService = {
     } catch {
       return "denied";
     }
+  },
+
+  /** Alias of request() — returns true if granted. */
+  async requestPermission() {
+    const r = await this.request();
+    return r === "granted";
+  },
+
+  /** "Disable" locally — flips internal pref off. Browser permission can only
+   *  be revoked from the browser settings (we cannot revoke programmatically).
+   *  We still flip a local flag so the UI reflects the off state. */
+  async disable() {
+    const next = { ...loadPrefs(), streakReminder: false, dailyChallenge: false, newAchievement: false };
+    savePrefs(next);
+    return true;
+  },
+
+  /** Re-enable local prefs (without changing browser permission). */
+  async enable() {
+    const next = { ...loadPrefs(), streakReminder: true, dailyChallenge: true, newAchievement: true };
+    savePrefs(next);
+    return true;
   },
 
   getPrefs() { return loadPrefs(); },

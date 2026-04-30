@@ -10,7 +10,7 @@ export default function ShareButton({ title, text, url, className = "" }) {
   const handleShare = async () => {
     setFailed(false);
     const shareData = {
-      title: title || "GeoLo Platform",
+      title: title || "Kibloo",
       text: text || (isEl ? "Δες τα επιτεύγματά μου!" : "Check out my achievements!"),
       url: url || window.location.href,
     };

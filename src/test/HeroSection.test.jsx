@@ -45,12 +45,12 @@ describe('HeroSection', () => {
 
   it('renders the hero title', () => {
     renderHero();
-    expect(screen.getByText('Learn. Think. Solve.')).toBeInTheDocument();
+    expect(screen.getByText('Where curiosity blooms.')).toBeInTheDocument();
   });
 
   it('renders the subtitle', () => {
     renderHero();
-    expect(screen.getByText(/350\+ educational games/)).toBeInTheDocument();
+    expect(screen.getByText(/350\+ playful educational games/)).toBeInTheDocument();
   });
 
   it('shows Sign Up, Log in, Try as guest buttons when not logged in', () => {
@@ -109,12 +109,12 @@ describe('HeroSection', () => {
 
   it('does not render platform badge (removed)', () => {
     renderHero();
-    expect(screen.queryByText('Edutainment Platform')).not.toBeInTheDocument();
+    expect(screen.queryByText('Kibloo Platform Badge')).not.toBeInTheDocument();
   });
 
   it('renders tagline badge', () => {
     renderHero();
-    const matches = screen.getAllByText(/Train your brain with logic/);
+    const matches = screen.getAllByText(/Where curiosity blooms/);
     expect(matches.length).toBeGreaterThanOrEqual(1);
   });
 });

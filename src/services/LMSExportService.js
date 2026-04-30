@@ -83,7 +83,7 @@ export const LMSExportService = {
   },
 
   /** Generate an .ics calendar file for an assignment due date. */
-  toICS({ title, description, dueDate, url, organizer = "GeoLearn" }) {
+  toICS({ title, description, dueDate, url, organizer = "Kibloo" }) {
     if (!dueDate) return "";
     const fmt = (d) => {
       const dt = new Date(d);
@@ -92,7 +92,7 @@ export const LMSExportService = {
     };
     const start = fmt(dueDate);
     const end = fmt(new Date(new Date(dueDate).getTime() + 30 * 60 * 1000));
-    const uid = `${Date.now()}-${Math.random().toString(36).slice(2)}@geolearn`;
+    const uid = `${Date.now()}-${Math.random().toString(36).slice(2)}@kibloo`;
     const lines = [
       "BEGIN:VCALENDAR",
       "VERSION:2.0",

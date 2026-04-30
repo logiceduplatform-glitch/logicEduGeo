@@ -313,7 +313,7 @@ export default function ClassReports({ classrooms = [], classroomMembers = {}, r
             </table>
 
             <div style={{ marginTop: "30px", paddingTop: "10px", borderTop: "1px solid #e2e8f0", fontSize: "10px", color: "#94a3b8", textAlign: "center" }}>
-              GeoLearn • {new Date().toLocaleString(lang === "el" ? "el-GR" : "en-US")}
+              Kibloo • {new Date().toLocaleString(lang === "el" ? "el-GR" : "en-US")}
             </div>
           </div>
         </>

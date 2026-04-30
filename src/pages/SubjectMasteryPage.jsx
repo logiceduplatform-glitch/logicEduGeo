@@ -115,7 +115,7 @@ export default function SubjectMasteryPage() {
             <div className="text-center py-10">
               <div className="text-5xl mb-3">📊</div>
               <p className="text-slate-500 mb-4">{l.noData}</p>
-              <Link to="/quiz" className="inline-block px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-bold text-sm">{l.play}</Link>
+              <Link to="/play" className="inline-block px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-bold text-sm">{l.play}</Link>
             </div>
           ) : (
             <>

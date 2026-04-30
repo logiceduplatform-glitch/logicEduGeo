@@ -6,10 +6,10 @@ import { LanguageContext } from "../i18n/LanguageContext";
 
 const FAQ_ITEMS = [
   {
-    q: { en: "What is GeoLo Platform?", el: "Τι είναι το GeoLo Platform;" },
+    q: { en: "What is Kibloo?", el: "Τι είναι το Kibloo;" },
     a: {
-      en: "GeoLo Platform is an interactive learning environment where children ages 2–12 can play games that help them learn math, logic, language, geography, and more. Learning through play is at the heart of everything we do.",
-      el: "Το GeoLo Platform είναι ένα διαδραστικό περιβάλλον μάθησης όπου παιδιά 2–12 ετών μπορούν να παίζουν παιχνίδια που τους βοηθούν να μάθουν μαθηματικά, λογική, γλώσσα, γεωγραφία κ.ά. Η μάθηση μέσω του παιχνιδιού είναι στον πυρήνα όλων όσων κάνουμε.",
+      en: "Kibloo is an interactive learning world where children ages 2–12 can play games that help them learn math, logic, language, geography, and more. Learning through play is at the heart of everything we do.",
+      el: "Το Kibloo είναι ένας διαδραστικός κόσμος μάθησης όπου παιδιά 2–12 ετών μπορούν να παίζουν παιχνίδια που τους βοηθούν να μάθουν μαθηματικά, λογική, γλώσσα, γεωγραφία κ.ά. Η μάθηση μέσω του παιχνιδιού είναι στον πυρήνα όλων όσων κάνουμε.",
     },
   },
   {
@@ -64,15 +64,15 @@ const FAQ_ITEMS = [
   {
     q: { en: "How can I contact you?", el: "Πώς μπορώ να επικοινωνήσω;" },
     a: {
-      en: "You can reach us at info@geoloplatform.com. We typically respond within 24 hours. You can also use our Contact page to send a message.",
-      el: "Μπορείτε να μας επικοινωνήσετε στο info@geoloplatform.com. Απαντάμε συνήθως εντός 24 ωρών. Μπορείτε επίσης να χρησιμοποιήσετε τη σελίδα Επικοινωνία για να στείλετε μήνυμα.",
+      en: "You can reach us at hello@kibloo.app. We typically respond within 24 hours. You can also use our Contact page to send a message.",
+      el: "Μπορείτε να μας επικοινωνήσετε στο hello@kibloo.app. Απαντάμε συνήθως εντός 24 ωρών. Μπορείτε επίσης να χρησιμοποιήσετε τη σελίδα Επικοινωνία για να στείλετε μήνυμα.",
     },
   },
   {
     q: { en: "Can I delete my account?", el: "Μπορώ να διαγράψω τον λογαριασμό μου;" },
     a: {
-      en: "Yes. You can request account deletion at any time. Contact us at info@geoloplatform.com with your request, and we will process it in line with GDPR.",
-      el: "Ναι. Μπορείτε να ζητήσετε τη διαγραφή του λογαριασμού σας ανά πάσα στιγμή. Επικοινωνήστε μαζί μας στο info@geoloplatform.com με το αίτημά σας και θα το επεξεργαστούμε σύμφωνα με το GDPR.",
+      en: "Yes. You can request account deletion at any time. Contact us at hello@kibloo.app with your request, and we will process it in line with GDPR.",
+      el: "Ναι. Μπορείτε να ζητήσετε τη διαγραφή του λογαριασμού σας ανά πάσα στιγμή. Επικοινωνήστε μαζί μας στο hello@kibloo.app με το αίτημά σας και θα το επεξεργαστούμε σύμφωνα με το GDPR.",
     },
   },
 ];
@@ -89,7 +89,7 @@ export default function FAQPage() {
     <div id="main-content" className="min-h-screen bg-slate-50 dark:bg-slate-900">
       <SEO
         title={title}
-        description={isEl ? "Απαντήσεις σε συχνές ερωτήσεις για το GeoLo Platform" : "Answers to common questions about GeoLo Platform"}
+        description={isEl ? "Απαντήσεις σε συχνές ερωτήσεις για το Kibloo" : "Answers to common questions about Kibloo"}
       />
       <Navbar />
 

@@ -11,11 +11,11 @@ const CONTENT = {
     sections: [
       {
         heading: "1. Αποδοχή όρων",
-        body: "Χρησιμοποιώντας την πλατφόρμα GeoLo Platform, αποδέχεστε τους παρόντες όρους χρήσης. Αν δεν συμφωνείτε, παρακαλούμε μην χρησιμοποιείτε την υπηρεσία.",
+        body: "Χρησιμοποιώντας την πλατφόρμα Kibloo, αποδέχεστε τους παρόντες όρους χρήσης. Αν δεν συμφωνείτε, παρακαλούμε μην χρησιμοποιείτε την υπηρεσία.",
       },
       {
         heading: "2. Περιγραφή υπηρεσίας",
-        body: "Η GeoLo Platform είναι μια εκπαιδευτική πλατφόρμα παιχνιδιών για παιδιά 2-12 ετών. Παρέχει δραστηριότητες λογικής, μαθηματικών, γεωγραφίας και άλλων θεμάτων.",
+        body: "Το Kibloo είναι μια εκπαιδευτική πλατφόρμα παιχνιδιών για παιδιά 2-12 ετών. Παρέχει δραστηριότητες λογικής, μαθηματικών, γεωγραφίας και άλλων θεμάτων.",
       },
       {
         heading: "3. Λογαριασμοί χρηστών",
@@ -23,7 +23,7 @@ const CONTENT = {
       },
       {
         heading: "4. Πνευματική ιδιοκτησία",
-        body: "Όλο το περιεχόμενο της πλατφόρμας (παιχνίδια, εικόνες, κείμενα) ανήκει στην GeoLo Platform και προστατεύεται από τους νόμους περί πνευματικής ιδιοκτησίας.",
+        body: "Όλο το περιεχόμενο της πλατφόρμας (παιχνίδια, εικόνες, κείμενα) ανήκει στο Kibloo και προστατεύεται από τους νόμους περί πνευματικής ιδιοκτησίας.",
       },
       {
         heading: "5. Περιορισμός ευθύνης",
@@ -41,11 +41,11 @@ const CONTENT = {
     sections: [
       {
         heading: "1. Acceptance of terms",
-        body: "By using GeoLo Platform, you agree to these terms of service. If you do not agree, please do not use the service.",
+        body: "By using Kibloo, you agree to these terms of service. If you do not agree, please do not use the service.",
       },
       {
         heading: "2. Service description",
-        body: "GeoLo Platform is an educational gaming platform for children ages 2-12. It provides activities in logic, math, geography, and other subjects.",
+        body: "Kibloo is an educational gaming platform for children ages 2-12. It provides activities in logic, math, geography, and other subjects.",
       },
       {
         heading: "3. User accounts",
@@ -53,7 +53,7 @@ const CONTENT = {
       },
       {
         heading: "4. Intellectual property",
-        body: "All platform content (games, images, text) belongs to GeoLo Platform and is protected by intellectual property laws.",
+        body: "All platform content (games, images, text) belongs to Kibloo and is protected by intellectual property laws.",
       },
       {
         heading: "5. Limitation of liability",
@@ -99,8 +99,8 @@ export default function TermsPage() {
 
           <div className="mt-12 p-4 bg-purple-50 dark:bg-purple-900/30 rounded-xl text-sm text-purple-700 dark:text-purple-300">
             {lang === "el"
-              ? "Για οποιαδήποτε ερώτηση, επικοινωνήστε: info@geoloplatform.com"
-              : "For any questions, contact: info@geoloplatform.com"}
+              ? "Για οποιαδήποτε ερώτηση, επικοινωνήστε: hello@kibloo.app"
+              : "For any questions, contact: hello@kibloo.app"}
           </div>
         </div>
       </div>

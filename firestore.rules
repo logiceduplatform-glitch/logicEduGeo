@@ -276,6 +276,15 @@ service cloud.firestore {
                               && (resource.data.uid == request.auth.uid || isAdmin());
     }
 
+    // Print-on-demand orders: users can create/read their own; admins can read/update all.
+    match /podOrders/{orderId} {
+      allow create: if request.auth != null
+                    && request.resource.data.uid == request.auth.uid;
+      allow read: if request.auth != null
+                  && (resource.data.uid == request.auth.uid || isAdmin());
+      allow update, delete: if isAdmin();
+    }
+
     // Block everything else
     match /{document=**} {
       allow read, write: if false;

@@ -1,7 +1,7 @@
 {
-  "name": "GeoLo Platform – Learn. Think. Solve.",
-  "short_name": "GeoLo",
-  "description": "Train your brain with logic! 350+ educational games for kids 2-12 & adults.",
+  "name": "Kibloo – Where curiosity blooms",
+  "short_name": "Kibloo",
+  "description": "Kibloo is a playful learning world for kids 2–12 and curious adults. 350+ educational games in math, logic, language, science and more.",
   "start_url": "/",
   "display": "standalone",
   "theme_color": "#7c3aed",

@@ -16,14 +16,57 @@ const TEXTS = {
   },
 };
 
+// Detects errors caused by stale chunk hashes after a new deploy.
+// In that case the safest action is to hard-reload (forces fresh index.html).
+function isChunkLoadError(err) {
+  if (!err) return false;
+  const msg = String(err?.message || err || "");
+  return (
+    err?.name === "ChunkLoadError" ||
+    /Failed to fetch dynamically imported module/i.test(msg) ||
+    /Loading chunk \d+ failed/i.test(msg) ||
+    /Loading CSS chunk/i.test(msg) ||
+    /Importing a module script failed/i.test(msg) ||
+    /MIME type of "text\/html"/i.test(msg)
+  );
+}
+
+const RELOAD_KEY = "geo:chunkReloadOnce";
+function maybeAutoReload() {
+  try {
+    // Avoid reload loops
+    const did = sessionStorage.getItem(RELOAD_KEY);
+    if (did) return false;
+    sessionStorage.setItem(RELOAD_KEY, String(Date.now()));
+    // Hard reload to force fetching fresh index.html
+    window.location.reload();
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+// Listen for unhandled promise rejections (lazy import failures)
+if (typeof window !== "undefined") {
+  window.addEventListener("unhandledrejection", (event) => {
+    if (isChunkLoadError(event.reason)) {
+      maybeAutoReload();
+    }
+  });
+}
+
 export default class ErrorBoundary extends React.Component {
   state = { hasError: false, error: null };
 
   static getDerivedStateFromError(error) {
+    if (isChunkLoadError(error)) {
+      maybeAutoReload();
+    }
     return { hasError: true, error };
   }
 
   componentDidCatch(error, errorInfo) {
+    if (isChunkLoadError(error)) return;
     ErrorReportingService.captureException(error, {
       source: "ErrorBoundary",
       componentStack: errorInfo?.componentStack?.slice(0, 500),

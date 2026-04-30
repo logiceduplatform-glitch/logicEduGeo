@@ -186,7 +186,7 @@ export default function ProfileSwitcher({ lang, onSwitch, compact = false, readO
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-2 w-72 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 py-2 z-50">
+        <div className="absolute right-0 top-full mt-2 w-72 max-w-[calc(100vw-2rem)] bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 py-2 z-[60]">
           <div className="px-4 py-2 border-b border-slate-100 dark:border-slate-700">
             <p className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
               {isEl ? "Προφίλ παιδιών" : "Child profiles"}

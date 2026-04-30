@@ -40,11 +40,11 @@ const STATS = [
 const MISSION = {
   en: {
     title: "Our Mission",
-    body: "We believe every child deserves access to high-quality educational content that sparks curiosity and grows with them. GeoLo Platform combines playful games with real learning outcomes—helping kids ages 2–12 build skills in math, logic, language, and more. We're built by educators and developers who care about safe, engaging, and meaningful learning.",
+    body: "We believe every child deserves access to high-quality educational content that sparks curiosity and grows with them. Kibloo combines playful games with real learning outcomes—helping kids ages 2–12 build skills in math, logic, language, and more. We're built by educators and developers who care about safe, engaging, and meaningful learning.",
   },
   el: {
     title: "Η Αποστολή μας",
-    body: "Πιστεύουμε ότι κάθε παιδί αξίζει πρόσβαση σε ποιοτικό εκπαιδευτικό περιεχόμενο που αναζωπυρώνει την περιέργεια και αναπτύσσεται μαζί του. Το GeoLo Platform συνδυάζει διασκεδαστικά παιχνίδια με πραγματικά μαθησιακά αποτελέσματα—βοηθώντας τα παιδιά 2–12 ετών να αναπτύξουν δεξιότητες σε μαθηματικά, λογική, γλώσσα και άλλα. Είμαστε φτιαγμένοι από εκπαιδευτικούς και προγραμματιστές που νοιάζονται για ασφαλή, ελκυστική και ουσιαστική μάθηση.",
+    body: "Πιστεύουμε ότι κάθε παιδί αξίζει πρόσβαση σε ποιοτικό εκπαιδευτικό περιεχόμενο που αναζωπυρώνει την περιέργεια και αναπτύσσεται μαζί του. Το Kibloo συνδυάζει διασκεδαστικά παιχνίδια με πραγματικά μαθησιακά αποτελέσματα—βοηθώντας τα παιδιά 2–12 ετών να αναπτύξουν δεξιότητες σε μαθηματικά, λογική, γλώσσα και άλλα. Είμαστε φτιαγμένοι από εκπαιδευτικούς και προγραμματιστές που νοιάζονται για ασφαλή, ελκυστική και ουσιαστική μάθηση.",
   },
 };
 
@@ -65,7 +65,7 @@ export default function AboutPage() {
     <div id="main-content" className="min-h-screen bg-slate-50 dark:bg-slate-900">
       <SEO
         title={title}
-        description={isEl ? "Μάθετε για το GeoLo Platform και την αποστολή μας" : "Learn about GeoLo Platform and our mission"}
+        description={isEl ? "Μάθετε για το Kibloo και την αποστολή μας" : "Learn about Kibloo and our mission"}
       />
       <Navbar />
 

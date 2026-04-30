@@ -17,7 +17,7 @@ function LangWrapper({ children, lang = 'en' }) {
 describe('FooterSection', () => {
   it('renders the brand name', () => {
     render(<LangWrapper lang="en"><FooterSection t={mockT} /></LangWrapper>);
-    expect(screen.getByText('GeoLo Platform')).toBeInTheDocument();
+    expect(screen.getAllByText('Kibloo').length).toBeGreaterThan(0);
   });
 
   it('shows current year in copyright', () => {
@@ -46,7 +46,7 @@ describe('FooterSection', () => {
 
   it('shows contact email', () => {
     render(<LangWrapper lang="en"><FooterSection t={mockT} /></LangWrapper>);
-    expect(screen.getByText('info@geoloplatform.com')).toBeInTheDocument();
+    expect(screen.getByText('hello@kibloo.app')).toBeInTheDocument();
   });
 
   it('renders privacy and terms links', () => {
@@ -73,7 +73,7 @@ describe('FooterSection', () => {
 
   it('renders the branding tagline', () => {
     render(<LangWrapper lang="en"><FooterSection t={mockT} /></LangWrapper>);
-    expect(screen.getByText('Learn. Think. Solve.')).toBeInTheDocument();
+    expect(screen.getByText('Where curiosity blooms')).toBeInTheDocument();
   });
 
 });

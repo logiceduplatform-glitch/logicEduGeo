@@ -15,6 +15,7 @@ import { FeatureFlagService } from "../services/FeatureFlagService";
 import AvatarDisplay, { getAvatarData } from "./AvatarDisplay";
 import NotificationBell from "./NotificationBell";
 import VoiceCommandButton from "./VoiceCommandButton";
+import KiblooLogo from "./KiblooLogo";
 import {
   ageToQuizRoute,
   adultObjectiveRoutes,
@@ -222,63 +223,67 @@ export default function Navbar() {
   }, []);
 
   const NAV_LINKS = (() => {
+    let links;
     if (!isLoggedIn) {
-      return [
+      links = [
         { label: isEl ? "Παιχνίδια" : "Games", fullLabel: isEl ? "Παιχνίδια" : "Games", href: "#categories", icon: "🎮" },
         { label: isEl ? "Γονείς" : "Parents", fullLabel: isEl ? "Για Γονείς" : "For Parents", href: "/for-parents", isRoute: true, icon: "👨‍👩‍👧" },
         { label: isEl ? "Δάσκαλοι" : "Teachers", fullLabel: isEl ? "Για Εκπαιδευτικούς" : "For Teachers", href: "/for-teachers", isRoute: true, icon: "👨‍🏫" },
-        { label: isEl ? "Blog" : "Blog", fullLabel: isEl ? "Blog" : "Blog", href: "/blog", isRoute: true, icon: "📝" },
-        { label: isEl ? "Τιμές" : "Pricing", fullLabel: isEl ? "Πλάνα & Τιμές" : "Plans & Pricing", href: "#pricing", icon: "💎" },
+        { label: isEl ? "Blog" : "Blog", fullLabel: isEl ? "Blog" : "Blog", href: "/blog", isRoute: true, icon: "📝", flag: "blog" },
+        { label: isEl ? "Τιμές" : "Pricing", fullLabel: isEl ? "Πλάνα & Τιμές" : "Plans & Pricing", href: "#pricing", icon: "💎", flag: "subs_enabled" },
       ];
-    }
-    if (userRole === "teacher" && !teacherInChildMode) {
-      return [
+    } else if (userRole === "teacher" && !teacherInChildMode) {
+      links = [
         { label: isEl ? "Dashboard" : "Dashboard", fullLabel: isEl ? "Πίνακας Δασκάλου" : "Teacher Dashboard", href: "/teacher-dashboard", isRoute: true, icon: "📚" },
-        { label: isEl ? "AI Μάθημα" : "AI Lesson", fullLabel: isEl ? "AI Δημιουργός Μαθήματος" : "AI Lesson Generator", href: "/teacher/ai-lesson", isRoute: true, icon: "🤖" },
-        { label: isEl ? "Πακέτα" : "Packs", fullLabel: isEl ? "Έτοιμα Πακέτα Μαθημάτων" : "Curriculum Packs", href: "/curriculum", isRoute: true, icon: "📦" },
-        { label: isEl ? "Σχολείο" : "School", fullLabel: isEl ? "Διαχείριση Σχολείου" : "School Admin", href: "/school-admin", isRoute: true, icon: "🏫" },
-        { label: isEl ? "Live Quiz" : "Live Quiz", fullLabel: isEl ? "Live Quiz" : "Live Quiz", href: "/live-quiz", isRoute: true, icon: "🎮" },
-        { label: isEl ? "Φύλλα" : "Worksheets", fullLabel: isEl ? "Φύλλα Εργασίας" : "Worksheets", href: "/worksheets", isRoute: true, icon: "🖨️" },
-        { label: isEl ? "Affiliate" : "Affiliate", fullLabel: isEl ? "Affiliate Πρόγραμμα" : "Affiliate Program", href: "/affiliate", isRoute: true, icon: "💼" },
+        { label: isEl ? "AI Μάθημα" : "AI Lesson", fullLabel: isEl ? "AI Δημιουργός Μαθήματος" : "AI Lesson Generator", href: "/teacher/ai-lesson", isRoute: true, icon: "🤖", flag: "aiLessonGen" },
+        { label: isEl ? "Πακέτα" : "Packs", fullLabel: isEl ? "Έτοιμα Πακέτα Μαθημάτων" : "Curriculum Packs", href: "/curriculum", isRoute: true, icon: "📦", flag: "curriculumPacks" },
+        { label: isEl ? "Σχολείο" : "School", fullLabel: isEl ? "Διαχείριση Σχολείου" : "School Admin", href: "/school-admin", isRoute: true, icon: "🏫", flag: "schoolAdmin" },
+        { label: isEl ? "Live Quiz" : "Live Quiz", fullLabel: isEl ? "Live Quiz" : "Live Quiz", href: "/live-quiz", isRoute: true, icon: "🎮", flag: "liveQuiz" },
+        { label: isEl ? "Φύλλα" : "Worksheets", fullLabel: isEl ? "Φύλλα Εργασίας" : "Worksheets", href: "/worksheets", isRoute: true, icon: "🖨️", flag: "worksheets" },
+        { label: isEl ? "Affiliate" : "Affiliate", fullLabel: isEl ? "Affiliate Πρόγραμμα" : "Affiliate Program", href: "/affiliate", isRoute: true, icon: "💼", flag: "affiliate" },
       ];
-    }
-    if (userRole === "parent" && !activeChild) {
-      return [
+    } else if (userRole === "parent" && !activeChild) {
+      links = [
         { label: isEl ? "Παιχνίδια" : "Games", fullLabel: isEl ? "Παιχνίδια" : "Games", href: "#categories", icon: "🎮" },
         { label: isEl ? "Dashboard" : "Dashboard", fullLabel: isEl ? "Γονικός Πίνακας" : "Parent Dashboard", href: "/parent-dashboard", isRoute: true, icon: "📊" },
-        { label: isEl ? "Οικ. Quiz" : "Family Quiz", fullLabel: isEl ? "Οικογενειακή Πρόκληση" : "Family Challenge", href: "/family-challenge", isRoute: true, icon: "👨‍👩‍👧" },
-        { label: isEl ? "Αναφορές" : "Reports", fullLabel: isEl ? "Εβδομαδιαίες Αναφορές" : "Weekly Reports", href: "/weekly-report", isRoute: true, icon: "📋" },
-        { label: isEl ? "Blog" : "Blog", fullLabel: isEl ? "Blog" : "Blog", href: "/blog", isRoute: true, icon: "📝" },
+        { label: isEl ? "Οικ. Quiz" : "Family Quiz", fullLabel: isEl ? "Οικογενειακή Πρόκληση" : "Family Challenge", href: "/family-challenge", isRoute: true, icon: "👨‍👩‍👧", flag: "familyChallenge" },
+        { label: isEl ? "Αναφορές" : "Reports", fullLabel: isEl ? "Εβδομαδιαίες Αναφορές" : "Weekly Reports", href: "/weekly-report", isRoute: true, icon: "📋", flag: "weeklyDigest" },
+        { label: isEl ? "Blog" : "Blog", fullLabel: isEl ? "Blog" : "Blog", href: "/blog", isRoute: true, icon: "📝", flag: "blog" },
+      ];
+    } else {
+      links = [
+        // Primary
+        { label: isEl ? "Παιχνίδια" : "Games", fullLabel: isEl ? "Παιχνίδια" : "Games", href: "#categories", icon: "🎮" },
+        { label: isEl ? "Η Τάξη μου" : "My Class", fullLabel: isEl ? "Η Τάξη μου" : "My Classroom", href: "/my-classroom", isRoute: true, icon: "🏫" },
+        { label: isEl ? "Πρόκληση" : "Daily", fullLabel: isEl ? "Ημερήσια Πρόκληση" : "Daily Challenge", href: "/daily", isRoute: true, icon: "🎯", flag: "dailyChallenge" },
+        { label: isEl ? "AI" : "AI", fullLabel: isEl ? "Study Buddy AI" : "Study Buddy AI", href: "/study-buddy", isRoute: true, icon: "🤖", flag: "aiTutor" },
+
+        // 🎮 Παίξε
+        { label: isEl ? "Ημερήσιες Αποστολές" : "Daily Quests", fullLabel: isEl ? "Ημερήσιες Αποστολές" : "Daily Quests", href: "/quests", isRoute: true, icon: "🎯", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play", flag: "dailyQuests" },
+        { label: isEl ? "Χάρτης Περιπέτειας" : "Adventure Map", fullLabel: isEl ? "Χάρτης Περιπέτειας" : "Adventure Map", href: "/adventure", isRoute: true, icon: "🗺️", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play", flag: "adventureMap" },
+        { label: isEl ? "Battle Royale" : "Battle Royale", fullLabel: isEl ? "Battle Royale" : "Battle Royale", href: "/battle", isRoute: true, icon: "⚔️", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play", flag: "battleRoyale" },
+        { label: isEl ? "Speedrun" : "Speedrun", fullLabel: isEl ? "Speedrun" : "Speedrun", href: "/speedrun", isRoute: true, icon: "⚡", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play", flag: "speedrun" },
+        { label: isEl ? "Το Pet μου" : "My Pet", fullLabel: isEl ? "Το Pet μου" : "My Pet", href: "/pet", isRoute: true, icon: "🐾", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play", flag: "pet" },
+        { label: isEl ? "Διαδραστικές Περιπέτειες" : "Interactive Adventures", fullLabel: isEl ? "Διαδραστικές Περιπέτειες" : "Interactive Adventures", href: "/adventures", isRoute: true, icon: "📖", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play", flag: "adventures" },
+        { label: isEl ? "Φωνητικό Quiz" : "Voice Quiz", fullLabel: isEl ? "Φωνητικό Quiz" : "Voice Quiz", href: "/voice-quiz", isRoute: true, icon: "🎤", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play", flag: "voiceQuiz" },
+        { label: isEl ? "Mini-Games" : "Mini-Games", fullLabel: isEl ? "Καθημερινά Mini-Games" : "Daily Mini-Games", href: "/mini-games", isRoute: true, icon: "🎲", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play", flag: "miniGames" },
+        { label: isEl ? "AR Flashcards" : "AR Flashcards", fullLabel: isEl ? "AR Κάρτες (Κάμερα)" : "AR Flashcards (Camera)", href: "/ar-flashcards", isRoute: true, icon: "📱", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play", flag: "arFlashcards" },
+        { label: isEl ? "Παίξε με γονιό" : "Co-Play with Parent", fullLabel: isEl ? "Παίξε με τους Γονείς" : "Co-Play with Parent", href: "/co-play", isRoute: true, icon: "👨‍👩‍👧", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play", flag: "coPlay" },
+
+        // 🏆 Συναγωνισμός
+        { label: isEl ? "Online Battle" : "Online Battle", fullLabel: isEl ? "Online Quiz Battle" : "Online Quiz Battle", href: "/online-battle", isRoute: true, icon: "⚔️", group: "more", section: isEl ? "🏆 Συναγωνισμός" : "🏆 Compete", flag: "onlineBattle" },
+        { label: isEl ? "Συμμαχίες" : "Guilds", fullLabel: isEl ? "Συμμαχίες (Crews)" : "Guilds (Crews)", href: "/guilds", isRoute: true, icon: "🛡️", group: "more", section: isEl ? "🏆 Συναγωνισμός" : "🏆 Compete", flag: "guilds" },
+        { label: isEl ? "Events & Τουρνουά" : "Events & Tournaments", fullLabel: isEl ? "Events & Τουρνουά" : "Events & Tournaments", href: "/events", isRoute: true, icon: "🏆", group: "more", section: isEl ? "🏆 Συναγωνισμός" : "🏆 Compete", flag: "events" },
+        { label: isEl ? "Παγκόσμια Κατάταξη" : "Global Leaderboard", fullLabel: isEl ? "Παγκόσμια Κατάταξη" : "Global Leaderboard", href: "/leaderboard", isRoute: true, icon: "🌍", group: "more", section: isEl ? "🏆 Συναγωνισμός" : "🏆 Compete", flag: "leaderboard" },
+
+        // 📊 Πρόοδος
+        { label: isEl ? "Διαδρομή Μάθησης" : "Learning Path", fullLabel: isEl ? "Προσωπική Διαδρομή Μάθησης" : "Personalized Learning Path", href: "/learning-path", isRoute: true, icon: "🎯", group: "more", section: isEl ? "📊 Πρόοδος" : "📊 Progress", flag: "learningPath" },
+        { label: isEl ? "Trophy Room" : "Trophy Room", fullLabel: isEl ? "Trophy Room" : "Trophy Room", href: "/trophy-room", isRoute: true, icon: "🏆", group: "more", section: isEl ? "📊 Πρόοδος" : "📊 Progress", flag: "trophyRoom" },
+        { label: isEl ? "Mastery Tracker" : "Mastery Tracker", fullLabel: isEl ? "Mastery Tracker" : "Mastery Tracker", href: "/mastery", isRoute: true, icon: "🔥", group: "more", section: isEl ? "📊 Πρόοδος" : "📊 Progress", flag: "masteryTracker" },
       ];
     }
-    return [
-      // Primary (πάντα ορατά - μόνο 4)
-      { label: isEl ? "Παιχνίδια" : "Games", fullLabel: isEl ? "Παιχνίδια" : "Games", href: "#categories", icon: "🎮" },
-      { label: isEl ? "Η Τάξη μου" : "My Class", fullLabel: isEl ? "Η Τάξη μου" : "My Classroom", href: "/my-classroom", isRoute: true, icon: "🏫" },
-      { label: isEl ? "Πρόκληση" : "Daily", fullLabel: isEl ? "Ημερήσια Πρόκληση" : "Daily Challenge", href: "/daily", isRoute: true, icon: "🎯" },
-      { label: isEl ? "AI" : "AI", fullLabel: isEl ? "Study Buddy AI" : "Study Buddy AI", href: "/study-buddy", isRoute: true, icon: "🤖" },
-
-      // 🎮 Παίξε
-      { label: isEl ? "Ημερήσιες Αποστολές" : "Daily Quests", fullLabel: isEl ? "Ημερήσιες Αποστολές" : "Daily Quests", href: "/quests", isRoute: true, icon: "🎯", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play" },
-      { label: isEl ? "Χάρτης Περιπέτειας" : "Adventure Map", fullLabel: isEl ? "Χάρτης Περιπέτειας" : "Adventure Map", href: "/adventure", isRoute: true, icon: "🗺️", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play" },
-      { label: isEl ? "Battle Royale" : "Battle Royale", fullLabel: isEl ? "Battle Royale" : "Battle Royale", href: "/battle", isRoute: true, icon: "⚔️", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play" },
-      { label: isEl ? "Speedrun" : "Speedrun", fullLabel: isEl ? "Speedrun" : "Speedrun", href: "/speedrun", isRoute: true, icon: "⚡", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play" },
-      { label: isEl ? "Το Pet μου" : "My Pet", fullLabel: isEl ? "Το Pet μου" : "My Pet", href: "/pet", isRoute: true, icon: "🐾", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play" },
-      { label: isEl ? "Διαδραστικές Περιπέτειες" : "Interactive Adventures", fullLabel: isEl ? "Διαδραστικές Περιπέτειες" : "Interactive Adventures", href: "/adventures", isRoute: true, icon: "📖", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play" },
-      { label: isEl ? "Φωνητικό Quiz" : "Voice Quiz", fullLabel: isEl ? "Φωνητικό Quiz" : "Voice Quiz", href: "/voice-quiz", isRoute: true, icon: "🎤", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play" },
-      { label: isEl ? "Mini-Games" : "Mini-Games", fullLabel: isEl ? "Καθημερινά Mini-Games" : "Daily Mini-Games", href: "/mini-games", isRoute: true, icon: "🎲", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play" },
-
-      // 🏆 Συναγωνισμός
-      { label: isEl ? "Online Battle" : "Online Battle", fullLabel: isEl ? "Online Quiz Battle" : "Online Quiz Battle", href: "/online-battle", isRoute: true, icon: "⚔️", group: "more", section: isEl ? "🏆 Συναγωνισμός" : "🏆 Compete" },
-      { label: isEl ? "Συμμαχίες" : "Guilds", fullLabel: isEl ? "Συμμαχίες (Crews)" : "Guilds (Crews)", href: "/guilds", isRoute: true, icon: "🛡️", group: "more", section: isEl ? "🏆 Συναγωνισμός" : "🏆 Compete" },
-      { label: isEl ? "Events & Τουρνουά" : "Events & Tournaments", fullLabel: isEl ? "Events & Τουρνουά" : "Events & Tournaments", href: "/events", isRoute: true, icon: "🏆", group: "more", section: isEl ? "🏆 Συναγωνισμός" : "🏆 Compete" },
-      { label: isEl ? "Παγκόσμια Κατάταξη" : "Global Leaderboard", fullLabel: isEl ? "Παγκόσμια Κατάταξη" : "Global Leaderboard", href: "/leaderboard", isRoute: true, icon: "🌍", group: "more", section: isEl ? "🏆 Συναγωνισμός" : "🏆 Compete" },
-
-      // 📊 Πρόοδος
-      { label: isEl ? "Διαδρομή Μάθησης" : "Learning Path", fullLabel: isEl ? "Προσωπική Διαδρομή Μάθησης" : "Personalized Learning Path", href: "/learning-path", isRoute: true, icon: "🎯", group: "more", section: isEl ? "📊 Πρόοδος" : "📊 Progress" },
-      { label: isEl ? "Trophy Room" : "Trophy Room", fullLabel: isEl ? "Trophy Room" : "Trophy Room", href: "/trophy-room", isRoute: true, icon: "🏆", group: "more", section: isEl ? "📊 Πρόοδος" : "📊 Progress" },
-      { label: isEl ? "Mastery Tracker" : "Mastery Tracker", fullLabel: isEl ? "Mastery Tracker" : "Mastery Tracker", href: "/mastery", isRoute: true, icon: "🔥", group: "more", section: isEl ? "📊 Πρόοδος" : "📊 Progress" },
-    ];
+    // Filter out links whose feature flag is disabled
+    return links.filter((it) => !it.flag || FeatureFlagService.isEnabled(it.flag));
   })();
 
   const scrollTo = (href, isRoute) => {
@@ -335,13 +340,11 @@ export default function Navbar() {
           }}
           className="flex items-center gap-2 group shrink-0"
         >
-          <span className="text-2xl group-hover:scale-110 transition-transform">🧠</span>
-          <span className="text-lg font-bold text-slate-800 dark:text-white">Educational</span>
-          <span className="text-lg font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-            Platform
+          <span className="group-hover:scale-110 transition-transform inline-flex">
+            <KiblooLogo variant="full" size={36} />
           </span>
-          <span className="hidden xl:inline-block text-[9px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 px-1.5 py-0.5 rounded-full border border-amber-200 dark:border-amber-700 ml-1 tracking-wider uppercase">
-            Learn. Think. Solve.
+          <span className="hidden 2xl:inline-block text-[9px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 px-1.5 py-0.5 rounded-full border border-amber-200 dark:border-amber-700 ml-1 tracking-wider uppercase">
+            {isEl ? "Μάθε παίζοντας" : "Where curiosity blooms"}
           </span>
         </button>
 
@@ -391,8 +394,8 @@ export default function Navbar() {
               {/Mac|iPhone|iPad/.test(navigator.userAgent) ? "⌘K" : "Ctrl+K"}
             </kbd>
           </button>
-          {/* Voice command */}
-          <VoiceCommandButton />
+          {/* Voice command — hidden on medium screens to save space */}
+          <span className="hidden xl:inline-flex"><VoiceCommandButton /></span>
           {/* Notification bell */}
           {isLoggedIn && <NotificationBell />}
           {/* Theme toggle */}
@@ -417,17 +420,19 @@ export default function Navbar() {
             )}
           </button>
 
-          {/* Language toggle */}
+          {/* Language toggle — flag-only on medium, full text on xl+ */}
           <button
             onClick={() => setLang(lang === "el" ? "en" : "el")}
-            className={`px-3 py-2 rounded-lg text-sm font-medium flex items-center gap-1.5 transition-all ${
+            className={`px-2.5 xl:px-3 py-2 rounded-lg text-sm font-medium flex items-center gap-1.5 transition-all ${
               scrolled
                 ? "text-slate-600 dark:text-slate-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:text-purple-700 dark:hover:text-purple-400"
                 : "text-slate-700 dark:text-slate-300 hover:bg-white/50 dark:hover:bg-white/10"
             }`}
             title={lang === "el" ? "Switch to English" : "Αλλαγή σε Ελληνικά"}
+            aria-label={lang === "el" ? "Switch to English" : "Αλλαγή σε Ελληνικά"}
           >
-            {lang === "el" ? "🇬🇧 English" : "🇬🇷 Ελληνικά"}
+            <span>{lang === "el" ? "🇬🇧" : "🇬🇷"}</span>
+            <span className="hidden xl:inline">{lang === "el" ? "English" : "Ελληνικά"}</span>
           </button>
 
           {/* Age group badge with category dropdown */}
@@ -457,7 +462,7 @@ export default function Navbar() {
                 const routes = getObjectiveRoutes(currentAge);
                 if (!routes) return null;
                 return (
-                  <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 py-2 z-50">
+                  <div className="absolute right-0 top-full mt-2 w-48 max-w-[calc(100vw-2rem)] bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 py-2 z-[60]">
                     <p className="px-4 py-1.5 text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
                       {isEl ? "Κατηγορία" : "Category"}
                     </p>
@@ -506,40 +511,42 @@ export default function Navbar() {
                 }`}
               >
                 {activeChildAvatar ? (
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-lg border-2 border-indigo-300">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-lg border-2 border-indigo-300 shrink-0">
                     {activeChildAvatar}
                   </div>
                 ) : hasCustomAvatar ? (
-                  <AvatarDisplay avatar={customAvatar} size={32} className="border-2 border-purple-300" />
+                  <AvatarDisplay avatar={customAvatar} size={32} className="border-2 border-purple-300 shrink-0" />
                 ) : userEmoji ? (
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-lg border-2 border-purple-300">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-lg border-2 border-purple-300 shrink-0">
                     {userEmoji}
                   </div>
                 ) : avatarUrl ? (
-                  <img src={avatarUrl} alt={`${displayName} avatar`} loading="lazy" className="w-8 h-8 rounded-full border-2 border-purple-300 object-cover" />
+                  <img src={avatarUrl} alt={`${displayName} avatar`} loading="lazy" className="w-8 h-8 rounded-full border-2 border-purple-300 object-cover shrink-0" />
                 ) : (
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-xs font-bold border-2 border-purple-300">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-xs font-bold border-2 border-purple-300 shrink-0">
                     {initials}
                   </div>
                 )}
-                {isLoggedIn && <XPLevelBadge lang={lang} size="sm" />}
-                {isLoggedIn && (() => { const c = CoinService.getBalance(); return c.balance > 0 ? <span className="text-xs font-bold text-amber-600 dark:text-amber-400 flex items-center gap-0.5"><span className="text-sm">🪙</span>{c.balance}</span> : null; })()}
-                <span className="text-sm font-semibold text-slate-700 dark:text-slate-200 max-w-[100px] truncate">
+                {/* XP & coins only on xl screens (≥1280px) */}
+                {isLoggedIn && <span className="hidden xl:inline-flex"><XPLevelBadge lang={lang} size="sm" /></span>}
+                {isLoggedIn && (() => { const c = CoinService.getBalance(); return c.balance > 0 ? <span className="hidden xl:inline-flex text-xs font-bold text-amber-600 dark:text-amber-400 items-center gap-0.5"><span className="text-sm">🪙</span>{c.balance}</span> : null; })()}
+                {/* Name only on lg screens (≥1024px) */}
+                <span className="hidden lg:inline text-sm font-semibold text-slate-700 dark:text-slate-200 max-w-[100px] truncate">
                   {displayName}
                 </span>
                 {isPremium && (
-                  <span className="px-1.5 py-0.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[9px] font-bold leading-none">
+                  <span className="hidden md:inline-flex px-1.5 py-0.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[9px] font-bold leading-none shrink-0">
                     PRO
                   </span>
                 )}
-                <svg className={`w-4 h-4 text-slate-400 dark:text-slate-500 transition-transform ${profileOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <svg className={`w-4 h-4 text-slate-400 dark:text-slate-500 transition-transform shrink-0 ${profileOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
 
               {/* Dropdown */}
               {profileOpen && (
-                <div className="absolute right-0 top-full mt-2 w-64 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 py-2 z-50 max-h-[calc(100vh-80px)] overflow-y-auto scrollbar-thin">
+                <div className="absolute right-0 top-full mt-2 w-64 max-w-[calc(100vw-2rem)] bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 py-2 z-[60] max-h-[calc(100vh-80px)] overflow-y-auto scrollbar-thin">
                   {/* User info */}
                   <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
                     <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 truncate">{displayName}</p>
@@ -568,6 +575,17 @@ export default function Navbar() {
                         {isEl ? "Λειτουργία παιδιού" : "Child mode"}
                       </span>
                     )}
+                    {/* XP & coins (compact) - shown in dropdown so they're not in the header bar */}
+                    {isLoggedIn && (
+                      <div className="flex items-center gap-2 mt-2 xl:hidden">
+                        <XPLevelBadge lang={lang} size="sm" />
+                        {(() => { const c = CoinService.getBalance(); return c.balance > 0 ? (
+                          <span className="text-xs font-bold text-amber-600 dark:text-amber-400 flex items-center gap-0.5">
+                            <span className="text-sm">🪙</span>{c.balance}
+                          </span>
+                        ) : null; })()}
+                      </div>
+                    )}
                   </div>
 
                   {/* Links */}
@@ -579,7 +597,7 @@ export default function Navbar() {
                     {isEl ? "Προφίλ & Ρυθμίσεις" : "Profile & Settings"}
                   </button>
 
-                  {user?.uid && (
+                  {user?.uid && FeatureFlagService.isEnabled("publicProfile") && (
                     <button
                       onClick={() => { setProfileOpen(false); navigate(`/u/${user.uid}`); }}
                       className="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:text-purple-700 dark:hover:text-purple-400 transition-colors flex items-center gap-2"
@@ -589,13 +607,35 @@ export default function Navbar() {
                     </button>
                   )}
 
-                  <button
-                    onClick={() => { setProfileOpen(false); navigate("/music"); }}
-                    className="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:text-purple-700 dark:hover:text-purple-400 transition-colors flex items-center gap-2"
-                  >
-                    <span>🎶</span>
-                    {isEl ? "Μουσική & Ήχος" : "Music & Sound"}
-                  </button>
+                  {FeatureFlagService.isEnabled("music") && (
+                    <button
+                      onClick={() => { setProfileOpen(false); navigate("/music"); }}
+                      className="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:text-purple-700 dark:hover:text-purple-400 transition-colors flex items-center gap-2"
+                    >
+                      <span>🎶</span>
+                      {isEl ? "Μουσική & Ήχος" : "Music & Sound"}
+                    </button>
+                  )}
+
+                  {FeatureFlagService.isEnabled("accessibility") && (
+                    <button
+                      onClick={() => { setProfileOpen(false); navigate("/accessibility"); }}
+                      className="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:text-purple-700 dark:hover:text-purple-400 transition-colors flex items-center gap-2"
+                    >
+                      <span>♿</span>
+                      {isEl ? "Προσβασιμότητα" : "Accessibility"}
+                    </button>
+                  )}
+
+                  {FeatureFlagService.isEnabled("printShop") && (
+                    <button
+                      onClick={() => { setProfileOpen(false); navigate("/print-shop"); }}
+                      className="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:text-purple-700 dark:hover:text-purple-400 transition-colors flex items-center gap-2"
+                    >
+                      <span>🖨️</span>
+                      {isEl ? "Print Shop" : "Print Shop"}
+                    </button>
+                  )}
 
                   <button
                     onClick={() => { setProfileOpen(false); navigate("/stats"); }}

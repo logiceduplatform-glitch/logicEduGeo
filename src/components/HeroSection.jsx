@@ -107,7 +107,7 @@ export default function HeroSection({ t, loginWithGoogle, beginGuest, guest, use
               WebkitTextFillColor: "transparent",
             }}
           >
-            {t("heroTitle", "Learn. Think. Solve.")}
+            {t("heroTitle", "Where curiosity blooms.")}
           </h1>
 
           <p className="text-lg text-slate-600 dark:text-slate-300 max-w-lg leading-relaxed">

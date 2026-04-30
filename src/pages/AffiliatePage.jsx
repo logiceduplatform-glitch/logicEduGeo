@@ -47,7 +47,7 @@ const T = {
   },
   en: {
     title: "💼 Affiliate Program",
-    subtitle: "Refer fellow teachers to GeoLearn and earn 30% commission on every new subscription!",
+    subtitle: "Refer fellow teachers to Kibloo and earn 30% commission on every new subscription!",
     needAuth: "Sign in to view your stats.",
     yourCode: "Your code",
     yourLink: "Your link",
@@ -122,7 +122,7 @@ export default function AffiliatePage() {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "GeoLearn — Educational Platform",
+          title: "Kibloo — Where curiosity blooms",
           text: lang === "el" ? "Δοκίμασε αυτή την εκπαιδευτική πλατφόρμα!" : "Check out this educational platform!",
           url: aff.link,
         });

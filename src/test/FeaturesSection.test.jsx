@@ -27,7 +27,7 @@ describe('FeaturesSection', () => {
 
   it('renders platform title', () => {
     render(<LangWrapper lang="en"><FeaturesSection t={mockT} /></LangWrapper>);
-    expect(screen.getByText('Edutainment Platform')).toBeInTheDocument();
+    expect(screen.getByText('Kibloo')).toBeInTheDocument();
   });
 
   it('renders 4 main feature cards and 2 parent feature cards', () => {

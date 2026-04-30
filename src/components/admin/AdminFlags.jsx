@@ -58,6 +58,13 @@ const CATEGORY_LABELS = {
   parents:   { el: "👨‍👩‍👧 Γονείς", en: "👨‍👩‍👧 Parents" },
   ux:        { el: "🎨 UX & Theme", en: "🎨 UX & Theme" },
   marketing: { el: "📈 Marketing", en: "📈 Marketing" },
+  round9:    { el: "🚀 Round 9 · AI / PWA / Quests", en: "🚀 Round 9 · AI / PWA / Quests" },
+  round10:   { el: "🌐 Round 10 · Multiplayer & Social", en: "🌐 Round 10 · Multiplayer & Social" },
+  round11:   { el: "✨ Round 11 · Innovative Modes", en: "✨ Round 11 · Innovative Modes" },
+  round12:   { el: "🏢 Round 12 · Business & B2B", en: "🏢 Round 12 · Business & B2B" },
+  round13:   { el: "🎮 Round 13 · Engagement Polish", en: "🎮 Round 13 · Engagement Polish" },
+  round14:   { el: "♿ Round 14 · Προσβασιμότητα", en: "♿ Round 14 · Accessibility" },
+  round15:   { el: "🚀 Round 15 · Ambitious (AR/Co-Play/Print)", en: "🚀 Round 15 · Ambitious (AR/Co-Play/Print)" },
 };
 
 // Order categories for display
@@ -77,6 +84,13 @@ const CATEGORY_ORDER = [
   "parents",
   "ux",
   "marketing",
+  "round9",
+  "round10",
+  "round11",
+  "round12",
+  "round13",
+  "round14",
+  "round15",
 ];
 
 export default function AdminFlags() {

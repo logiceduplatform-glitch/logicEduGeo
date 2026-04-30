@@ -119,6 +119,45 @@ export const DEFAULT_FLAGS = {
   blog:           { enabled: true, label: { el: "Blog", en: "Blog" }, category: "marketing" },
   trophyShare:    { enabled: true, label: { el: "Share Trophy Room", en: "Share Trophy Room" }, category: "marketing" },
   scoreShare:     { enabled: true, label: { el: "Share Score Card", en: "Share Score Card" }, category: "marketing" },
+
+  // ─── Round 9: AI / PWA / Quests ───────────────────────
+  aiLessonGen:    { enabled: true, label: { el: "AI Δημιουργία Μαθήματος", en: "AI Lesson Generator" }, category: "round9" },
+  pwaInstall:     { enabled: true, label: { el: "Εγκατάσταση PWA", en: "PWA Install" }, category: "round9" },
+  pushNotifs:     { enabled: true, label: { el: "Browser Ειδοποιήσεις", en: "Browser Notifications" }, category: "round9" },
+  dailyQuests:    { enabled: true, label: { el: "Ημερήσιες Αποστολές", en: "Daily Quests" }, category: "round9" },
+  offlineMode:    { enabled: true, label: { el: "Offline Mode (Service Worker)", en: "Offline Mode (Service Worker)" }, category: "round9" },
+
+  // ─── Round 10: Multiplayer & Social ───────────────────
+  onlineBattle:   { enabled: true, label: { el: "Online Battle (PvP)", en: "Online Battle (PvP)" }, category: "round10" },
+  guilds:         { enabled: true, label: { el: "Συμμαχίες (Guilds)", en: "Guilds / Crews" }, category: "round10" },
+  publicProfile:  { enabled: true, label: { el: "Δημόσιο Προφίλ", en: "Public Profile" }, category: "round10" },
+
+  // ─── Round 11: Innovative Modes ───────────────────────
+  adventures:     { enabled: true, label: { el: "Διαδραστικές Περιπέτειες", en: "Interactive Adventures" }, category: "round11" },
+  voiceQuiz:      { enabled: true, label: { el: "Φωνητικό Quiz", en: "Voice Quiz" }, category: "round11" },
+  learningPath:   { enabled: true, label: { el: "Διαδρομή Μάθησης (AI)", en: "Personalized Learning Path (AI)" }, category: "round11" },
+
+  // ─── Round 12: Business / B2B ─────────────────────────
+  curriculumPacks:{ enabled: true, label: { el: "Πακέτα Curriculum", en: "Curriculum Packs" }, category: "round12" },
+  schoolAdmin:    { enabled: true, label: { el: "Διαχείριση Σχολείου", en: "School Admin" }, category: "round12" },
+  kidLogin:       { enabled: true, label: { el: "Kid Login (QR/PIN)", en: "Kid Login (QR/PIN)" }, category: "round12" },
+  affiliate:      { enabled: true, label: { el: "Affiliate Program", en: "Affiliate Program" }, category: "round12" },
+  lmsExport:      { enabled: true, label: { el: "LMS Export (Classroom/Teams)", en: "LMS Export (Classroom/Teams)" }, category: "round12" },
+
+  // ─── Round 13: Engagement Polish ──────────────────────
+  miniGames:      { enabled: true, label: { el: "Καθημερινά Mini-Games", en: "Daily Mini-Games" }, category: "round13" },
+  shopExpansion:  { enabled: true, label: { el: "Επέκταση Shop (frames, badges)", en: "Shop expansion (frames, badges)" }, category: "round13" },
+  music:          { enabled: true, label: { el: "Μουσική Παρασκηνίου", en: "Background Music" }, category: "round13" },
+
+  // ─── Round 14: Accessibility ──────────────────────────
+  accessibility:  { enabled: true, label: { el: "Σελίδα Προσβασιμότητας", en: "Accessibility Page" }, category: "round14" },
+  a11yFAB:        { enabled: true, label: { el: "Floating Accessibility (♿)", en: "Floating Accessibility (♿)" }, category: "round14" },
+  signLanguage:   { enabled: true, label: { el: "Νοηματική γλώσσα", en: "Sign Language" }, category: "round14" },
+
+  // ─── Round 15: Ambitious ──────────────────────────────
+  arFlashcards:   { enabled: true, label: { el: "AR Flashcards (κάμερα)", en: "AR Flashcards (camera)" }, category: "round15" },
+  coPlay:         { enabled: true, label: { el: "Co-Play με Γονιό", en: "Co-Play with Parent" }, category: "round15" },
+  printShop:      { enabled: true, label: { el: "Print Shop (φυσικά προϊόντα)", en: "Print Shop (physical goods)" }, category: "round15" },
 };
 
 const CACHE_KEY = "geo:featureFlags";

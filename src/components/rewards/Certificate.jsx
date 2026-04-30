@@ -95,10 +95,10 @@ export default function Certificate({ childName, date, category, score, total, l
       W / 2, 430
     );
 
-    // Geo Platform branding
+    // Kibloo branding
     ctx.font = "bold 14px sans-serif";
     ctx.fillStyle = "#a855f7";
-    ctx.fillText("GeoLo Platform", W / 2, 490);
+    ctx.fillText("Kibloo", W / 2, 490);
     ctx.font = "12px sans-serif";
     ctx.fillStyle = "#cbd5e1";
     ctx.fillText(lang === "el" ? "Εκπαιδευτική Πλατφόρμα Παιχνιδιών" : "Educational Gaming Platform", W / 2, 510);

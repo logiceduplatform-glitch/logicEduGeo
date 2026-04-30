@@ -253,10 +253,10 @@ export default function ContactPage() {
                       Email
                     </p>
                     <a
-                      href="mailto:info@geoloplatform.com"
+                      href="mailto:hello@kibloo.app"
                       className="text-purple-700 dark:text-purple-300 hover:text-purple-800 dark:hover:text-purple-200 font-medium break-all"
                     >
-                      info@geoloplatform.com
+                      hello@kibloo.app
                     </a>
                   </div>
                   <div>

@@ -83,7 +83,7 @@ export default function AchievementShowcase({ readonly = false, profileUrl = nul
       return a ? `${a.icon} ${a.title[lang] || a.title.en}` : "";
     }).filter(Boolean).join("\n")}\n\n${sharedUrl}`;
     if (navigator.share) {
-      try { await navigator.share({ title: "GeoLearn Trophies", text, url: sharedUrl }); return; } catch {}
+      try { await navigator.share({ title: "Kibloo Trophies", text, url: sharedUrl }); return; } catch {}
     }
     try {
       await navigator.clipboard.writeText(text);

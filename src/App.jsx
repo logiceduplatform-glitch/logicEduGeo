@@ -23,6 +23,9 @@ import FeatureGate from "./components/FeatureGate";
 import PremiumGate from "./components/PremiumGate";
 import { SkeletonCard } from "./components/SkeletonLoader";
 import SeasonalDecorations from "./components/SeasonalDecorations";
+import AccessibilitySVGFilters from "./components/AccessibilitySVGFilters";
+import AccessibilityFAB from "./components/AccessibilityFAB";
+import "./services/AccessibilityService";
 import KeyboardShortcutsHandler from "./components/KeyboardShortcutsHandler";
 
 const MilestoneCertificate = React.lazy(() => import("./components/rewards/MilestoneCertificate"));
@@ -76,6 +79,10 @@ const AffiliatePage = React.lazy(() => import("./pages/AffiliatePage"));
 const CurriculumPacksPage = React.lazy(() => import("./pages/CurriculumPacksPage"));
 const MiniGamesPage = React.lazy(() => import("./pages/MiniGamesPage"));
 const MusicSettingsPage = React.lazy(() => import("./pages/MusicSettingsPage"));
+const AccessibilityPage = React.lazy(() => import("./pages/AccessibilityPage"));
+const ARFlashcardsPage = React.lazy(() => import("./pages/ARFlashcardsPage"));
+const CoPlayPage = React.lazy(() => import("./pages/CoPlayPage"));
+const PrintOnDemandPage = React.lazy(() => import("./pages/PrintOnDemandPage"));
 const JoinClassroomPage = React.lazy(() => import("./pages/JoinClassroomPage"));
 const MyClassroomPage = React.lazy(() => import("./pages/MyClassroomPage"));
 const AchievementsPage = React.lazy(() => import("./pages/AchievementsPage"));
@@ -223,6 +230,8 @@ export default function App() {
             <ToastProvider>
             <SkipLink />
             <SeasonalDecorations />
+            <AccessibilitySVGFilters />
+            <AccessibilityFAB />
             <KeyboardShortcutsHandler />
             <ErrorBoundary>
             <Suspense fallback={<PageLoader />}>
@@ -282,25 +291,30 @@ export default function App() {
                 <Route path="/parent-dashboard" element={<PlayGate><ErrorBoundary><ParentDashboard /></ErrorBoundary></PlayGate>} />
                 <Route path="/teacher-dashboard" element={<PlayGate><ErrorBoundary><TeacherDashboard /></ErrorBoundary></PlayGate>} />
                 <Route path="/teacher/ai-lesson" element={<FeatureGate flag="aiQuizGen"><PremiumGate id="feature_aiQuizGen"><ErrorBoundary><AILessonGeneratorPage /></ErrorBoundary></PremiumGate></FeatureGate>} />
-                <Route path="/quests" element={<ErrorBoundary><DailyQuestsPage /></ErrorBoundary>} />
-                <Route path="/online-battle" element={<ErrorBoundary><OnlineBattlePage /></ErrorBoundary>} />
-                <Route path="/online-battle/:code" element={<ErrorBoundary><OnlineBattlePage /></ErrorBoundary>} />
-                <Route path="/guilds" element={<ErrorBoundary><GuildsPage /></ErrorBoundary>} />
-                <Route path="/guilds/:guildId" element={<ErrorBoundary><GuildsPage /></ErrorBoundary>} />
-                <Route path="/u/:uid" element={<ErrorBoundary><PublicProfilePage /></ErrorBoundary>} />
-                <Route path="/adventures" element={<ErrorBoundary><NarrativeAdventurePage /></ErrorBoundary>} />
-                <Route path="/adventures/:id" element={<ErrorBoundary><NarrativeAdventurePage /></ErrorBoundary>} />
-                <Route path="/voice-quiz" element={<ErrorBoundary><VoiceQuizPage /></ErrorBoundary>} />
-                <Route path="/learning-path" element={<ErrorBoundary><LearningPathPage /></ErrorBoundary>} />
-                <Route path="/school-admin" element={<ErrorBoundary><SchoolAdminPage /></ErrorBoundary>} />
-                <Route path="/k" element={<ErrorBoundary><KidLoginPage /></ErrorBoundary>} />
-                <Route path="/k/:code" element={<ErrorBoundary><KidLoginPage /></ErrorBoundary>} />
-                <Route path="/affiliate" element={<ErrorBoundary><AffiliatePage /></ErrorBoundary>} />
-                <Route path="/curriculum" element={<ErrorBoundary><CurriculumPacksPage /></ErrorBoundary>} />
-                <Route path="/curriculum/:id" element={<ErrorBoundary><CurriculumPacksPage /></ErrorBoundary>} />
-                <Route path="/mini-games" element={<ErrorBoundary><MiniGamesPage /></ErrorBoundary>} />
-                <Route path="/mini-games/:id" element={<ErrorBoundary><MiniGamesPage /></ErrorBoundary>} />
-                <Route path="/music" element={<ErrorBoundary><MusicSettingsPage /></ErrorBoundary>} />
+                <Route path="/quests" element={<FeatureGate flag="dailyQuests"><ErrorBoundary><DailyQuestsPage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/online-battle" element={<FeatureGate flag="onlineBattle"><ErrorBoundary><OnlineBattlePage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/online-battle/:code" element={<FeatureGate flag="onlineBattle"><ErrorBoundary><OnlineBattlePage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/guilds" element={<FeatureGate flag="guilds"><ErrorBoundary><GuildsPage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/guilds/:guildId" element={<FeatureGate flag="guilds"><ErrorBoundary><GuildsPage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/u/:uid" element={<FeatureGate flag="publicProfile"><ErrorBoundary><PublicProfilePage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/adventures" element={<FeatureGate flag="adventures"><ErrorBoundary><NarrativeAdventurePage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/adventures/:id" element={<FeatureGate flag="adventures"><ErrorBoundary><NarrativeAdventurePage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/voice-quiz" element={<FeatureGate flag="voiceQuiz"><ErrorBoundary><VoiceQuizPage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/learning-path" element={<FeatureGate flag="learningPath"><ErrorBoundary><LearningPathPage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/school-admin" element={<FeatureGate flag="schoolAdmin"><ErrorBoundary><SchoolAdminPage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/k" element={<FeatureGate flag="kidLogin"><ErrorBoundary><KidLoginPage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/k/:code" element={<FeatureGate flag="kidLogin"><ErrorBoundary><KidLoginPage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/affiliate" element={<FeatureGate flag="affiliate"><ErrorBoundary><AffiliatePage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/curriculum" element={<FeatureGate flag="curriculumPacks"><ErrorBoundary><CurriculumPacksPage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/curriculum/:id" element={<FeatureGate flag="curriculumPacks"><ErrorBoundary><CurriculumPacksPage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/mini-games" element={<FeatureGate flag="miniGames"><ErrorBoundary><MiniGamesPage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/mini-games/:id" element={<FeatureGate flag="miniGames"><ErrorBoundary><MiniGamesPage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/music" element={<FeatureGate flag="music"><ErrorBoundary><MusicSettingsPage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/accessibility" element={<FeatureGate flag="accessibility"><ErrorBoundary><AccessibilityPage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/ar-flashcards" element={<FeatureGate flag="arFlashcards"><ErrorBoundary><ARFlashcardsPage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/ar-flashcards/:deckId" element={<FeatureGate flag="arFlashcards"><ErrorBoundary><ARFlashcardsPage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/co-play" element={<FeatureGate flag="coPlay"><ErrorBoundary><CoPlayPage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/print-shop" element={<FeatureGate flag="printShop"><ErrorBoundary><PrintOnDemandPage /></ErrorBoundary></FeatureGate>} />
                 <Route path="/join/:code" element={<PlayGate><ErrorBoundary><JoinClassroomPage /></ErrorBoundary></PlayGate>} />
                 <Route path="/join" element={<PlayGate><ErrorBoundary><JoinClassroomPage /></ErrorBoundary></PlayGate>} />
                 <Route path="/lesson/:code" element={<ErrorBoundary><LessonViewPage /></ErrorBoundary>} />

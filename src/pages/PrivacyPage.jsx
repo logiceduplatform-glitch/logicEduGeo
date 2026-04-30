@@ -11,7 +11,7 @@ const CONTENT = {
     sections: [
       {
         heading: "1. Εισαγωγή",
-        body: "Η πλατφόρμα GeoLo Education (\"εμείς\", \"μας\") δεσμεύεται στην προστασία της ιδιωτικότητας των χρηστών μας, ιδιαίτερα των παιδιών. Η παρούσα πολιτική εξηγεί ποια δεδομένα συλλέγουμε, πώς τα χρησιμοποιούμε και τα δικαιώματά σας σύμφωνα με τον Γενικό Κανονισμό Προστασίας Δεδομένων (GDPR), τον ελληνικό νόμο 4624/2019 και τις αρχές του COPPA.",
+        body: "Η πλατφόρμα Kibloo (\"εμείς\", \"μας\") δεσμεύεται στην προστασία της ιδιωτικότητας των χρηστών μας, ιδιαίτερα των παιδιών. Η παρούσα πολιτική εξηγεί ποια δεδομένα συλλέγουμε, πώς τα χρησιμοποιούμε και τα δικαιώματά σας σύμφωνα με τον Γενικό Κανονισμό Προστασίας Δεδομένων (GDPR), τον ελληνικό νόμο 4624/2019 και τις αρχές του COPPA.",
       },
       {
         heading: "2. Ποια δεδομένα συλλέγουμε",
@@ -39,7 +39,7 @@ const CONTENT = {
       },
       {
         heading: "8. Δικαιώματα χρηστών (GDPR)",
-        body: `Σύμφωνα με τον GDPR, έχετε τα ακόλουθα δικαιώματα:\n\n• Πρόσβαση: Ζητήστε αντίγραφο των δεδομένων σας\n• Διόρθωση: Διορθώστε ανακριβή δεδομένα\n• Διαγραφή: Ζητήστε πλήρη διαγραφή (\"δικαίωμα στη λήθη\")\n• Φορητότητα: Λάβετε τα δεδομένα σας σε μηχαναγνώσιμη μορφή\n• Εναντίωση: Αντιταχθείτε στην επεξεργασία ανώνυμων analytics\n• Ανάκληση συγκατάθεσης: Ανά πάσα στιγμή\n\nΓια να ασκήσετε τα δικαιώματά σας: info@geoloplatform.com\nΑπαντάμε εντός 30 ημερών.`,
+        body: `Σύμφωνα με τον GDPR, έχετε τα ακόλουθα δικαιώματα:\n\n• Πρόσβαση: Ζητήστε αντίγραφο των δεδομένων σας\n• Διόρθωση: Διορθώστε ανακριβή δεδομένα\n• Διαγραφή: Ζητήστε πλήρη διαγραφή (\"δικαίωμα στη λήθη\")\n• Φορητότητα: Λάβετε τα δεδομένα σας σε μηχαναγνώσιμη μορφή\n• Εναντίωση: Αντιταχθείτε στην επεξεργασία ανώνυμων analytics\n• Ανάκληση συγκατάθεσης: Ανά πάσα στιγμή\n\nΓια να ασκήσετε τα δικαιώματά σας: hello@kibloo.app\nΑπαντάμε εντός 30 ημερών.`,
       },
       {
         heading: "9. Διεθνείς μεταφορές δεδομένων",
@@ -47,7 +47,7 @@ const CONTENT = {
       },
       {
         heading: "10. Εκπαιδευτικοί οργανισμοί (Σχολεία)",
-        body: "Αν χρησιμοποιείτε την πλατφόρμα ως σχολείο, ο δάσκαλος ενεργεί ως υπεύθυνος επεξεργασίας για τα δεδομένα των μαθητών του. Μπορούμε να συνάψουμε Συμφωνία Επεξεργασίας Δεδομένων (DPA) κατόπιν αιτήματος στο info@geoloplatform.com.",
+        body: "Αν χρησιμοποιείτε την πλατφόρμα ως σχολείο, ο δάσκαλος ενεργεί ως υπεύθυνος επεξεργασίας για τα δεδομένα των μαθητών του. Μπορούμε να συνάψουμε Συμφωνία Επεξεργασίας Δεδομένων (DPA) κατόπιν αιτήματος στο hello@kibloo.app.",
       },
       {
         heading: "11. Αλλαγές στην πολιτική",
@@ -55,7 +55,7 @@ const CONTENT = {
       },
       {
         heading: "12. Επικοινωνία",
-        body: "Υπεύθυνος Προστασίας Δεδομένων (DPO)\nEmail: info@geoloplatform.com\n\nΑρχή Προστασίας Δεδομένων Προσωπικού Χαρακτήρα (ΑΠΔΠΧ)\nΚηφισίας 1-3, 115 23 Αθήνα\nwww.dpa.gr",
+        body: "Υπεύθυνος Προστασίας Δεδομένων (DPO)\nEmail: hello@kibloo.app\n\nΑρχή Προστασίας Δεδομένων Προσωπικού Χαρακτήρα (ΑΠΔΠΧ)\nΚηφισίας 1-3, 115 23 Αθήνα\nwww.dpa.gr",
       },
     ],
   },
@@ -65,7 +65,7 @@ const CONTENT = {
     sections: [
       {
         heading: "1. Introduction",
-        body: "GeoLo Education platform (\"we\", \"us\") is committed to protecting the privacy of our users, especially children. This policy explains what data we collect, how we use it, and your rights under the General Data Protection Regulation (GDPR), Greek Law 4624/2019, and COPPA principles.",
+        body: "Kibloo platform (\"we\", \"us\") is committed to protecting the privacy of our users, especially children. This policy explains what data we collect, how we use it, and your rights under the General Data Protection Regulation (GDPR), Greek Law 4624/2019, and COPPA principles.",
       },
       {
         heading: "2. What data we collect",
@@ -93,7 +93,7 @@ const CONTENT = {
       },
       {
         heading: "8. User rights (GDPR)",
-        body: `Under GDPR, you have the following rights:\n\n• Access: Request a copy of your data\n• Rectification: Correct inaccurate data\n• Erasure: Request full deletion ("right to be forgotten")\n• Portability: Receive your data in machine-readable format\n• Objection: Object to anonymous analytics processing\n• Withdraw consent: At any time\n\nTo exercise your rights: info@geoloplatform.com\nWe respond within 30 days.`,
+        body: `Under GDPR, you have the following rights:\n\n• Access: Request a copy of your data\n• Rectification: Correct inaccurate data\n• Erasure: Request full deletion ("right to be forgotten")\n• Portability: Receive your data in machine-readable format\n• Objection: Object to anonymous analytics processing\n• Withdraw consent: At any time\n\nTo exercise your rights: hello@kibloo.app\nWe respond within 30 days.`,
       },
       {
         heading: "9. International data transfers",
@@ -101,7 +101,7 @@ const CONTENT = {
       },
       {
         heading: "10. Educational organizations (Schools)",
-        body: "If you use the platform as a school, the teacher acts as data controller for their students' data. We can enter into a Data Processing Agreement (DPA) upon request at info@geoloplatform.com.",
+        body: "If you use the platform as a school, the teacher acts as data controller for their students' data. We can enter into a Data Processing Agreement (DPA) upon request at hello@kibloo.app.",
       },
       {
         heading: "11. Policy changes",
@@ -109,7 +109,7 @@ const CONTENT = {
       },
       {
         heading: "12. Contact",
-        body: "Data Protection Officer (DPO)\nEmail: info@geoloplatform.com\n\nHellenic Data Protection Authority (HDPA)\nKifisias 1-3, 115 23 Athens, Greece\nwww.dpa.gr",
+        body: "Data Protection Officer (DPO)\nEmail: hello@kibloo.app\n\nHellenic Data Protection Authority (HDPA)\nKifisias 1-3, 115 23 Athens, Greece\nwww.dpa.gr",
       },
     ],
   },
@@ -151,8 +151,8 @@ export default function PrivacyPage() {
             </p>
             <p className="text-sm text-purple-600 dark:text-purple-400">
               {lang === "el"
-                ? "Για οποιαδήποτε ερώτηση σχετικά με το απόρρητο, επικοινωνήστε: info@geoloplatform.com"
-                : "For any privacy-related questions, contact: info@geoloplatform.com"}
+                ? "Για οποιαδήποτε ερώτηση σχετικά με το απόρρητο, επικοινωνήστε: hello@kibloo.app"
+                : "For any privacy-related questions, contact: hello@kibloo.app"}
             </p>
           </div>
         </div>

@@ -1,7 +1,8 @@
 {
-  "name": "vite_react_tailwind_full_ui",
+  "name": "kibloo",
   "version": "1.0.0",
   "private": true,
+  "description": "Kibloo — where curiosity blooms. A playful learning world for kids 2–12 and curious adults.",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

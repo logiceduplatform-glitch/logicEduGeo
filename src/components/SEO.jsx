@@ -3,10 +3,10 @@ import { Helmet } from "react-helmet-async";
 import { useLocation } from "react-router-dom";
 
 const DEFAULTS = {
-  siteName: "GeoLo Platform",
-  description: "Train your brain with logic! 350+ educational games for kids 2-12 & adults. Learn. Think. Solve.",
-  url: "https://geoloplatform.com",
-  image: "https://geoloplatform.com/og-image.png",
+  siteName: "Kibloo",
+  description: "Kibloo is a playful learning world for kids 2–12 and curious adults. 350+ educational games. Where curiosity blooms.",
+  url: "https://kibloo.app",
+  image: "https://kibloo.app/og-image.png",
   imageWidth: "1200",
   imageHeight: "630",
 };

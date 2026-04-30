@@ -105,7 +105,7 @@ export default function MilestoneCertificate({ cert, userName, lang = "el", onCl
 
     ctx.font = "bold 14px sans-serif";
     ctx.fillStyle = scheme.border;
-    ctx.fillText("GeoLo Platform", W / 2, 490);
+    ctx.fillText("Kibloo", W / 2, 490);
     ctx.font = "12px sans-serif";
     ctx.fillStyle = "#cbd5e1";
     ctx.fillText(

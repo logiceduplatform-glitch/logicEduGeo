@@ -136,7 +136,7 @@ export default function WeeklyDigestPanel() {
         ? recentAchievements.map(a => `- ${a.name || a.id}`)
         : [`(${l.noAchievements})`]),
       "",
-      "— GeoLearn",
+      "— Kibloo",
     ].join("\n");
   };
 
@@ -153,7 +153,7 @@ export default function WeeklyDigestPanel() {
         body: JSON.stringify({
           email: prefs.email,
           subject: `${l.title} - ${child.name}`,
-          name: `GeoLearn Weekly Digest`,
+          name: `Kibloo Weekly Digest`,
           message: buildPlainTextReport(),
         }),
       });

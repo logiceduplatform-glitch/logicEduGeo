@@ -28,7 +28,7 @@ export default function ReferralCard() {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: isEl ? "GeoLo Education - Μάθε παίζοντας!" : "GeoLo Education - Learn by playing!",
+          title: isEl ? "Kibloo — Μάθε παίζοντας!" : "Kibloo — Learn by playing!",
           text: isEl
             ? "Δοκίμασε αυτή την εκπαιδευτική πλατφόρμα! Χρησιμοποίησε τον κωδικό μου για bonus."
             : "Try this educational platform! Use my code for a bonus.",

@@ -1,6 +1,6 @@
-const CACHE_NAME = "edu-platform-v7";
-const RUNTIME_CACHE = "edu-runtime-v7";
-const GAME_CACHE = "edu-games-v4";
+const CACHE_NAME = "kibloo-v9";
+const RUNTIME_CACHE = "kibloo-runtime-v9";
+const GAME_CACHE = "kibloo-games-v6";
 
 const STATIC_ASSETS = [
   "/",
@@ -153,8 +153,8 @@ self.addEventListener("notificationclick", (event) => {
 // Optional: handle real push events (works once you add server VAPID).
 self.addEventListener("push", (event) => {
   let data = {};
-  try { data = event.data ? event.data.json() : {}; } catch { data = { title: "GeoLo", body: event.data?.text() || "" }; }
-  const title = data.title || "GeoLo Platform";
+  try { data = event.data ? event.data.json() : {}; } catch { data = { title: "Kibloo", body: event.data?.text() || "" }; }
+  const title = data.title || "Kibloo";
   const options = {
     body: data.body || "",
     icon: "/icon-192.png",

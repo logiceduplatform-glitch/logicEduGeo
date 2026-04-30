@@ -106,8 +106,8 @@ export default function UseCasesSection() {
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-800 dark:text-white mb-4">
             {isEl
-              ? "Πότε χρειάζεσαι το GeoLearn;"
-              : "When do you need GeoLearn?"}
+              ? "Πότε χρειάζεσαι το Kibloo;"
+              : "When do you need Kibloo?"}
           </h2>
           <p className="text-lg text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">
             {isEl

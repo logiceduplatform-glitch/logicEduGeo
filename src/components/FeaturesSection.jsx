@@ -65,7 +65,7 @@ export default function FeaturesSection({ t }) {
             {isEl ? "Χαρακτηριστικά" : "Features"}
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-800 dark:text-white">
-            {t("platformTitle", "Edutainment Platform")}
+            {t("platformTitle", "Kibloo")}
           </h2>
         </div>
 

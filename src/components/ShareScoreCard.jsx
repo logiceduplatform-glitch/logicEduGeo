@@ -6,18 +6,18 @@ const TEXTS = {
     share: "Κοινοποίηση",
     copyLink: "Αντιγραφή",
     copied: "Αντιγράφηκε!",
-    shareTitle: "Πέτυχα σκορ στο GeoLo!",
+    shareTitle: "Πέτυχα σκορ στο Kibloo!",
     shareText: (score, total, game) =>
-      `🎮 Πέτυχα ${score}/${total} στο "${game}" στο GeoLo Platform! Δοκίμασε κι εσύ!`,
+      `🎈 Πέτυχα ${score}/${total} στο "${game}" στο Kibloo! Δοκίμασε κι εσύ!`,
     downloadCard: "Λήψη Κάρτας",
   },
   en: {
     share: "Share",
     copyLink: "Copy Link",
     copied: "Copied!",
-    shareTitle: "My GeoLo Score!",
+    shareTitle: "My Kibloo Score!",
     shareText: (score, total, game) =>
-      `🎮 I scored ${score}/${total} in "${game}" on GeoLo Platform! Try it too!`,
+      `🎈 I scored ${score}/${total} in "${game}" on Kibloo! Try it too!`,
     downloadCard: "Download Card",
   },
 };
@@ -48,7 +48,7 @@ function drawScoreCard(canvas, { score, total, gameName, icon, lang }) {
   ctx.fillStyle = "#fff";
   ctx.font = "bold 22px system-ui, sans-serif";
   ctx.textAlign = "left";
-  ctx.fillText("GeoLo Platform", 30, 44);
+  ctx.fillText("Kibloo", 30, 44);
 
   ctx.font = "48px system-ui, sans-serif";
   ctx.textAlign = "center";
@@ -75,7 +75,7 @@ function drawScoreCard(canvas, { score, total, gameName, icon, lang }) {
   ctx.fillStyle = "rgba(255,255,255,0.5)";
   ctx.font = "13px system-ui, sans-serif";
   ctx.textAlign = "right";
-  ctx.fillText("geoloplatform.com — Δοκίμασε κι εσύ!", w - 20, h - 16);
+  ctx.fillText("kibloo.app — Δοκίμασε κι εσύ!", w - 20, h - 16);
 }
 
 export default function ShareScoreCard({ score = 0, total = 0, gameName = "", icon = "🎮" }) {
@@ -84,7 +84,7 @@ export default function ShareScoreCard({ score = 0, total = 0, gameName = "", ic
   const canvasRef = useRef(null);
   const [copied, setCopied] = useState(false);
 
-  const shareUrl = typeof window !== "undefined" ? window.location.href : "https://geoloplatform.com";
+  const shareUrl = typeof window !== "undefined" ? window.location.href : "https://kibloo.app";
   const shareText = l.shareText(score, total, gameName);
 
   const generateCard = useCallback(() => {
