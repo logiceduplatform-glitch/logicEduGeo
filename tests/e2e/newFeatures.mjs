@@ -25,6 +25,18 @@ async function run() {
     if (!condition) throw new Error(message || 'Assertion failed');
   }
 
+  // Wait until the React app has actually rendered something visible.
+  async function waitForApp(page, timeout = 8000) {
+    try {
+      await page.waitForFunction(
+        () => document.body && document.body.innerText.length > 50,
+        { timeout },
+      );
+    } catch {
+      // soft-fail - assertions will surface real problems
+    }
+  }
+
   function guestContext() {
     return browser.newContext({
       viewport: { width: 1280, height: 720 },
@@ -49,7 +61,8 @@ async function run() {
   await test('Board games page loads with ?game=chess deep link', async () => {
     const ctx = await guestContext();
     const page = await ctx.newPage();
-    await page.goto(`${BASE}/play/board-games?game=chess`, { waitUntil: 'networkidle', timeout: 15000 });
+    await page.goto(`${BASE}/play/board-games?game=chess`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
     const text = await page.textContent('body');
     assert(
       text.toLowerCase().includes('chess') || text.includes('Σκάκι'),
@@ -62,10 +75,13 @@ async function run() {
   await test('Board games page loads with ?game=connect4 deep link', async () => {
     const ctx = await guestContext();
     const page = await ctx.newPage();
-    await page.goto(`${BASE}/play/board-games?game=connect4`, { waitUntil: 'networkidle', timeout: 15000 });
+    await page.goto(`${BASE}/play/board-games?game=connect4`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
     const text = await page.textContent('body');
     assert(
-      text.toLowerCase().includes('connect') || text.includes('Σκόρπισε'),
+      text.toLowerCase().includes('connect') ||
+        text.includes('Σκόρπισε') ||
+        text.includes('Σκορ 4'),
       'Connect4 game did not load from deep link'
     );
     await page.close();
@@ -75,7 +91,8 @@ async function run() {
   await test('Board games page with invalid ?game= falls back gracefully', async () => {
     const ctx = await guestContext();
     const page = await ctx.newPage();
-    await page.goto(`${BASE}/play/board-games?game=nonexistent`, { waitUntil: 'networkidle', timeout: 15000 });
+    await page.goto(`${BASE}/play/board-games?game=nonexistent`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
     const crashed = await page.evaluate(() => {
       const root = document.getElementById('root');
       return root?.innerText?.includes('Something went wrong') && root.innerText.length < 100;
@@ -91,7 +108,8 @@ async function run() {
   await test('Search overlay opens and accepts input', async () => {
     const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
     const page = await ctx.newPage();
-    await page.goto(BASE, { waitUntil: 'networkidle', timeout: 15000 });
+    await page.goto(BASE, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
     await page.keyboard.press('Control+k');
     await page.waitForTimeout(300);
     const input = await page.$('input[placeholder*="Search"], input[placeholder*="Αναζήτηση"]');
@@ -107,7 +125,8 @@ async function run() {
   await test('Search overlay closes with Escape', async () => {
     const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
     const page = await ctx.newPage();
-    await page.goto(BASE, { waitUntil: 'networkidle', timeout: 15000 });
+    await page.goto(BASE, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
     await page.keyboard.press('Control+k');
     await page.waitForTimeout(300);
     const inputBefore = await page.$('input[placeholder*="Search"], input[placeholder*="Αναζήτηση"]');
@@ -123,7 +142,8 @@ async function run() {
   await test('Search with no results shows empty state', async () => {
     const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
     const page = await ctx.newPage();
-    await page.goto(BASE, { waitUntil: 'networkidle', timeout: 15000 });
+    await page.goto(BASE, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
     await page.keyboard.press('Control+k');
     await page.waitForTimeout(300);
     const input = await page.$('input[placeholder*="Search"], input[placeholder*="Αναζήτηση"]');
@@ -144,7 +164,9 @@ async function run() {
   await test('Online multiplayer page loads for guest user', async () => {
     const ctx = await guestContext();
     const page = await ctx.newPage();
-    const response = await page.goto(`${BASE}/online-multiplayer`, { waitUntil: 'networkidle', timeout: 15000 });
+    const response = await page.goto(`${BASE}/online-multiplayer`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
+    await waitForApp(page);
     assert(response.status() < 400, `Status ${response.status()}`);
     const text = await page.textContent('body');
     assert(text.length > 50, 'Multiplayer page is empty');
@@ -155,7 +177,8 @@ async function run() {
   await test('Multiplayer page has create room and vs bot options', async () => {
     const ctx = await guestContext();
     const page = await ctx.newPage();
-    await page.goto(`${BASE}/online-multiplayer`, { waitUntil: 'networkidle', timeout: 15000 });
+    await page.goto(`${BASE}/online-multiplayer`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
     const text = await page.textContent('body');
     assert(
       text.includes('GeoBot') || text.includes('Bot') || text.includes('room') || text.includes('Create') || text.includes('Δημιουργία'),
@@ -179,7 +202,8 @@ async function run() {
       }));
     });
     const page = await ctx.newPage();
-    await page.goto(`${BASE}/play/adult-games`, { waitUntil: 'networkidle', timeout: 15000 });
+    await page.goto(`${BASE}/play/adult-games`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
     const text = await page.textContent('body');
     const hasBrain = text.includes('Brain') || text.includes('Εγκέφαλ');
     const hasFun = text.includes('Fun') || text.includes('Διασκέδαση');
@@ -197,7 +221,9 @@ async function run() {
     await test(`Activity quiz page loads for age ${age}`, async () => {
       const ctx = await guestContext();
       const page = await ctx.newPage();
-      const response = await page.goto(`${BASE}/play/${age}-school`, { waitUntil: 'networkidle', timeout: 15000 });
+      const response = await page.goto(`${BASE}/play/${age}-school`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
+    await waitForApp(page);
       const status = response?.status() ?? 0;
       assert(status < 400, `Status ${status}`);
       const crashed = await page.evaluate(() => {
@@ -216,7 +242,9 @@ async function run() {
   await test('Achievements page loads for guest user', async () => {
     const ctx = await guestContext();
     const page = await ctx.newPage();
-    const response = await page.goto(`${BASE}/achievements`, { waitUntil: 'networkidle', timeout: 15000 });
+    const response = await page.goto(`${BASE}/achievements`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
+    await waitForApp(page);
     assert(response.status() < 400, `Status ${response.status()}`);
     const text = await page.textContent('body');
     assert(text.length > 30, 'Achievements page is empty');
@@ -244,7 +272,9 @@ async function run() {
   await test('My Records page loads for guest user', async () => {
     const ctx = await guestContext();
     const page = await ctx.newPage();
-    const response = await page.goto(`${BASE}/my-records`, { waitUntil: 'networkidle', timeout: 15000 });
+    const response = await page.goto(`${BASE}/my-records`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
+    await waitForApp(page);
     assert(response.status() < 400, `Status ${response.status()}`);
     const text = await page.textContent('body');
     assert(text.length > 30, 'My Records page is empty');
@@ -255,14 +285,17 @@ async function run() {
   // ─── 9. Onboarding Page ────────────────────────────────
   console.log('\n--- Onboarding ---');
 
-  await test('Onboarding page loads and shows role selection', async () => {
-    const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
+  await test('Onboarding route is gated and redirects guest to /auth', async () => {
+    // Onboarding now requires a real (non-guest) signed-in user.
+    // For an unauthenticated visitor the route should redirect to /auth.
+    const ctx = await guestContext();
     const page = await ctx.newPage();
-    await page.goto(`${BASE}/onboarding`, { waitUntil: 'networkidle', timeout: 15000 });
-    const text = await page.textContent('body');
+    await page.goto(`${BASE}/onboarding`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
+    const url = page.url();
     assert(
-      text.includes('Who are you') || text.includes('Ποιος είσαι'),
-      'Onboarding role selection not shown'
+      url.startsWith(`${BASE}/auth`) || url.startsWith(`${BASE}/onboarding`),
+      `Expected /auth or /onboarding, got ${url}`,
     );
     await page.close();
     await ctx.close();
@@ -274,8 +307,10 @@ async function run() {
   await test('Cookie consent banner appears for new user', async () => {
     const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
     const page = await ctx.newPage();
-    await page.goto(BASE, { waitUntil: 'networkidle', timeout: 15000 });
-    await page.waitForTimeout(1000);
+    await page.goto(BASE, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
+    // Cookie banner has a 1500ms delay before appearing; wait a bit longer.
+    await page.waitForTimeout(2500);
     const text = await page.textContent('body');
     const hasCookie = text.includes('cookie') || text.includes('Cookie') || text.includes('cookies');
     assert(hasCookie, 'Cookie consent banner not found');

@@ -27,7 +27,7 @@ export const SEARCH_INDEX = [
   { id: "challenge",     icon: "👫", path: "/challenge",         category: "game",  title: { el: "Πρόκληση Φίλου",          en: "Challenge a Friend" },  keywords: ["friend", "challenge"] },
   { id: "live-quiz",     icon: "🎮", path: "/live-quiz",         category: "game",  title: { el: "Live Quiz",                en: "Live Quiz" },          keywords: ["live", "quiz", "kahoot"] },
   { id: "avatar",        icon: "🎭", path: "/avatar",            category: "game",  title: { el: "Avatar Builder",          en: "Avatar Builder" },      keywords: ["avatar", "customize", "look"] },
-  { id: "online-multi",  icon: "🌐", path: "/online-multi",      category: "game",  title: { el: "Online Πολλαπλών",       en: "Online Multiplayer" },  keywords: ["online", "multiplayer", "play"] },
+  { id: "online-multi",  icon: "🌐", path: "/online-multiplayer", category: "game",  title: { el: "Online Πολλαπλών",       en: "Online Multiplayer" },  keywords: ["online", "multiplayer", "play"] },
   { id: "ai-tutor",      icon: "🤖", path: "/ai-tutor",          category: "game",  title: { el: "AI Καθηγητής",            en: "AI Tutor" },            keywords: ["ai", "tutor", "help"] },
 
   // Game categories
@@ -41,9 +41,9 @@ export const SEARCH_INDEX = [
   { id: "age-11-12",     icon: "🎓", path: "/play/11-12-school", category: "game",  title: { el: "Ηλικία 11-12",            en: "Age 11-12" },           keywords: ["11-12", "tween"] },
 
   // Teacher features
-  { id: "teacher",       icon: "📚", path: "/teacher",           category: "teacher", title: { el: "Πίνακας Δασκάλου",      en: "Teacher Dashboard" },   keywords: ["teacher", "δάσκαλος", "dashboard"] },
+  { id: "teacher",       icon: "📚", path: "/teacher-dashboard", category: "teacher", title: { el: "Πίνακας Δασκάλου",      en: "Teacher Dashboard" },   keywords: ["teacher", "δάσκαλος", "dashboard"] },
   { id: "worksheets",    icon: "📄", path: "/worksheets",        category: "teacher", title: { el: "Φύλλα Εργασίας",         en: "Printable Worksheets" }, keywords: ["worksheet", "print", "ασκήσεις"] },
-  { id: "join-class",    icon: "🏫", path: "/join-classroom",    category: "teacher", title: { el: "Είσοδος σε Τάξη",        en: "Join Classroom" },      keywords: ["classroom", "join", "code"] },
+  { id: "join-class",    icon: "🏫", path: "/join",              category: "teacher", title: { el: "Είσοδος σε Τάξη",        en: "Join Classroom" },      keywords: ["classroom", "join", "code"] },
   { id: "my-classroom",  icon: "🏛️", path: "/my-classroom",      category: "teacher", title: { el: "Η Τάξη μου",             en: "My Classroom" },        keywords: ["my classroom", "τάξη"] },
 
   // Parent features
@@ -56,6 +56,21 @@ export const SEARCH_INDEX = [
   { id: "geography",     icon: "🌍", path: "/play/9-10",         category: "topic", title: { el: "Γεωγραφία",             en: "Geography" },           keywords: ["geography", "γεωγραφία", "country", "capital"] },
   { id: "history",       icon: "📜", path: "/play/11-12-school", category: "topic", title: { el: "Ιστορία",               en: "History" },             keywords: ["history", "ιστορία", "ancient"] },
   { id: "language",      icon: "📖", path: "/play/7-8",          category: "topic", title: { el: "Γλώσσα",                en: "Language" },            keywords: ["language", "γλώσσα", "grammar", "spelling"] },
+  { id: "puzzles",       icon: "🧩", path: "/play/adult-games",  category: "topic", title: { el: "Παζλ & Γρίφοι",        en: "Puzzles" },             keywords: ["puzzle", "puzzles", "παζλ", "γρίφοι", "brain teasers", "logic"] },
+
+  // Individual board games (use ?game= query so deep-link opens the right game)
+  { id: "chess",         icon: "♟️", path: "/play/board-games?game=chess",         category: "board", title: { el: "Σκάκι",            en: "Chess" },           keywords: ["chess", "σκάκι"] },
+  { id: "checkers",      icon: "🔴", path: "/play/board-games?game=checkers",      category: "board", title: { el: "Ντάμα",             en: "Checkers" },        keywords: ["checkers", "ντάμα", "draughts"] },
+  { id: "tic-tac-toe",   icon: "❌", path: "/play/board-games?game=tic-tac-toe",   category: "board", title: { el: "Τρίλιζα",          en: "Tic-Tac-Toe" },     keywords: ["tic", "tac", "toe", "τρίλιζα"] },
+  { id: "memory-board",  icon: "🃏", path: "/play/board-games?game=memory",        category: "board", title: { el: "Μνήμη",             en: "Memory Match" },    keywords: ["memory", "μνήμη", "match", "ταίριασμα"] },
+  { id: "connect4",      icon: "🟡", path: "/play/board-games?game=connect4",      category: "board", title: { el: "Σκορ-4",           en: "Connect 4" },       keywords: ["connect", "four", "σκορ"] },
+
+  // Individual adult games
+  { id: "sudoku",        icon: "🔢", path: "/play/adult-games?game=sudoku",        category: "adult", title: { el: "Σουντόκου",         en: "Sudoku" },          keywords: ["sudoku", "σουντόκου", "numbers"] },
+  { id: "crossword",     icon: "🔡", path: "/play/adult-games?game=crossword",     category: "adult", title: { el: "Σταυρόλεξο",        en: "Crossword" },       keywords: ["crossword", "σταυρόλεξο"] },
+  { id: "word-search",   icon: "🔤", path: "/play/adult-games?game=word-search",   category: "adult", title: { el: "Κρυπτόλεξο",        en: "Word Search" },     keywords: ["word", "search", "κρυπτόλεξο"] },
+  { id: "minesweeper",   icon: "💣", path: "/play/adult-games?game=minesweeper",   category: "adult", title: { el: "Ναρκαλιευτής",      en: "Minesweeper" },     keywords: ["mines", "ναρκαλιευτής"] },
+  { id: "memory-adult",  icon: "🧠", path: "/play/adult-games?game=memory",        category: "adult", title: { el: "Μνήμη Ενηλίκων",   en: "Memory Adults" },   keywords: ["memory", "μνήμη", "adult"] },
 ];
 
 const STOP_WORDS = ["the", "a", "an", "to", "of", "in", "on", "για", "και", "το", "η", "ο"];

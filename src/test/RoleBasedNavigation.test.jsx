@@ -50,8 +50,7 @@ describe('Role-Based Navigation', () => {
 
   it('renders brand for unauthenticated user', () => {
     renderNavbar();
-    expect(screen.getByText('Educational')).toBeInTheDocument();
-    expect(screen.getByText('Platform')).toBeInTheDocument();
+    expect(screen.getAllByText('Kibloo').length).toBeGreaterThan(0);
   });
 
   it('shows login/register buttons when not logged in', () => {

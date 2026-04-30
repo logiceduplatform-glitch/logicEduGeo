@@ -6,13 +6,13 @@ import TestimonialsSection from '../components/TestimonialsSection';
 describe('TestimonialsSection', () => {
   it('renders English heading', () => {
     render(<TestimonialsSection lang="en" />);
-    expect(screen.getByText('What parents say')).toBeInTheDocument();
+    expect(screen.getByText('What our users say')).toBeInTheDocument();
     expect(screen.getByText('Testimonials')).toBeInTheDocument();
   });
 
   it('renders Greek heading', () => {
     render(<TestimonialsSection lang="el" />);
-    expect(screen.getByText('Τι λένε οι γονείς')).toBeInTheDocument();
+    expect(screen.getByText('Τι λένε οι χρήστες μας')).toBeInTheDocument();
     expect(screen.getByText('Αξιολογήσεις')).toBeInTheDocument();
   });
 
@@ -45,6 +45,6 @@ describe('TestimonialsSection', () => {
 
   it('renders testimonial text', () => {
     render(<TestimonialsSection lang="en" />);
-    expect(screen.getAllByText(/6-year-old now recognizes/).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText(/recognizes all letters/).length).toBeGreaterThanOrEqual(1);
   });
 });

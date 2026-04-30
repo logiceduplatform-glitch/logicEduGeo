@@ -111,7 +111,7 @@ export default function HeroSection({ t, loginWithGoogle, beginGuest, guest, use
           </h1>
 
           <p className="text-lg text-slate-600 dark:text-slate-300 max-w-lg leading-relaxed">
-            {t("heroSubtitle", "Train your brain with logic! 350+ educational games for kids 2–12 & adults.")}
+            {t("heroSubtitle", "Welcome to Kibloo! 350+ playful educational games for kids 2–12 & curious adults.")}
           </p>
 
           {isLoggedIn ? (

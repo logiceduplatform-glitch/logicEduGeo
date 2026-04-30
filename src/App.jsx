@@ -126,6 +126,29 @@ function AuthGate({ children }) {
   return children;
 }
 
+// RoleGate restricts a route to specific user roles. Guests and users
+// without a matching role are redirected. We deliberately reject guests
+// here even though PlayGate allows them, because role-restricted pages
+// (teacher dashboard, parent dashboard, school admin) require a real
+// authenticated user with a profile role set.
+function RoleGate({ roles, children }) {
+  const { user, userProfile, loading } = React.useContext(AuthContext);
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+  if (!user) return <Navigate to="/auth" replace />;
+  if (!userProfile) return <Navigate to="/onboarding" replace />;
+  const allowed = Array.isArray(roles) ? roles : [roles];
+  if (!allowed.includes(userProfile.role)) {
+    return <Navigate to="/" replace />;
+  }
+  return children;
+}
+
 const GuestExpiredPage = React.lazy(() => import("./pages/GuestExpiredPage"));
 
 function PageLoader() {
@@ -288,8 +311,8 @@ export default function App() {
                 <Route path="/play/adult-games" element={<PlayGate><FeatureGate flag="games_age_adult_brain"><PremiumGate id="games_age_adult_brain"><ErrorBoundary><AdultGamesPage /></ErrorBoundary></PremiumGate></FeatureGate></PlayGate>} />
                 <Route path="/play/adult-games/:category" element={<PlayGate><ErrorBoundary><AdultGamesPage /></ErrorBoundary></PlayGate>} />
                 <Route path="/play/:ageGroup" element={<PlayGate><ErrorBoundary><ActivityQuizPage /></ErrorBoundary></PlayGate>} />
-                <Route path="/parent-dashboard" element={<PlayGate><ErrorBoundary><ParentDashboard /></ErrorBoundary></PlayGate>} />
-                <Route path="/teacher-dashboard" element={<PlayGate><ErrorBoundary><TeacherDashboard /></ErrorBoundary></PlayGate>} />
+                <Route path="/parent-dashboard" element={<RoleGate roles={["parent", "admin"]}><ErrorBoundary><ParentDashboard /></ErrorBoundary></RoleGate>} />
+                <Route path="/teacher-dashboard" element={<RoleGate roles={["teacher", "admin"]}><ErrorBoundary><TeacherDashboard /></ErrorBoundary></RoleGate>} />
                 <Route path="/teacher/ai-lesson" element={<FeatureGate flag="aiQuizGen"><PremiumGate id="feature_aiQuizGen"><ErrorBoundary><AILessonGeneratorPage /></ErrorBoundary></PremiumGate></FeatureGate>} />
                 <Route path="/quests" element={<FeatureGate flag="dailyQuests"><ErrorBoundary><DailyQuestsPage /></ErrorBoundary></FeatureGate>} />
                 <Route path="/online-battle" element={<FeatureGate flag="onlineBattle"><ErrorBoundary><OnlineBattlePage /></ErrorBoundary></FeatureGate>} />
@@ -301,7 +324,7 @@ export default function App() {
                 <Route path="/adventures/:id" element={<FeatureGate flag="adventures"><ErrorBoundary><NarrativeAdventurePage /></ErrorBoundary></FeatureGate>} />
                 <Route path="/voice-quiz" element={<FeatureGate flag="voiceQuiz"><ErrorBoundary><VoiceQuizPage /></ErrorBoundary></FeatureGate>} />
                 <Route path="/learning-path" element={<FeatureGate flag="learningPath"><ErrorBoundary><LearningPathPage /></ErrorBoundary></FeatureGate>} />
-                <Route path="/school-admin" element={<FeatureGate flag="schoolAdmin"><ErrorBoundary><SchoolAdminPage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/school-admin" element={<FeatureGate flag="schoolAdmin"><RoleGate roles={["teacher", "admin"]}><ErrorBoundary><SchoolAdminPage /></ErrorBoundary></RoleGate></FeatureGate>} />
                 <Route path="/k" element={<FeatureGate flag="kidLogin"><ErrorBoundary><KidLoginPage /></ErrorBoundary></FeatureGate>} />
                 <Route path="/k/:code" element={<FeatureGate flag="kidLogin"><ErrorBoundary><KidLoginPage /></ErrorBoundary></FeatureGate>} />
                 <Route path="/affiliate" element={<FeatureGate flag="affiliate"><ErrorBoundary><AffiliatePage /></ErrorBoundary></FeatureGate>} />

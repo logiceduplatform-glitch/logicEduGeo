@@ -46,7 +46,7 @@ describe('TryFreeSection', () => {
 
   it('renders subtitle', () => {
     renderSection();
-    expect(screen.getByText(/Enter your email to join/)).toBeInTheDocument();
+    expect(screen.getByText(/Create a free account/)).toBeInTheDocument();
   });
 
   it('shows Sign Up and Try as guest when not logged in', () => {

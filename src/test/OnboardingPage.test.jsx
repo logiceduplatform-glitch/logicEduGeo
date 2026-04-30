@@ -100,7 +100,7 @@ describe('OnboardingPage', () => {
     expect(screen.getByText(/of 3/)).toBeInTheDocument();
   });
 
-  it('parent flow saves profile and navigates after all 6 steps', () => {
+  it('parent flow saves profile and navigates after all 6 steps', async () => {
     render(<Wrapper><OnboardingPage /></Wrapper>);
 
     // Step 1: role
@@ -130,7 +130,11 @@ describe('OnboardingPage', () => {
     expect(mockSaveProfile).toHaveBeenCalledWith(
       expect.objectContaining({ name: 'Parent User', role: 'parent' })
     );
-    expect(mockNavigate).toHaveBeenCalled();
+    // doNavigate uses a 2s celebration timeout before calling navigate
+    await waitFor(
+      () => expect(mockNavigate).toHaveBeenCalled(),
+      { timeout: 3500 },
+    );
   });
 
   it('teacher flow shows school name and grade selection', () => {
@@ -151,7 +155,7 @@ describe('OnboardingPage', () => {
     expect(screen.getByText('All grades')).toBeInTheDocument();
   });
 
-  it('teacher flow saves profile and navigates to /teacher-dashboard', () => {
+  it('teacher flow saves profile and navigates to /teacher-dashboard', async () => {
     render(<Wrapper><OnboardingPage /></Wrapper>);
 
     fireEvent.click(screen.getByText('imTeacher'));
@@ -172,7 +176,11 @@ describe('OnboardingPage', () => {
         gradeRange: 'elem',
       })
     );
-    expect(mockNavigate).toHaveBeenCalledWith('/teacher-dashboard');
+    // doNavigate uses a 2s celebration timeout before calling navigate
+    await waitFor(
+      () => expect(mockNavigate).toHaveBeenCalledWith('/teacher-dashboard'),
+      { timeout: 3500 },
+    );
   });
 
   it('back button returns to previous step', () => {

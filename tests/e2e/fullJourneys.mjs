@@ -25,6 +25,10 @@ async function run() {
     if (!condition) throw new Error(message || 'Assertion failed');
   }
 
+  async function waitForApp(page, timeout = 8000) {
+    try { await page.waitForFunction(() => document.body && document.body.innerText.length > 50, { timeout }); } catch {}
+  }
+
   console.log('\n=== E2E: Full User Journey Tests ===\n');
 
   // ─── 1. Homepage Smoke ─────────────────────────────────
@@ -33,9 +37,17 @@ async function run() {
   await test('Homepage renders hero section with branding', async () => {
     const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
     const page = await ctx.newPage();
-    await page.goto(BASE, { waitUntil: 'networkidle', timeout: 15000 });
+    await page.goto(BASE, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
     const text = await page.textContent('body');
-    assert(text.includes('Learn. Think. Solve.') || text.includes('Μάθε. Σκέψου. Λύσε.'), 'Missing branding tagline');
+    assert(
+      text.includes('Where curiosity blooms') ||
+        text.includes('Όπου η περιέργεια ανθίζει') ||
+        text.includes('Kibloo') ||
+        text.includes('Learn. Think. Solve.') ||
+        text.includes('Μάθε. Σκέψου. Λύσε.'),
+      'Missing branding tagline',
+    );
     await page.close();
     await ctx.close();
   });
@@ -43,7 +55,8 @@ async function run() {
   await test('Homepage has pricing section', async () => {
     const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
     const page = await ctx.newPage();
-    await page.goto(BASE, { waitUntil: 'networkidle', timeout: 15000 });
+    await page.goto(BASE, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
     const pricing = await page.$('#pricing');
     assert(pricing !== null, 'No pricing section found');
     await page.close();
@@ -53,7 +66,8 @@ async function run() {
   await test('Homepage has FAQ section', async () => {
     const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
     const page = await ctx.newPage();
-    await page.goto(BASE, { waitUntil: 'networkidle', timeout: 15000 });
+    await page.goto(BASE, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
     const faq = await page.$('#faq');
     assert(faq !== null, 'No FAQ section found');
     await page.close();
@@ -63,7 +77,8 @@ async function run() {
   await test('Homepage shows correct pricing (€2.99 and €4.99)', async () => {
     const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
     const page = await ctx.newPage();
-    await page.goto(BASE, { waitUntil: 'networkidle', timeout: 15000 });
+    await page.goto(BASE, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
     const text = await page.textContent('body');
     assert(text.includes('2.99'), 'Missing Premium price €2.99');
     assert(text.includes('4.99'), 'Missing Family price €4.99');
@@ -74,7 +89,8 @@ async function run() {
   await test('Homepage has games showcase section', async () => {
     const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
     const page = await ctx.newPage();
-    await page.goto(BASE, { waitUntil: 'networkidle', timeout: 15000 });
+    await page.goto(BASE, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
     const games = await page.$('#games');
     assert(games !== null, 'No games section found');
     await page.close();
@@ -87,7 +103,8 @@ async function run() {
   await test('Guest setup page loads and shows age selection', async () => {
     const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
     const page = await ctx.newPage();
-    await page.goto(`${BASE}/guest-setup`, { waitUntil: 'networkidle', timeout: 15000 });
+    await page.goto(`${BASE}/guest-setup`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
     const text = await page.textContent('body');
     assert(text.length > 50, 'Guest setup page is empty');
     await page.close();
@@ -100,7 +117,8 @@ async function run() {
   await test('Auth page shows login form', async () => {
     const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
     const page = await ctx.newPage();
-    await page.goto(`${BASE}/auth`, { waitUntil: 'networkidle', timeout: 15000 });
+    await page.goto(`${BASE}/auth`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
     const hasEmail = await page.$('input[type="email"]');
     const hasPassword = await page.$('input[type="password"]');
     assert(hasEmail !== null, 'No email input on auth page');
@@ -112,7 +130,8 @@ async function run() {
   await test('Auth page has Google login button', async () => {
     const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
     const page = await ctx.newPage();
-    await page.goto(`${BASE}/auth`, { waitUntil: 'networkidle', timeout: 15000 });
+    await page.goto(`${BASE}/auth`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
     const text = await page.textContent('body');
     assert(text.includes('Google'), 'No Google login button found');
     await page.close();
@@ -125,7 +144,8 @@ async function run() {
   await test('Subscription page loads with pricing plans', async () => {
     const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
     const page = await ctx.newPage();
-    await page.goto(`${BASE}/subscription`, { waitUntil: 'networkidle', timeout: 15000 });
+    await page.goto(`${BASE}/subscription`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
     const text = await page.textContent('body');
     assert(text.includes('Premium'), 'Missing Premium plan');
     assert(text.includes('Family') || text.includes('Οικογενειακό'), 'Missing Family plan');
@@ -146,7 +166,9 @@ async function run() {
     await test(`${name} page loads`, async () => {
       const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
       const page = await ctx.newPage();
-      const response = await page.goto(`${BASE}${path}`, { waitUntil: 'networkidle', timeout: 15000 });
+      const response = await page.goto(`${BASE}${path}`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
+    await waitForApp(page);
       assert(response.status() < 400, `Status ${response.status()}`);
       const text = await page.textContent('body');
       assert(text.length > 50, `${name} page is empty`);
@@ -171,9 +193,18 @@ async function run() {
     await test(`${name} redirects to home when not logged in`, async () => {
       const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
       const page = await ctx.newPage();
-      await page.goto(`${BASE}${path}`, { waitUntil: 'networkidle', timeout: 15000 });
+      await page.goto(`${BASE}${path}`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
       const url = page.url();
-      assert(url === `${BASE}/` || url === BASE, `Expected redirect to home, got ${url}`);
+      // Anonymous visitors are routed to /, /auth or /guest-setup depending
+      // on which gate the route uses (PlayGate vs RoleGate vs AuthGate).
+      assert(
+        url === `${BASE}/` ||
+          url === BASE ||
+          url.startsWith(`${BASE}/auth`) ||
+          url.startsWith(`${BASE}/guest-setup`),
+        `Expected redirect to home/auth/guest-setup, got ${url}`,
+      );
       await page.close();
       await ctx.close();
     });
@@ -185,7 +216,8 @@ async function run() {
   await test('Unknown route shows 404 page', async () => {
     const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
     const page = await ctx.newPage();
-    await page.goto(`${BASE}/nonexistent-route-xyz`, { waitUntil: 'networkidle', timeout: 15000 });
+    await page.goto(`${BASE}/nonexistent-route-xyz`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
     const text = await page.textContent('body');
     assert(text.includes('404'), '404 page did not show');
     await page.close();
@@ -198,7 +230,8 @@ async function run() {
   await test('Homepage renders on mobile (375x812)', async () => {
     const ctx = await browser.newContext({ viewport: { width: 375, height: 812 } });
     const page = await ctx.newPage();
-    await page.goto(BASE, { waitUntil: 'networkidle', timeout: 15000 });
+    await page.goto(BASE, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
     const content = await page.textContent('body');
     assert(content.length > 100, 'Mobile homepage is empty');
     await page.close();
@@ -208,7 +241,8 @@ async function run() {
   await test('Mobile hamburger menu opens', async () => {
     const ctx = await browser.newContext({ viewport: { width: 375, height: 812 } });
     const page = await ctx.newPage();
-    await page.goto(BASE, { waitUntil: 'networkidle', timeout: 15000 });
+    await page.goto(BASE, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
     const hamburger = await page.$('[aria-label="Open menu"], [aria-label="Άνοιγμα μενού"]');
     assert(hamburger !== null, 'No hamburger button found');
     await hamburger.click();
@@ -233,7 +267,9 @@ async function run() {
       }));
     });
     const page = await ctx.newPage();
-    const response = await page.goto(`${BASE}/play/6-fun`, { waitUntil: 'networkidle', timeout: 15000 });
+    const response = await page.goto(`${BASE}/play/6-fun`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
+    await waitForApp(page);
     const status = response?.status() ?? 0;
     assert(status < 400, `Status ${status}`);
     const crashed = await page.evaluate(() => {
@@ -256,7 +292,9 @@ async function run() {
       }));
     });
     const page = await ctx.newPage();
-    const response = await page.goto(`${BASE}/play/board-games`, { waitUntil: 'networkidle', timeout: 15000 });
+    const response = await page.goto(`${BASE}/play/board-games`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
+    await waitForApp(page);
     const status = response?.status() ?? 0;
     assert(status < 400, `Status ${status}`);
     const text = await page.textContent('body');
@@ -276,7 +314,9 @@ async function run() {
       }));
     });
     const page = await ctx.newPage();
-    const response = await page.goto(`${BASE}/play/adult-games`, { waitUntil: 'networkidle', timeout: 15000 });
+    const response = await page.goto(`${BASE}/play/adult-games`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
+    await waitForApp(page);
     const status = response?.status() ?? 0;
     assert(status < 400, `Status ${status}`);
     await page.close();
@@ -289,7 +329,8 @@ async function run() {
   await test('Skip-to-content link exists', async () => {
     const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
     const page = await ctx.newPage();
-    await page.goto(BASE, { waitUntil: 'networkidle', timeout: 15000 });
+    await page.goto(BASE, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
     const skipLink = await page.$('a.skip-link');
     assert(skipLink !== null, 'No skip-to-content link');
     await page.close();
@@ -299,7 +340,8 @@ async function run() {
   await test('Search opens with Ctrl+K', async () => {
     const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
     const page = await ctx.newPage();
-    await page.goto(BASE, { waitUntil: 'networkidle', timeout: 15000 });
+    await page.goto(BASE, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
     await page.keyboard.press('Control+k');
     await page.waitForTimeout(300);
     const searchInput = await page.$('input[placeholder*="Search"], input[placeholder*="Αναζήτηση"]');
@@ -311,7 +353,8 @@ async function run() {
   await test('Language toggle works', async () => {
     const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
     const page = await ctx.newPage();
-    await page.goto(BASE, { waitUntil: 'networkidle', timeout: 15000 });
+    await page.goto(BASE, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
     const langBtn = await page.$('[aria-label*="language"], [aria-label*="Language"], [aria-label*="Αλλαγή"]') || await page.$('button:has-text("EN")') || await page.$('button:has-text("EL")');
     if (langBtn) {
       await langBtn.click();
@@ -329,7 +372,8 @@ async function run() {
   await test('Dark mode toggle exists', async () => {
     const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
     const page = await ctx.newPage();
-    await page.goto(BASE, { waitUntil: 'networkidle', timeout: 15000 });
+    await page.goto(BASE, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await waitForApp(page);
     const themeBtn = await page.$('[aria-label*="mode"], [aria-label*="θέμα"]');
     assert(themeBtn !== null, 'No theme toggle button found');
     await page.close();

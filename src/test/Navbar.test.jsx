@@ -54,8 +54,7 @@ describe('Navbar', () => {
 
   it('renders brand name', () => {
     renderNavbar();
-    expect(screen.getByText('Educational')).toBeInTheDocument();
-    expect(screen.getByText('Platform')).toBeInTheDocument();
+    expect(screen.getAllByText('Kibloo').length).toBeGreaterThan(0);
   });
 
   it('renders navigation landmark', () => {
@@ -101,8 +100,9 @@ describe('Navbar', () => {
 
   it('logo navigates to home', () => {
     renderNavbar();
-    const logo = screen.getByText('Educational').closest('button');
-    fireEvent.click(logo);
+    const logoSpans = screen.getAllByText('Kibloo');
+    const logoButton = logoSpans[0].closest('button');
+    fireEvent.click(logoButton);
     expect(mockNavigate).toHaveBeenCalledWith('/');
   });
 });

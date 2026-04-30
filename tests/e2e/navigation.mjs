@@ -27,6 +27,26 @@ async function run() {
     if (!condition) throw new Error(message || 'Assertion failed');
   }
 
+  // Helper that goes to a URL and waits for the React app to mount.
+  // The app emits its <nav> + content quickly after the bundles execute,
+  // so polling for any rendered content (>50 chars) is a reliable signal.
+  // Returns the navigation response so callers can still inspect status().
+  async function gotoAndWaitForApp(page, url, opts = {}) {
+    const response = await page.goto(url, {
+      waitUntil: 'domcontentloaded',
+      timeout: opts.timeout || 15000,
+    });
+    try {
+      await page.waitForFunction(
+        () => document.body && document.body.innerText.length > 50,
+        { timeout: opts.appTimeout || 10000 },
+      );
+    } catch {
+      // soft-fail; individual assertions will surface the reason
+    }
+    return response;
+  }
+
   console.log('\n=== E2E: Navigation & UI Tests ===\n');
 
   // ─── Homepage Tests ────────────────────────────────────
@@ -34,15 +54,15 @@ async function run() {
 
   await test('Homepage loads with correct title', async () => {
     const page = await context.newPage();
-    await page.goto(BASE, { waitUntil: 'networkidle', timeout: 15000 });
+    await gotoAndWaitForApp(page, BASE);
     const title = await page.title();
-    assert(title.includes('Educational Platform') || title.includes('Εκπαιδευτική'), `Expected title to contain "Educational Platform", got "${title}"`);
+    assert(title.includes('Kibloo') || title.includes('Educational Platform') || title.includes('Εκπαιδευτική'), `Expected title to contain "Kibloo", got "${title}"`);
     await page.close();
   });
 
   await test('Homepage has navigation bar', async () => {
     const page = await context.newPage();
-    await page.goto(BASE, { waitUntil: 'networkidle', timeout: 15000 });
+    await gotoAndWaitForApp(page, BASE);
     const nav = await page.$('nav');
     assert(nav !== null, 'No <nav> element found');
     await page.close();
@@ -50,7 +70,7 @@ async function run() {
 
   await test('Homepage has skip-to-content link for accessibility', async () => {
     const page = await context.newPage();
-    await page.goto(BASE, { waitUntil: 'networkidle', timeout: 15000 });
+    await gotoAndWaitForApp(page, BASE);
     const skipLink = await page.$('a.skip-link');
     assert(skipLink !== null, 'No skip-link found');
     await page.close();
@@ -58,7 +78,7 @@ async function run() {
 
   await test('Homepage has main content area', async () => {
     const page = await context.newPage();
-    await page.goto(BASE, { waitUntil: 'networkidle', timeout: 15000 });
+    await gotoAndWaitForApp(page, BASE);
     const hasContent = await page.evaluate(() => document.body.innerText.length > 50);
     assert(hasContent, 'Homepage has no meaningful content');
     await page.close();
@@ -69,7 +89,7 @@ async function run() {
 
   await test('Privacy page loads', async () => {
     const page = await context.newPage();
-    const response = await page.goto(`${BASE}/privacy`, { waitUntil: 'networkidle', timeout: 15000 });
+    const response = await gotoAndWaitForApp(page, `${BASE}/privacy`);
     assert(response.status() < 400, `Status ${response.status()}`);
     const text = await page.evaluate(() => document.body.innerText);
     assert(text.length > 20, 'Privacy page is empty');
@@ -78,7 +98,7 @@ async function run() {
 
   await test('Terms page loads', async () => {
     const page = await context.newPage();
-    const response = await page.goto(`${BASE}/terms`, { waitUntil: 'networkidle', timeout: 15000 });
+    const response = await gotoAndWaitForApp(page, `${BASE}/terms`);
     assert(response.status() < 400, `Status ${response.status()}`);
     const text = await page.evaluate(() => document.body.innerText);
     assert(text.length > 20, 'Terms page is empty');
@@ -87,14 +107,14 @@ async function run() {
 
   await test('Auth page loads', async () => {
     const page = await context.newPage();
-    const response = await page.goto(`${BASE}/auth`, { waitUntil: 'networkidle', timeout: 15000 });
+    const response = await gotoAndWaitForApp(page, `${BASE}/auth`);
     assert(response.status() < 400, `Status ${response.status()}`);
     await page.close();
   });
 
   await test('404 page shows for unknown route', async () => {
     const page = await context.newPage();
-    await page.goto(`${BASE}/this-route-does-not-exist`, { waitUntil: 'networkidle', timeout: 15000 });
+    await gotoAndWaitForApp(page, `${BASE}/this-route-does-not-exist`);
     const text = await page.evaluate(() => document.body.innerText);
     assert(text.includes('404'), '404 page did not show');
     await page.close();
@@ -105,7 +125,7 @@ async function run() {
 
   await test('Guest setup page loads', async () => {
     const page = await context.newPage();
-    const response = await page.goto(`${BASE}/guest-setup`, { waitUntil: 'networkidle', timeout: 15000 });
+    const response = await gotoAndWaitForApp(page, `${BASE}/guest-setup`);
     assert(response.status() < 400, `Status ${response.status()}`);
     const text = await page.evaluate(() => document.body.innerText);
     assert(text.length > 20, 'Guest setup page is empty');
@@ -115,27 +135,38 @@ async function run() {
   // ─── Protected Routes Redirect ────────────────────────
   console.log('\n--- Protected Routes ---');
 
-  await test('Protected /play redirects to home when not logged in', async () => {
+  // Anonymous users are routed to /guest-setup or / when hitting protected
+  // routes; either is acceptable.
+  function isPublicLanding(url) {
+    return (
+      url === `${BASE}/` ||
+      url === BASE ||
+      url.startsWith(`${BASE}/guest-setup`) ||
+      url.startsWith(`${BASE}/auth`)
+    );
+  }
+
+  await test('Protected /play redirects guest to setup or home', async () => {
     const page = await context.newPage();
-    await page.goto(`${BASE}/play`, { waitUntil: 'networkidle', timeout: 15000 });
+    await gotoAndWaitForApp(page, `${BASE}/play`);
     const url = page.url();
-    assert(url === `${BASE}/` || url === BASE, `Expected redirect to home, got ${url}`);
+    assert(isPublicLanding(url), `Expected redirect to home/guest-setup/auth, got ${url}`);
     await page.close();
   });
 
-  await test('Protected /profile redirects to home when not logged in', async () => {
+  await test('Protected /profile redirects guest to setup or home', async () => {
     const page = await context.newPage();
-    await page.goto(`${BASE}/profile`, { waitUntil: 'networkidle', timeout: 15000 });
+    await gotoAndWaitForApp(page, `${BASE}/profile`);
     const url = page.url();
-    assert(url === `${BASE}/` || url === BASE, `Expected redirect to home, got ${url}`);
+    assert(isPublicLanding(url), `Expected redirect to home/guest-setup/auth, got ${url}`);
     await page.close();
   });
 
-  await test('Protected /parent-dashboard redirects when not logged in', async () => {
+  await test('Protected /parent-dashboard redirects guest to setup or home', async () => {
     const page = await context.newPage();
-    await page.goto(`${BASE}/parent-dashboard`, { waitUntil: 'networkidle', timeout: 15000 });
+    await gotoAndWaitForApp(page, `${BASE}/parent-dashboard`);
     const url = page.url();
-    assert(url === `${BASE}/` || url === BASE, `Expected redirect to home, got ${url}`);
+    assert(isPublicLanding(url), `Expected redirect to home/guest-setup/auth, got ${url}`);
     await page.close();
   });
 
@@ -167,7 +198,7 @@ async function run() {
       const page = await guestContext.newPage();
       try {
         const response = await page.goto(`${BASE}${route.path}`, {
-          waitUntil: 'networkidle',
+          waitUntil: 'domcontentloaded',
           timeout: 15000,
         });
         const status = response?.status() ?? 0;
@@ -192,7 +223,7 @@ async function run() {
   await test('Mobile viewport renders without crash', async () => {
     const mobileCtx = await browser.newContext({ viewport: { width: 375, height: 812 } });
     const page = await mobileCtx.newPage();
-    await page.goto(BASE, { waitUntil: 'networkidle', timeout: 15000 });
+    await gotoAndWaitForApp(page, BASE);
     const hasContent = await page.evaluate(() => document.body.innerText.length > 50);
     assert(hasContent, 'Mobile homepage has no content');
     await page.close();
@@ -202,7 +233,7 @@ async function run() {
   await test('Tablet viewport renders without crash', async () => {
     const tabletCtx = await browser.newContext({ viewport: { width: 768, height: 1024 } });
     const page = await tabletCtx.newPage();
-    await page.goto(BASE, { waitUntil: 'networkidle', timeout: 15000 });
+    await gotoAndWaitForApp(page, BASE);
     const hasContent = await page.evaluate(() => document.body.innerText.length > 50);
     assert(hasContent, 'Tablet homepage has no content');
     await page.close();

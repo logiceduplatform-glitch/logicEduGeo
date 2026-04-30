@@ -12,10 +12,13 @@ describe('Bundle Size', () => {
   it('project builds successfully', { timeout: 120000 }, () => {
     distPath = resolve(PROJECT_ROOT, 'dist');
     try {
-      execSync('npx vite build', {
+      // Vitest sets NODE_ENV=test which disables Vite's default minifier; we
+      // need a production build for accurate size measurements, so override.
+      execSync('npx vite build --mode production', {
         cwd: PROJECT_ROOT,
         stdio: 'pipe',
         timeout: 90000,
+        env: { ...process.env, NODE_ENV: 'production' },
       });
       built = true;
     } catch (err) {

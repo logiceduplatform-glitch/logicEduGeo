@@ -15,12 +15,66 @@ export default defineConfig({
     ],
   },
   build: {
+    chunkSizeWarningLimit: 600,
     rollupOptions: {
       output: {
-        manualChunks: {
-          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-          'vendor-firebase': ['firebase/app', 'firebase/auth', 'firebase/firestore', 'firebase/analytics'],
-          'vendor-charts': ['recharts'],
+        manualChunks(id) {
+          // Vendor libraries are split by package so we get long-lived
+          // immutable caches per dependency.
+          //
+          // IMPORTANT: react and react-dom must live in the SAME chunk to
+          // avoid circular initialization issues with libraries like
+          // react-helmet-async / react-router that import from both.
+          if (id.includes("node_modules")) {
+            // Bucket 1: React core ecosystem (must stay together to avoid TDZ)
+            if (
+              id.includes("/react/") ||
+              id.includes("react-dom") ||
+              id.includes("react-router") ||
+              id.includes("react-helmet") ||
+              id.includes("scheduler") ||
+              id.includes("/use-sync-external-store/")
+            ) {
+              return "vendor-react";
+            }
+            // Bucket 2: Firebase (split by sub-package since they're large)
+            if (id.includes("firebase/firestore")) return "vendor-firestore";
+            if (id.includes("firebase/auth")) return "vendor-firebase-auth";
+            if (id.includes("firebase/analytics")) return "vendor-firebase-analytics";
+            if (id.includes("firebase")) return "vendor-firebase";
+            // Bucket 3: Charts (heavy, only used in dashboards)
+            if (id.includes("recharts") || id.includes("d3-") || id.includes("victory-")) {
+              return "vendor-charts";
+            }
+            // Bucket 4: PDF (huge, only used on demand)
+            if (id.includes("html2pdf") || id.includes("jspdf") || id.includes("html2canvas")) {
+              return "vendor-html2pdf";
+            }
+            // Bucket 5: QR code (only on school admin / kid login)
+            if (id.includes("qrcode")) return "vendor-qrcode";
+            // Bucket 6: Chess (only on board games)
+            if (id.includes("chess.js")) return "vendor-chess";
+            // Everything else lumped together - typically small utilities
+            return "vendor-misc";
+          }
+
+          // App-side: split heavy data buckets and dashboards into their own
+          // chunks so the initial route doesn't drag them in.
+          //
+          // Quiz question banks are huge (~100KB each); give every category
+          // its own chunk so they load on demand only when their quiz mounts.
+          if (id.includes("/src/components/quiz/data/")) {
+            const m = id.match(/quiz\/data\/([^/]+)\.js/);
+            if (m) return `data-${m[1].toLowerCase().replace(/[^a-z0-9]/g, "-")}`;
+            return "data-quiz-shared";
+          }
+          if (id.includes("/src/config/questions") || id.includes("Questions")) return "data-questions";
+          if (id.includes("/src/services/")) return "app-services";
+          if (id.includes("/src/contexts/")) return "app-contexts";
+          if (id.includes("/src/components/admin/")) return "page-admin";
+          if (id.includes("/src/components/teacher/")) return "page-teacher";
+          if (id.includes("/src/components/parent/")) return "page-parent";
+          if (id.includes("/src/components/rewards/")) return "feat-rewards";
         },
       },
     },

@@ -38,7 +38,7 @@ async function runTests() {
     const page = await context.newPage();
     try {
       const response = await page.goto(`${BASE}${path}`, {
-        waitUntil: 'networkidle',
+        waitUntil: 'domcontentloaded',
         timeout: 15000,
       });
 
