@@ -93,8 +93,12 @@ export const MissionsService = {
       }
 
       if (newProgress !== m.progress) {
+        const wasCompleted = m.completed;
         m.progress = Math.min(newProgress, m.target);
         if (m.progress >= m.target) m.completed = true;
+        if (m.completed && !wasCompleted) {
+          _notifyMissionComplete(m);
+        }
         changed = true;
       }
     });
@@ -126,3 +130,22 @@ export const MissionsService = {
     return stats[today]?.correct || 0;
   },
 };
+
+// Best-effort browser notification on mission complete (lazy import to avoid cycles).
+function _notifyMissionComplete(mission) {
+  try {
+    const lang = (typeof navigator !== "undefined" && navigator.language?.startsWith("el")) ? "el" : "en";
+    const title = mission.title?.[lang] || mission.title?.en || "Mission complete!";
+    const body = lang === "el"
+      ? `🎉 Ολοκλήρωσες την αποστολή! +${mission.reward} 🪙. Διεκδίκησε τα νομίσματά σου!`
+      : `🎉 Mission complete! +${mission.reward} 🪙. Claim your coins!`;
+
+    import("./NotificationService").then((mod) => {
+      mod.NotificationService?.show?.(`✓ ${title}`, {
+        body,
+        tag: `mission-${mission.id}`,
+        data: { url: "/quests" },
+      });
+    }).catch(() => {});
+  } catch {}
+}

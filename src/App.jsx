@@ -18,6 +18,7 @@ import TimeLimitOverlay from "./components/TimeLimitOverlay";
 import { CertificateService } from "./services/CertificateService";
 import { FeatureFlagService } from "./services/FeatureFlagService";
 import { PremiumContentService } from "./services/PremiumContentService";
+import "./services/NotificationService";
 import FeatureGate from "./components/FeatureGate";
 import PremiumGate from "./components/PremiumGate";
 import { SkeletonCard } from "./components/SkeletonLoader";
@@ -61,6 +62,20 @@ const ContentEditorPage = React.lazy(() => import("./pages/ContentEditorPage"));
 const OnlineMultiplayerPage = React.lazy(() => import("./pages/OnlineMultiplayerPage"));
 const AITutorPage = React.lazy(() => import("./pages/AITutorPage"));
 const TeacherDashboard = React.lazy(() => import("./pages/TeacherDashboard"));
+const AILessonGeneratorPage = React.lazy(() => import("./pages/AILessonGeneratorPage"));
+const DailyQuestsPage = React.lazy(() => import("./pages/DailyQuestsPage"));
+const OnlineBattlePage = React.lazy(() => import("./pages/OnlineBattlePage"));
+const GuildsPage = React.lazy(() => import("./pages/GuildsPage"));
+const PublicProfilePage = React.lazy(() => import("./pages/PublicProfilePage"));
+const NarrativeAdventurePage = React.lazy(() => import("./pages/NarrativeAdventurePage"));
+const VoiceQuizPage = React.lazy(() => import("./pages/VoiceQuizPage"));
+const LearningPathPage = React.lazy(() => import("./pages/LearningPathPage"));
+const SchoolAdminPage = React.lazy(() => import("./pages/SchoolAdminPage"));
+const KidLoginPage = React.lazy(() => import("./pages/KidLoginPage"));
+const AffiliatePage = React.lazy(() => import("./pages/AffiliatePage"));
+const CurriculumPacksPage = React.lazy(() => import("./pages/CurriculumPacksPage"));
+const MiniGamesPage = React.lazy(() => import("./pages/MiniGamesPage"));
+const MusicSettingsPage = React.lazy(() => import("./pages/MusicSettingsPage"));
 const JoinClassroomPage = React.lazy(() => import("./pages/JoinClassroomPage"));
 const MyClassroomPage = React.lazy(() => import("./pages/MyClassroomPage"));
 const AchievementsPage = React.lazy(() => import("./pages/AchievementsPage"));
@@ -266,6 +281,26 @@ export default function App() {
                 <Route path="/play/:ageGroup" element={<PlayGate><ErrorBoundary><ActivityQuizPage /></ErrorBoundary></PlayGate>} />
                 <Route path="/parent-dashboard" element={<PlayGate><ErrorBoundary><ParentDashboard /></ErrorBoundary></PlayGate>} />
                 <Route path="/teacher-dashboard" element={<PlayGate><ErrorBoundary><TeacherDashboard /></ErrorBoundary></PlayGate>} />
+                <Route path="/teacher/ai-lesson" element={<FeatureGate flag="aiQuizGen"><PremiumGate id="feature_aiQuizGen"><ErrorBoundary><AILessonGeneratorPage /></ErrorBoundary></PremiumGate></FeatureGate>} />
+                <Route path="/quests" element={<ErrorBoundary><DailyQuestsPage /></ErrorBoundary>} />
+                <Route path="/online-battle" element={<ErrorBoundary><OnlineBattlePage /></ErrorBoundary>} />
+                <Route path="/online-battle/:code" element={<ErrorBoundary><OnlineBattlePage /></ErrorBoundary>} />
+                <Route path="/guilds" element={<ErrorBoundary><GuildsPage /></ErrorBoundary>} />
+                <Route path="/guilds/:guildId" element={<ErrorBoundary><GuildsPage /></ErrorBoundary>} />
+                <Route path="/u/:uid" element={<ErrorBoundary><PublicProfilePage /></ErrorBoundary>} />
+                <Route path="/adventures" element={<ErrorBoundary><NarrativeAdventurePage /></ErrorBoundary>} />
+                <Route path="/adventures/:id" element={<ErrorBoundary><NarrativeAdventurePage /></ErrorBoundary>} />
+                <Route path="/voice-quiz" element={<ErrorBoundary><VoiceQuizPage /></ErrorBoundary>} />
+                <Route path="/learning-path" element={<ErrorBoundary><LearningPathPage /></ErrorBoundary>} />
+                <Route path="/school-admin" element={<ErrorBoundary><SchoolAdminPage /></ErrorBoundary>} />
+                <Route path="/k" element={<ErrorBoundary><KidLoginPage /></ErrorBoundary>} />
+                <Route path="/k/:code" element={<ErrorBoundary><KidLoginPage /></ErrorBoundary>} />
+                <Route path="/affiliate" element={<ErrorBoundary><AffiliatePage /></ErrorBoundary>} />
+                <Route path="/curriculum" element={<ErrorBoundary><CurriculumPacksPage /></ErrorBoundary>} />
+                <Route path="/curriculum/:id" element={<ErrorBoundary><CurriculumPacksPage /></ErrorBoundary>} />
+                <Route path="/mini-games" element={<ErrorBoundary><MiniGamesPage /></ErrorBoundary>} />
+                <Route path="/mini-games/:id" element={<ErrorBoundary><MiniGamesPage /></ErrorBoundary>} />
+                <Route path="/music" element={<ErrorBoundary><MusicSettingsPage /></ErrorBoundary>} />
                 <Route path="/join/:code" element={<PlayGate><ErrorBoundary><JoinClassroomPage /></ErrorBoundary></PlayGate>} />
                 <Route path="/join" element={<PlayGate><ErrorBoundary><JoinClassroomPage /></ErrorBoundary></PlayGate>} />
                 <Route path="/lesson/:code" element={<ErrorBoundary><LessonViewPage /></ErrorBoundary>} />

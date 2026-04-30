@@ -89,6 +89,21 @@ export const ProgressService = {
       }
     } catch (_) { /* certificates are non-critical */ }
 
+    // Public profile sync (debounced, fire-and-forget). Only updates if user has previously published.
+    try {
+      if (this._publicSyncTimer) clearTimeout(this._publicSyncTimer);
+      this._publicSyncTimer = setTimeout(async () => {
+        try {
+          const auth = (await import("../auth/firebase")).auth;
+          const uid = auth?.currentUser?.uid;
+          if (!uid) return;
+          const { PublicProfileService } = await import("./PublicProfileService");
+          const existing = await PublicProfileService.get(uid);
+          if (existing) await PublicProfileService.syncFromLocal(uid);
+        } catch { /* silent */ }
+      }, 2500);
+    } catch (_) { /* public profile is non-critical */ }
+
     return updated;
   },
 

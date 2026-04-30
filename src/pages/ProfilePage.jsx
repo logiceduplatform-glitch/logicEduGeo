@@ -18,6 +18,7 @@ import SeasonalThemeSelector from "../components/SeasonalThemeSelector";
 import { FeatureFlagService } from "../services/FeatureFlagService";
 import OfflineDownloadCard from "../components/OfflineDownloadCard";
 import CountryPicker from "../components/CountryPicker";
+import NotificationSettings from "../components/NotificationSettings";
 
 import {
   ageToQuizRoute,
@@ -950,6 +951,8 @@ export default function ProfilePage() {
 
         {/* Country picker */}
         {tab === "account" && user && <div className="mb-6"><CountryPicker /></div>}
+
+        {tab === "account" && user && <div className="mb-6"><NotificationSettings /></div>}
 
         {/* Referral card */}
         {tab === "account" && user && <ReferralCard />}

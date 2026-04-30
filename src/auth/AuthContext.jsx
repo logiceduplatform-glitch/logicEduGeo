@@ -99,6 +99,10 @@ export function AuthProvider({ children }) {
       localStorage.removeItem("geo:guestProfile");
       syncAfterLogin();
       AnalyticsService.signup("email");
+      try {
+        const { AffiliateService } = await import("../services/AffiliateService");
+        await AffiliateService.recordSignup({ refereeUid: result.user.uid });
+      } catch { /* ignore */ }
     } catch (err) {
       setError(err.message);
     }

@@ -114,16 +114,237 @@ const WORKSHEET_TYPES = [
     icon: "📝",
     name: { el: "Προβλήματα", en: "Word Problems" },
     category: "math",
-    generate: (count, difficulty) => {
-      const templates = [
-        (a, b) => ({ question: `Maria has ${a} apples. She buys ${b} more. How many does she have? ___`, answer: a + b }),
-        (a, b) => ({ question: `There are ${a + b} birds. ${a} fly away. How many remain? ___`, answer: b }),
-        (a, b) => ({ question: `${a} children each have ${b} stickers. Total stickers? ___`, answer: a * b }),
-      ];
+    generate: (count, difficulty, lang = "en") => {
+      const templates = {
+        en: [
+          (a, b) => ({ question: `Maria has ${a} apples. She buys ${b} more. How many does she have? ___`, answer: a + b }),
+          (a, b) => ({ question: `There are ${a + b} birds. ${a} fly away. How many remain? ___`, answer: b }),
+          (a, b) => ({ question: `${a} children each have ${b} stickers. Total stickers? ___`, answer: a * b }),
+          (a, b) => ({ question: `A box has ${a * b} chocolates shared equally among ${a} children. Each gets? ___`, answer: b }),
+          (a, b) => ({ question: `John reads ${a} pages a day for ${b} days. Total pages read? ___`, answer: a * b }),
+        ],
+        el: [
+          (a, b) => ({ question: `Η Μαρία έχει ${a} μήλα. Αγοράζει άλλα ${b}. Πόσα έχει συνολικά; ___`, answer: a + b }),
+          (a, b) => ({ question: `Σε ένα δέντρο κάθονται ${a + b} πουλιά. ${a} φεύγουν. Πόσα μένουν; ___`, answer: b }),
+          (a, b) => ({ question: `${a} παιδιά έχουν από ${b} αυτοκόλλητα το καθένα. Πόσα αυτοκόλλητα συνολικά; ___`, answer: a * b }),
+          (a, b) => ({ question: `Ένα κουτί έχει ${a * b} σοκολατάκια και τα μοιράζονται ${a} παιδιά. Πόσα παίρνει το καθένα; ___`, answer: b }),
+          (a, b) => ({ question: `Ο Γιάννης διαβάζει ${a} σελίδες την ημέρα για ${b} μέρες. Πόσες σελίδες διάβασε συνολικά; ___`, answer: a * b }),
+          (a, b) => ({ question: `Στο πάρκο υπάρχουν ${a} κούνιες. Κάθε κούνια έχει ${b} παιδιά. Πόσα παιδιά συνολικά; ___`, answer: a * b }),
+        ],
+      };
+      const t = templates[lang] || templates.en;
       return Array.from({ length: count }, () => {
         const a = Math.floor(Math.random() * 12) + 2;
         const b = Math.floor(Math.random() * 12) + 2;
-        return templates[Math.floor(Math.random() * templates.length)](a, b);
+        return t[Math.floor(Math.random() * t.length)](a, b);
+      });
+    },
+  },
+
+  // ─── ΕΛΛΗΝΙΚΑ / GREEK LANGUAGE ────────────────────────────────────────────
+  {
+    id: "el_alphabet",
+    icon: "🔤",
+    name: { el: "Αλφάβητο", en: "Greek Alphabet" },
+    category: "language_el",
+    onlyLang: "el",
+    generate: (count) => {
+      const alphabet = ["Α","Β","Γ","Δ","Ε","Ζ","Η","Θ","Ι","Κ","Λ","Μ","Ν","Ξ","Ο","Π","Ρ","Σ","Τ","Υ","Φ","Χ","Ψ","Ω"];
+      const lower    = ["α","β","γ","δ","ε","ζ","η","θ","ι","κ","λ","μ","ν","ξ","ο","π","ρ","σ","τ","υ","φ","χ","ψ","ω"];
+      return Array.from({ length: count }, () => {
+        const i = Math.floor(Math.random() * alphabet.length);
+        const variants = [
+          { question: `Γράψε το πεζό του γράμματος ${alphabet[i]}: ___`, answer: lower[i] },
+          { question: `Γράψε το κεφαλαίο του γράμματος ${lower[i]}: ___`, answer: alphabet[i] },
+          { question: `Ποιο γράμμα έρχεται μετά το ${alphabet[i]}; ___`, answer: alphabet[(i + 1) % alphabet.length] },
+        ];
+        return variants[Math.floor(Math.random() * variants.length)];
+      });
+    },
+  },
+  {
+    id: "el_spelling",
+    icon: "📝",
+    name: { el: "Ορθογραφία", en: "Greek Spelling" },
+    category: "language_el",
+    onlyLang: "el",
+    generate: (count, difficulty) => {
+      const easy = [
+        { hint: "γάτος", answer: "γάτος" }, { hint: "παιδί", answer: "παιδί" },
+        { hint: "σπίτι", answer: "σπίτι" }, { hint: "βιβλίο", answer: "βιβλίο" },
+        { hint: "δάσκαλος", answer: "δάσκαλος" }, { hint: "αγόρι", answer: "αγόρι" },
+        { hint: "κορίτσι", answer: "κορίτσι" }, { hint: "ήλιος", answer: "ήλιος" },
+        { hint: "νερό", answer: "νερό" }, { hint: "χέρι", answer: "χέρι" },
+        { hint: "ποδήλατο", answer: "ποδήλατο" }, { hint: "καρέκλα", answer: "καρέκλα" },
+      ];
+      const medium = [
+        { hint: "Γράψε σωστά: «η»/«οι» — αυτές οι φίλες είναι κ___λές", answer: "καλές" },
+        { hint: "Συμπλήρωσε: το σχ___λείο έχει αρχ___σει", answer: "σχολείο, αρχίσει" },
+        { hint: "Συμπλήρωσε ο/ω: μαθητ___ς που γράφ___", answer: "μαθητής, γράφω" },
+        { hint: "Διόρθωσε: «πεδί» → ", answer: "παιδί" },
+        { hint: "Διόρθωσε: «βυβλίο» → ", answer: "βιβλίο" },
+        { hint: "Συμπλήρωσε ει/ι: επ___δή", answer: "επειδή" },
+      ];
+      const hard = [
+        { hint: "Γράψε ορθά τη μετοχή του «τρέχω» (παρακείμενος)", answer: "έχω τρέξει" },
+        { hint: "Διόρθωσε: «εξεσερευνώ» → ", answer: "εξερευνώ" },
+        { hint: "Συμπλήρωσε ορθογραφικά: «έγρα___ε» (γράφω, αόρ.)", answer: "έγραψε" },
+        { hint: "Συμπλήρωσε: «πρ___τη φορά»", answer: "πρώτη" },
+        { hint: "Συμπλήρωσε: «δι___σταση»", answer: "διάσταση" },
+        { hint: "Διόρθωσε: «παρακαλόντας» → ", answer: "παρακαλώντας" },
+      ];
+      const pool = difficulty === "easy" ? easy : difficulty === "medium" ? medium : hard;
+      return Array.from({ length: count }, () => {
+        const it = pool[Math.floor(Math.random() * pool.length)];
+        return { question: `${it.hint} ___`, answer: it.answer };
+      });
+    },
+  },
+  {
+    id: "el_vocabulary",
+    icon: "📚",
+    name: { el: "Λεξιλόγιο", en: "Greek Vocabulary" },
+    category: "language_el",
+    onlyLang: "el",
+    generate: (count) => {
+      const items = [
+        { q: "Συνώνυμο: όμορφος", a: "ωραίος" },
+        { q: "Συνώνυμο: γρήγορος", a: "ταχύς" },
+        { q: "Συνώνυμο: μεγάλος", a: "τεράστιος" },
+        { q: "Αντώνυμο: φωτεινός", a: "σκοτεινός" },
+        { q: "Αντώνυμο: ψηλός", a: "κοντός" },
+        { q: "Αντώνυμο: πλούσιος", a: "φτωχός" },
+        { q: "Αντώνυμο: γρήγορος", a: "αργός" },
+        { q: "Συνώνυμο: χαρούμενος", a: "ευτυχισμένος" },
+        { q: "Συνώνυμο: τρέχω", a: "σπεύδω" },
+        { q: "Αντώνυμο: ζεστός", a: "κρύος" },
+        { q: "Συνώνυμο: φοβάμαι", a: "τρέμω" },
+        { q: "Αντώνυμο: αρχή", a: "τέλος" },
+        { q: "Συμπλήρωσε: ο τίτλος μιας ιστορίας ονομάζεται ___", a: "πρωτότυπος / αρχικός" },
+        { q: "Πληθυντικός: το βιβλίο →", a: "τα βιβλία" },
+        { q: "Πληθυντικός: ο μαθητής →", a: "οι μαθητές" },
+      ];
+      return Array.from({ length: count }, () => {
+        const it = items[Math.floor(Math.random() * items.length)];
+        return { question: `${it.q}: ___`, answer: it.a };
+      });
+    },
+  },
+  {
+    id: "el_grammar",
+    icon: "✏️",
+    name: { el: "Γραμματική", en: "Greek Grammar" },
+    category: "language_el",
+    onlyLang: "el",
+    generate: (count, difficulty) => {
+      const items = [
+        { q: "Συμπλήρωσε με τον σωστό τύπο του ρήματος «τρέχω» (β' εν., ενεστ.)", a: "τρέχεις" },
+        { q: "Συμπλήρωσε με τον σωστό τύπο του ρήματος «γράφω» (γ' πληθ., ενεστ.)", a: "γράφουν" },
+        { q: "Πτώσεις: γενική του «το παιδί»", a: "του παιδιού" },
+        { q: "Πτώσεις: αιτιατική πληθυντικού «ο μαθητής»", a: "τους μαθητές" },
+        { q: "Άρθρο πριν τη λέξη «αδελφή» (αιτιατική)", a: "την" },
+        { q: "Άρθρο πριν τη λέξη «πατέρας» (γενική)", a: "του" },
+        { q: "Συμπληρωμένος μέλλοντας του «παίζω» (α' εν.)", a: "θα έχω παίξει" },
+        { q: "Παραθετικά: μεγάλος → συγκριτικός", a: "μεγαλύτερος" },
+        { q: "Παραθετικά: όμορφος → υπερθετικός", a: "ομορφότατος / πιο όμορφος" },
+        { q: "Πτώση: «του βιβλίου» είναι σε", a: "γενική" },
+      ];
+      return Array.from({ length: count }, () => {
+        const it = items[Math.floor(Math.random() * items.length)];
+        return { question: `${it.q}: ___`, answer: it.a };
+      });
+    },
+  },
+  {
+    id: "el_word_problems",
+    icon: "🧩",
+    name: { el: "Προβλήματα Λογικής", en: "Greek Logic Problems" },
+    category: "language_el",
+    onlyLang: "el",
+    generate: (count, difficulty) => {
+      return Array.from({ length: count }, () => {
+        const a = Math.floor(Math.random() * 12) + 2;
+        const b = Math.floor(Math.random() * 12) + 2;
+        const templates = [
+          () => ({ question: `Η Άννα έχει ${a} ευρώ και ξοδεύει ${Math.min(a-1,b)}. Πόσα της μένουν; ___`, answer: a - Math.min(a-1, b) }),
+          () => ({ question: `Ο Νίκος έγραψε ${a * b} γράμματα σε ${a} φακέλους ισόποσα. Πόσα γράμματα ανά φάκελο; ___`, answer: b }),
+          () => ({ question: `Η μαμά αγόρασε ${a} κουτιά με ${b} αυγά το καθένα. Πόσα αυγά συνολικά; ___`, answer: a * b }),
+          () => ({ question: `Σε μια τάξη υπάρχουν ${a + b} μαθητές, ${a} αγόρια και υπόλοιπα κορίτσια. Πόσα κορίτσια; ___`, answer: b }),
+        ];
+        return templates[Math.floor(Math.random() * templates.length)]();
+      });
+    },
+  },
+
+  // ─── ENGLISH LANGUAGE ────────────────────────────────────────────────────
+  {
+    id: "en_alphabet",
+    icon: "🔤",
+    name: { el: "Αγγλικό Αλφάβητο", en: "English Alphabet" },
+    category: "language_en",
+    onlyLang: "en",
+    generate: (count) => {
+      const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+      const lower = "abcdefghijklmnopqrstuvwxyz".split("");
+      return Array.from({ length: count }, () => {
+        const i = Math.floor(Math.random() * upper.length);
+        const variants = [
+          { question: `Write the lowercase of ${upper[i]}: ___`, answer: lower[i] },
+          { question: `Write the uppercase of ${lower[i]}: ___`, answer: upper[i] },
+          { question: `Which letter comes after ${upper[i]}? ___`, answer: upper[(i + 1) % upper.length] },
+        ];
+        return variants[Math.floor(Math.random() * variants.length)];
+      });
+    },
+  },
+  {
+    id: "en_spelling",
+    icon: "📝",
+    name: { el: "Αγγλική Ορθογραφία", en: "English Spelling" },
+    category: "language_en",
+    onlyLang: "en",
+    generate: (count) => {
+      const items = [
+        { q: "Spell: a small house pet (4 letters)", a: "cat" },
+        { q: "Fix: «recieve» →", a: "receive" },
+        { q: "Fix: «definately» →", a: "definitely" },
+        { q: "Fix: «seperately» →", a: "separately" },
+        { q: "Fix: «occured» →", a: "occurred" },
+        { q: "Plural of «child»", a: "children" },
+        { q: "Plural of «mouse»", a: "mice" },
+        { q: "Past tense of «go»", a: "went" },
+        { q: "Past tense of «write»", a: "wrote" },
+        { q: "Spell the number 7", a: "seven" },
+        { q: "Spell the number 12", a: "twelve" },
+      ];
+      return Array.from({ length: count }, () => {
+        const it = items[Math.floor(Math.random() * items.length)];
+        return { question: `${it.q}: ___`, answer: it.a };
+      });
+    },
+  },
+  {
+    id: "en_vocabulary",
+    icon: "📚",
+    name: { el: "Αγγλικό Λεξιλόγιο", en: "English Vocabulary" },
+    category: "language_en",
+    onlyLang: "en",
+    generate: (count) => {
+      const items = [
+        { q: "Synonym of: happy", a: "joyful / glad" },
+        { q: "Synonym of: big", a: "large / huge" },
+        { q: "Antonym of: hot", a: "cold" },
+        { q: "Antonym of: fast", a: "slow" },
+        { q: "Antonym of: rich", a: "poor" },
+        { q: "Synonym of: smart", a: "clever / intelligent" },
+        { q: "Translate to English: σπίτι", a: "house" },
+        { q: "Translate to English: γάτα", a: "cat" },
+        { q: "Translate to English: σχολείο", a: "school" },
+        { q: "Translate to English: βιβλίο", a: "book" },
+      ];
+      return Array.from({ length: count }, () => {
+        const it = items[Math.floor(Math.random() * items.length)];
+        return { question: `${it.q}: ___`, answer: it.a };
       });
     },
   },
@@ -149,6 +370,9 @@ const T = {
     worksheet: "Φύλλο Εργασίας",
     answers: "Απαντήσεις",
     math: "Μαθηματικά",
+    language_el: "Ελληνική Γλώσσα",
+    language_en: "Αγγλική Γλώσσα",
+    catLabel: "Κατηγορία",
   },
   en: {
     title: "Printable Worksheets",
@@ -169,6 +393,9 @@ const T = {
     worksheet: "Worksheet",
     answers: "Answers",
     math: "Math",
+    language_el: "Greek Language",
+    language_en: "English Language",
+    catLabel: "Category",
   },
 };
 
@@ -184,11 +411,34 @@ export default function PrintableWorksheetsPage() {
   const [exercises, setExercises] = useState(null);
   const [showAnswers, setShowAnswers] = useState(false);
 
-  const wsType = WORKSHEET_TYPES.find(w => w.id === selectedType);
+  const visibleTypes = useMemo(
+    () => WORKSHEET_TYPES.filter(w => !w.onlyLang || w.onlyLang === lang),
+    [lang]
+  );
+
+  // Group by category for cleaner picker
+  const groupedTypes = useMemo(() => {
+    const out = {};
+    for (const w of visibleTypes) {
+      const cat = w.category || "math";
+      if (!out[cat]) out[cat] = [];
+      out[cat].push(w);
+    }
+    return out;
+  }, [visibleTypes]);
+
+  const wsType = WORKSHEET_TYPES.find(w => w.id === selectedType) || visibleTypes[0];
+
+  // Auto-switch type if current selection isn't valid for the language
+  React.useEffect(() => {
+    if (!visibleTypes.find(w => w.id === selectedType)) {
+      setSelectedType(visibleTypes[0]?.id || "addition");
+    }
+  }, [visibleTypes, selectedType]);
 
   const handleGenerate = () => {
     if (!wsType) return;
-    setExercises(wsType.generate(count, difficulty));
+    setExercises(wsType.generate(count, difficulty, lang));
     setShowAnswers(false);
   };
 
@@ -211,16 +461,23 @@ export default function PrintableWorksheetsPage() {
             </div>
 
             <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg border border-slate-100 dark:border-slate-700 space-y-4">
-              <div>
-                <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2">{l.type}</label>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                  {WORKSHEET_TYPES.map(wt => (
-                    <button key={wt.id} onClick={() => setSelectedType(wt.id)} className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all ${selectedType === wt.id ? "bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 border-2 border-indigo-400" : "bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600"}`}>
-                      <span>{wt.icon}</span>
-                      <span className="truncate">{isEl ? wt.name.el : wt.name.en}</span>
-                    </button>
-                  ))}
-                </div>
+              <div className="space-y-4">
+                <label className="block text-xs font-bold text-slate-500 dark:text-slate-400">{l.type}</label>
+                {Object.entries(groupedTypes).map(([cat, items]) => (
+                  <div key={cat}>
+                    <p className="text-[11px] font-extrabold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1.5">
+                      {l[cat] || cat}
+                    </p>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                      {items.map(wt => (
+                        <button key={wt.id} onClick={() => setSelectedType(wt.id)} className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all ${selectedType === wt.id ? "bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 border-2 border-indigo-400" : "bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600"}`}>
+                          <span>{wt.icon}</span>
+                          <span className="truncate">{isEl ? wt.name.el : wt.name.en}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
               </div>
 
               <div className="grid grid-cols-2 gap-4">

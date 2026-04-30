@@ -46,7 +46,8 @@ export default function ShopPage() {
     if (CoinService.isOwned(item.id)) return;
     if (!CoinService.spend(item.price)) return;
 
-    CoinService.addOwned({ id: item.id, type: activeTab === "avatars" ? "avatar" : activeTab === "pets" ? "pet" : "theme", emoji: item.emoji, name: item.name });
+    const typeMap = { avatars: "avatar", pets: "pet", themes: "theme", avatarParts: "avatarPart", frames: "frame", badges: "badge", music: "music" };
+    CoinService.addOwned({ id: item.id, type: typeMap[activeTab] || activeTab, emoji: item.emoji, name: item.name });
     setCoinData(CoinService.getBalance());
     setOwnedItems(CoinService.getOwned());
     setJustBought(item.id);

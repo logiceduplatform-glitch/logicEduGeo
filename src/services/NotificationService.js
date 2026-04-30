@@ -1,140 +1,135 @@
-const PERM_KEY = "geo:notifPermission";
-const TOKEN_KEY = "geo:fcmToken";
+// Browser local notification service.
+// Used for streak reminders, daily challenge, achievements, etc.
+// Works without a backend. Real "push" requires a server with VAPID keys.
 
-let messaging = null;
+const PREF_KEY = "geo:notifications";
+const DAILY_REMINDER_KEY = "geo:notif:lastReminder";
 
-async function getMessagingModule() {
-  if (messaging) return messaging;
+const DEFAULT_PREFS = {
+  streakReminder: true,
+  dailyChallenge: true,
+  newAchievement: true,
+  reminderTime: "18:30", // HH:MM (local time)
+};
+
+function loadPrefs() {
   try {
-    const { getMessaging, getToken, onMessage } = await import("firebase/messaging");
-    const { initializeApp, getApps } = await import("firebase/app");
+    const raw = localStorage.getItem(PREF_KEY);
+    if (raw) return { ...DEFAULT_PREFS, ...JSON.parse(raw) };
+  } catch {}
+  return { ...DEFAULT_PREFS };
+}
 
-    const hasConfig = !!(
-      import.meta.env.VITE_FIREBASE_API_KEY &&
-      import.meta.env.VITE_FIREBASE_PROJECT_ID
-    );
-    if (!hasConfig) return null;
-
-    let app = getApps()[0];
-    if (!app) {
-      app = initializeApp({
-        apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-        authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-        projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-        appId: import.meta.env.VITE_FIREBASE_APP_ID,
-        messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || undefined,
-      });
-    }
-    messaging = { instance: getMessaging(app), getToken, onMessage };
-    return messaging;
-  } catch {
-    return null;
-  }
+function savePrefs(p) {
+  try { localStorage.setItem(PREF_KEY, JSON.stringify(p)); } catch {}
 }
 
 export const NotificationService = {
-  _enabled: null,
-
   isSupported() {
-    return "Notification" in window && "serviceWorker" in navigator;
+    return typeof window !== "undefined" && "Notification" in window;
   },
 
-  isEnabled() {
-    if (this._enabled === null) {
-      this._enabled = localStorage.getItem(PERM_KEY) === "granted";
-    }
-    return this._enabled;
+  permission() {
+    if (!this.isSupported()) return "unsupported";
+    return Notification.permission;
   },
 
-  async requestPermission() {
-    if (!this.isSupported()) return false;
-
-    const permission = await Notification.requestPermission();
-    const granted = permission === "granted";
-    localStorage.setItem(PERM_KEY, permission);
-    this._enabled = granted;
-
-    if (granted) {
-      await this._registerToken();
-    }
-    return granted;
-  },
-
-  async _registerToken() {
+  async request() {
+    if (!this.isSupported()) return "unsupported";
+    if (Notification.permission === "granted") return "granted";
+    if (Notification.permission === "denied") return "denied";
     try {
-      const mod = await getMessagingModule();
-      if (!mod) return null;
-
-      const vapidKey = import.meta.env.VITE_FIREBASE_VAPID_KEY;
-      if (!vapidKey) {
-        if (import.meta.env.DEV) console.warn("[Notifications] Missing VITE_FIREBASE_VAPID_KEY");
-        return null;
-      }
-
-      const token = await mod.getToken(mod.instance, { vapidKey });
-      localStorage.setItem(TOKEN_KEY, token);
-      return token;
-    } catch (err) {
-      if (import.meta.env.DEV) console.warn("[Notifications] Token registration failed:", err);
-      return null;
+      const r = await Notification.requestPermission();
+      return r;
+    } catch {
+      return "denied";
     }
   },
 
-  async listenForeground(callback) {
+  getPrefs() { return loadPrefs(); },
+
+  setPrefs(updates) {
+    const next = { ...loadPrefs(), ...updates };
+    savePrefs(next);
+    return next;
+  },
+
+  /** Show a notification immediately (if permission granted). */
+  async show(title, options = {}) {
+    if (!this.isSupported() || Notification.permission !== "granted") return false;
     try {
-      const mod = await getMessagingModule();
-      if (!mod) return;
-
-      mod.onMessage(mod.instance, (payload) => {
-        const { title, body, icon } = payload.notification || {};
-        if (callback) callback(payload);
-
-        if (title && this.isSupported()) {
-          new Notification(title, {
-            body: body || "",
-            icon: icon || "/icons/icon-192x192.png",
-            badge: "/icons/icon-72x72.png",
+      // Prefer SW notifications (work even when tab is closed)
+      if ("serviceWorker" in navigator) {
+        const reg = await navigator.serviceWorker.getRegistration();
+        if (reg) {
+          await reg.showNotification(title, {
+            icon: "/icon-192.png",
+            badge: "/icon-192.png",
+            ...options,
           });
+          return true;
         }
-      });
-    } catch {}
-  },
-
-  sendLocal({ title, body, icon = "🎮", tag = "geo-local" }) {
-    if (!this.isSupported() || Notification.permission !== "granted") return;
-    try {
-      new Notification(title, { body, icon: "/icons/icon-192x192.png", tag, badge: "/icons/icon-72x72.png" });
-    } catch {}
-  },
-
-  scheduleStreakReminder(lang = "el") {
-    if (!this.isEnabled()) return;
-    const hour = new Date().getHours();
-    if (hour >= 18 && hour <= 20) {
-      this.sendLocal({
-        title: lang === "el" ? "Μην χάσεις το σερί σου! 🔥" : "Don't lose your streak! 🔥",
-        body: lang === "el" ? "Παίξε ένα παιχνίδι σήμερα για να κρατήσεις το σερί σου" : "Play a game today to keep your streak going",
-        tag: "streak-reminder",
-      });
+      }
+      new Notification(title, { icon: "/icon-192.png", ...options });
+      return true;
+    } catch {
+      return false;
     }
   },
 
-  scheduleMissionReminder(lang = "el", pending = 0) {
-    if (!this.isEnabled() || pending === 0) return;
-    this.sendLocal({
-      title: lang === "el" ? `${pending} αποστολές σε περιμένουν! 🎯` : `${pending} missions waiting! 🎯`,
-      body: lang === "el" ? "Ολοκλήρωσε τις ημερήσιες αποστολές σου" : "Complete your daily missions",
-      tag: "mission-reminder",
-    });
-  },
+  /**
+   * Daily reminder: if user hasn't been reminded today and current time
+   * matches preference, show notification.
+   * Call this on app start + on visibility change.
+   */
+  async maybeRunDailyReminder() {
+    if (!this.isSupported() || Notification.permission !== "granted") return;
+    const prefs = loadPrefs();
+    if (!prefs.streakReminder && !prefs.dailyChallenge) return;
 
-  getToken() {
-    return localStorage.getItem(TOKEN_KEY);
-  },
+    const today = new Date().toISOString().slice(0, 10);
+    let last = "";
+    try { last = localStorage.getItem(DAILY_REMINDER_KEY) || ""; } catch {}
+    if (last === today) return;
 
-  async disable() {
-    this._enabled = false;
-    localStorage.setItem(PERM_KEY, "denied");
-    localStorage.removeItem(TOKEN_KEY);
+    // Check time window: only fire if current time >= reminder time
+    const [hh, mm] = (prefs.reminderTime || "18:30").split(":").map((x) => parseInt(x, 10) || 0);
+    const now = new Date();
+    const remToday = new Date();
+    remToday.setHours(hh, mm, 0, 0);
+    if (now < remToday) return;
+
+    const lang = (typeof navigator !== "undefined" && navigator.language?.startsWith("el")) ? "el" : "en";
+    const messages = lang === "el"
+      ? [
+          { title: "🔥 Μην χάσεις το streak σου!", body: "Παίξε λίγο σήμερα για να συνεχίσεις τη σειρά σου." },
+          { title: "🎯 Ημερήσια Πρόκληση", body: "Έχει νέα πρόκληση να σε περιμένει! Πάμε;" },
+          { title: "✨ Ώρα για μάθηση", body: "5 λεπτά παιχνιδιού = 1 βήμα πιο κοντά σε νέο επίτευγμα!" },
+        ]
+      : [
+          { title: "🔥 Don't lose your streak!", body: "Play a bit today to keep your streak going." },
+          { title: "🎯 Daily Challenge", body: "A new challenge is waiting for you. Let's go!" },
+          { title: "✨ Time to learn", body: "5 mins of play = 1 step closer to a new achievement!" },
+        ];
+    const m = messages[Math.floor(Math.random() * messages.length)];
+    await this.show(m.title, { body: m.body, tag: "daily-reminder", data: { url: "/daily" } });
+    try { localStorage.setItem(DAILY_REMINDER_KEY, today); } catch {}
   },
 };
+
+// Auto-init: check on visibility / online / start
+if (typeof window !== "undefined") {
+  let _booted = false;
+  const boot = () => {
+    if (_booted) return;
+    _booted = true;
+    setTimeout(() => NotificationService.maybeRunDailyReminder(), 4000);
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") {
+        NotificationService.maybeRunDailyReminder();
+      }
+    });
+  };
+  if (document.readyState === "complete") boot();
+  else window.addEventListener("load", boot);
+}

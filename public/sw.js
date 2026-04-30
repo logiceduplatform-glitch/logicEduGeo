@@ -1,6 +1,6 @@
-const CACHE_NAME = "edu-platform-v6";
-const RUNTIME_CACHE = "edu-runtime-v6";
-const GAME_CACHE = "edu-games-v3";
+const CACHE_NAME = "edu-platform-v7";
+const RUNTIME_CACHE = "edu-runtime-v7";
+const GAME_CACHE = "edu-games-v4";
 
 const STATIC_ASSETS = [
   "/",
@@ -129,6 +129,40 @@ self.addEventListener("message", (event) => {
   if (event.data === "PRECACHE_GAMES") {
     event.waitUntil(precachePopularGames());
   }
+});
+
+// Click handler for notifications: focus app or open URL
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  const targetUrl = (event.notification.data && event.notification.data.url) || "/";
+  event.waitUntil(
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((clientList) => {
+      for (const client of clientList) {
+        if ("focus" in client) {
+          client.navigate?.(targetUrl);
+          return client.focus();
+        }
+      }
+      if (self.clients.openWindow) {
+        return self.clients.openWindow(targetUrl);
+      }
+    })
+  );
+});
+
+// Optional: handle real push events (works once you add server VAPID).
+self.addEventListener("push", (event) => {
+  let data = {};
+  try { data = event.data ? event.data.json() : {}; } catch { data = { title: "GeoLo", body: event.data?.text() || "" }; }
+  const title = data.title || "GeoLo Platform";
+  const options = {
+    body: data.body || "",
+    icon: "/icon-192.png",
+    badge: "/icon-192.png",
+    data: data.data || { url: data.url || "/" },
+    tag: data.tag,
+  };
+  event.waitUntil(self.registration.showNotification(title, options));
 });
 
 async function precachePopularGames() {

@@ -234,9 +234,12 @@ export default function Navbar() {
     if (userRole === "teacher" && !teacherInChildMode) {
       return [
         { label: isEl ? "Dashboard" : "Dashboard", fullLabel: isEl ? "Πίνακας Δασκάλου" : "Teacher Dashboard", href: "/teacher-dashboard", isRoute: true, icon: "📚" },
-        { label: isEl ? "Παιχνίδια" : "Games", fullLabel: isEl ? "Παιχνίδια" : "Games", href: "#categories", icon: "🎮" },
+        { label: isEl ? "AI Μάθημα" : "AI Lesson", fullLabel: isEl ? "AI Δημιουργός Μαθήματος" : "AI Lesson Generator", href: "/teacher/ai-lesson", isRoute: true, icon: "🤖" },
+        { label: isEl ? "Πακέτα" : "Packs", fullLabel: isEl ? "Έτοιμα Πακέτα Μαθημάτων" : "Curriculum Packs", href: "/curriculum", isRoute: true, icon: "📦" },
+        { label: isEl ? "Σχολείο" : "School", fullLabel: isEl ? "Διαχείριση Σχολείου" : "School Admin", href: "/school-admin", isRoute: true, icon: "🏫" },
         { label: isEl ? "Live Quiz" : "Live Quiz", fullLabel: isEl ? "Live Quiz" : "Live Quiz", href: "/live-quiz", isRoute: true, icon: "🎮" },
         { label: isEl ? "Φύλλα" : "Worksheets", fullLabel: isEl ? "Φύλλα Εργασίας" : "Worksheets", href: "/worksheets", isRoute: true, icon: "🖨️" },
+        { label: isEl ? "Affiliate" : "Affiliate", fullLabel: isEl ? "Affiliate Πρόγραμμα" : "Affiliate Program", href: "/affiliate", isRoute: true, icon: "💼" },
       ];
     }
     if (userRole === "parent" && !activeChild) {
@@ -256,16 +259,23 @@ export default function Navbar() {
       { label: isEl ? "AI" : "AI", fullLabel: isEl ? "Study Buddy AI" : "Study Buddy AI", href: "/study-buddy", isRoute: true, icon: "🤖" },
 
       // 🎮 Παίξε
+      { label: isEl ? "Ημερήσιες Αποστολές" : "Daily Quests", fullLabel: isEl ? "Ημερήσιες Αποστολές" : "Daily Quests", href: "/quests", isRoute: true, icon: "🎯", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play" },
       { label: isEl ? "Χάρτης Περιπέτειας" : "Adventure Map", fullLabel: isEl ? "Χάρτης Περιπέτειας" : "Adventure Map", href: "/adventure", isRoute: true, icon: "🗺️", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play" },
       { label: isEl ? "Battle Royale" : "Battle Royale", fullLabel: isEl ? "Battle Royale" : "Battle Royale", href: "/battle", isRoute: true, icon: "⚔️", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play" },
       { label: isEl ? "Speedrun" : "Speedrun", fullLabel: isEl ? "Speedrun" : "Speedrun", href: "/speedrun", isRoute: true, icon: "⚡", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play" },
       { label: isEl ? "Το Pet μου" : "My Pet", fullLabel: isEl ? "Το Pet μου" : "My Pet", href: "/pet", isRoute: true, icon: "🐾", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play" },
+      { label: isEl ? "Διαδραστικές Περιπέτειες" : "Interactive Adventures", fullLabel: isEl ? "Διαδραστικές Περιπέτειες" : "Interactive Adventures", href: "/adventures", isRoute: true, icon: "📖", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play" },
+      { label: isEl ? "Φωνητικό Quiz" : "Voice Quiz", fullLabel: isEl ? "Φωνητικό Quiz" : "Voice Quiz", href: "/voice-quiz", isRoute: true, icon: "🎤", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play" },
+      { label: isEl ? "Mini-Games" : "Mini-Games", fullLabel: isEl ? "Καθημερινά Mini-Games" : "Daily Mini-Games", href: "/mini-games", isRoute: true, icon: "🎲", group: "more", section: isEl ? "🎮 Παίξε" : "🎮 Play" },
 
       // 🏆 Συναγωνισμός
+      { label: isEl ? "Online Battle" : "Online Battle", fullLabel: isEl ? "Online Quiz Battle" : "Online Quiz Battle", href: "/online-battle", isRoute: true, icon: "⚔️", group: "more", section: isEl ? "🏆 Συναγωνισμός" : "🏆 Compete" },
+      { label: isEl ? "Συμμαχίες" : "Guilds", fullLabel: isEl ? "Συμμαχίες (Crews)" : "Guilds (Crews)", href: "/guilds", isRoute: true, icon: "🛡️", group: "more", section: isEl ? "🏆 Συναγωνισμός" : "🏆 Compete" },
       { label: isEl ? "Events & Τουρνουά" : "Events & Tournaments", fullLabel: isEl ? "Events & Τουρνουά" : "Events & Tournaments", href: "/events", isRoute: true, icon: "🏆", group: "more", section: isEl ? "🏆 Συναγωνισμός" : "🏆 Compete" },
       { label: isEl ? "Παγκόσμια Κατάταξη" : "Global Leaderboard", fullLabel: isEl ? "Παγκόσμια Κατάταξη" : "Global Leaderboard", href: "/leaderboard", isRoute: true, icon: "🌍", group: "more", section: isEl ? "🏆 Συναγωνισμός" : "🏆 Compete" },
 
       // 📊 Πρόοδος
+      { label: isEl ? "Διαδρομή Μάθησης" : "Learning Path", fullLabel: isEl ? "Προσωπική Διαδρομή Μάθησης" : "Personalized Learning Path", href: "/learning-path", isRoute: true, icon: "🎯", group: "more", section: isEl ? "📊 Πρόοδος" : "📊 Progress" },
       { label: isEl ? "Trophy Room" : "Trophy Room", fullLabel: isEl ? "Trophy Room" : "Trophy Room", href: "/trophy-room", isRoute: true, icon: "🏆", group: "more", section: isEl ? "📊 Πρόοδος" : "📊 Progress" },
       { label: isEl ? "Mastery Tracker" : "Mastery Tracker", fullLabel: isEl ? "Mastery Tracker" : "Mastery Tracker", href: "/mastery", isRoute: true, icon: "🔥", group: "more", section: isEl ? "📊 Πρόοδος" : "📊 Progress" },
     ];
@@ -567,6 +577,24 @@ export default function Navbar() {
                   >
                     <span>⚙️</span>
                     {isEl ? "Προφίλ & Ρυθμίσεις" : "Profile & Settings"}
+                  </button>
+
+                  {user?.uid && (
+                    <button
+                      onClick={() => { setProfileOpen(false); navigate(`/u/${user.uid}`); }}
+                      className="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:text-purple-700 dark:hover:text-purple-400 transition-colors flex items-center gap-2"
+                    >
+                      <span>🌐</span>
+                      {isEl ? "Δημόσιο Προφίλ" : "Public Profile"}
+                    </button>
+                  )}
+
+                  <button
+                    onClick={() => { setProfileOpen(false); navigate("/music"); }}
+                    className="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:text-purple-700 dark:hover:text-purple-400 transition-colors flex items-center gap-2"
+                  >
+                    <span>🎶</span>
+                    {isEl ? "Μουσική & Ήχος" : "Music & Sound"}
                   </button>
 
                   <button
