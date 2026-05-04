@@ -246,6 +246,87 @@ export default function HomePage() {
         <FunZoneSection />
       </RevealSection>
 
+      {/* NEW GAMES BANNERS */}
+      <RevealSection>
+        <div className="max-w-6xl mx-auto px-4 py-6 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <a
+            href="/games"
+            className="block rounded-3xl p-6 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 text-white shadow-xl hover:shadow-2xl hover:scale-[1.01] transition-all"
+          >
+            <div className="text-sm font-bold uppercase tracking-wider opacity-90">
+              {lang === "el" ? "Νέα στην Kibloo" : "New on Kibloo"}
+            </div>
+            <h3 className="text-xl sm:text-2xl font-extrabold mt-1">
+              {lang === "el" ? "🎮 10 κλασικά παιχνίδια" : "🎮 10 classic games"}
+            </h3>
+            <div className="text-sm opacity-90 mt-1">Wordle · 2048 · Snake · Tetris · Tic-Tac-Toe...</div>
+            <span className="inline-block mt-3 px-3 py-1 bg-white/20 rounded-full font-bold text-sm">
+              {lang === "el" ? "Παίξε τώρα →" : "Play now →"}
+            </span>
+          </a>
+          <a
+            href="/games/educational"
+            className="block rounded-3xl p-6 bg-gradient-to-r from-emerald-500 via-teal-600 to-blue-600 text-white shadow-xl hover:shadow-2xl hover:scale-[1.01] transition-all"
+          >
+            <div className="text-sm font-bold uppercase tracking-wider opacity-90">
+              {lang === "el" ? "Μάθηση + Διασκέδαση" : "Learn + Play"}
+            </div>
+            <h3 className="text-xl sm:text-2xl font-extrabold mt-1">
+              {lang === "el" ? "🎓 16 εκπαιδευτικά παιχνίδια" : "🎓 16 educational games"}
+            </h3>
+            <div className="text-sm opacity-90 mt-1">Spelling · Math · Geography · Periodic Table...</div>
+            <span className="inline-block mt-3 px-3 py-1 bg-white/20 rounded-full font-bold text-sm">
+              {lang === "el" ? "Δες όλα →" : "See all →"}
+            </span>
+          </a>
+          <a
+            href="/games/creative"
+            className="block rounded-3xl p-6 bg-gradient-to-r from-pink-600 via-fuchsia-600 to-purple-700 text-white shadow-xl hover:shadow-2xl hover:scale-[1.01] transition-all"
+          >
+            <div className="text-sm font-bold uppercase tracking-wider opacity-90">
+              {lang === "el" ? "Δημιουργικότητα" : "Creativity"}
+            </div>
+            <h3 className="text-xl sm:text-2xl font-extrabold mt-1">
+              {lang === "el" ? "🎨 13 δημιουργικά παιχνίδια" : "🎨 13 creative games"}
+            </h3>
+            <div className="text-sm opacity-90 mt-1">Pixel Art · Beat Maker · Stop Motion...</div>
+            <span className="inline-block mt-3 px-3 py-1 bg-white/20 rounded-full font-bold text-sm">
+              {lang === "el" ? "Δημιούργησε →" : "Create →"}
+            </span>
+          </a>
+          <a
+            href="/games/multiplayer"
+            className="block rounded-3xl p-6 bg-gradient-to-r from-rose-500 via-red-600 to-orange-600 text-white shadow-xl hover:shadow-2xl hover:scale-[1.01] transition-all"
+          >
+            <div className="text-sm font-bold uppercase tracking-wider opacity-90">
+              {lang === "el" ? "Με φίλο" : "With a friend"}
+            </div>
+            <h3 className="text-xl sm:text-2xl font-extrabold mt-1">
+              {lang === "el" ? "🤝 Multiplayer 1v1" : "🤝 Multiplayer 1v1"}
+            </h3>
+            <div className="text-sm opacity-90 mt-1">Battle Quiz · Co-op Maze · Pictionary...</div>
+            <span className="inline-block mt-3 px-3 py-1 bg-white/20 rounded-full font-bold text-sm">
+              {lang === "el" ? "Παίξτε μαζί →" : "Play together →"}
+            </span>
+          </a>
+          <a
+            href="/games/action"
+            className="block rounded-3xl p-6 bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 text-white shadow-xl hover:shadow-2xl hover:scale-[1.01] transition-all"
+          >
+            <div className="text-sm font-bold uppercase tracking-wider opacity-90">
+              {lang === "el" ? "Δράση" : "Action"}
+            </div>
+            <h3 className="text-xl sm:text-2xl font-extrabold mt-1">
+              {lang === "el" ? "⚡ 8 παιχνίδια ταχύτητας" : "⚡ 8 reflex games"}
+            </h3>
+            <div className="text-sm opacity-90 mt-1">Reaction · Bubble Pop · Tap Dance...</div>
+            <span className="inline-block mt-3 px-3 py-1 bg-white/20 rounded-full font-bold text-sm">
+              {lang === "el" ? "Δοκίμασε →" : "Try →"}
+            </span>
+          </a>
+        </div>
+      </RevealSection>
+
       {/* FEATURES */}
       <RevealSection>
       <div id="features">

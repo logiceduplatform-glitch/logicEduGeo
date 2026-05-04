@@ -71,6 +71,73 @@ export const SEARCH_INDEX = [
   { id: "word-search",   icon: "🔤", path: "/play/adult-games?game=word-search",   category: "adult", title: { el: "Κρυπτόλεξο",        en: "Word Search" },     keywords: ["word", "search", "κρυπτόλεξο"] },
   { id: "minesweeper",   icon: "💣", path: "/play/adult-games?game=minesweeper",   category: "adult", title: { el: "Ναρκαλιευτής",      en: "Minesweeper" },     keywords: ["mines", "ναρκαλιευτής"] },
   { id: "memory-adult",  icon: "🧠", path: "/play/adult-games?game=memory",        category: "adult", title: { el: "Μνήμη Ενηλίκων",   en: "Memory Adults" },   keywords: ["memory", "μνήμη", "adult"] },
+
+  // Quick Wins (new arcade-style classics)
+  { id: "qw-showcase",   icon: "🎮", path: "/games",                               category: "game",  title: { el: "Νέα Παιχνίδια",     en: "New Games" },        keywords: ["new", "νέα", "arcade", "classics"] },
+  { id: "qw-wordle",     icon: "🟩", path: "/games/wordle",                        category: "game",  title: { el: "Wordle",            en: "Wordle" },           keywords: ["wordle", "λέξη", "5 letters"] },
+  { id: "qw-2048",       icon: "🔢", path: "/games/2048",                          category: "game",  title: { el: "2048",              en: "2048" },             keywords: ["2048", "merge", "tiles"] },
+  { id: "qw-snake",      icon: "🐍", path: "/games/snake",                         category: "game",  title: { el: "Snake",             en: "Snake" },            keywords: ["snake", "φίδι"] },
+  { id: "qw-tetris",     icon: "🟦", path: "/games/tetris",                        category: "game",  title: { el: "Tetris",            en: "Tetris" },           keywords: ["tetris", "blocks"] },
+  { id: "qw-ttt",        icon: "❌", path: "/games/tic-tac-toe",                   category: "game",  title: { el: "Τρίλιζα Online",    en: "Tic-Tac-Toe Online"}, keywords: ["tic-tac-toe", "τρίλιζα", "xo", "online"] },
+  { id: "qw-24",         icon: "🎯", path: "/games/24",                            category: "game",  title: { el: "24 Game",           en: "24 Game" },          keywords: ["24", "math", "puzzle"] },
+  { id: "qw-wsearch",    icon: "🔍", path: "/games/word-search",                   category: "game",  title: { el: "Κρυπτόλεξο (νέο)", en: "Word Search (new)"}, keywords: ["word", "search", "κρυπτόλεξο"] },
+  { id: "qw-whack",      icon: "🐹", path: "/games/whack",                         category: "game",  title: { el: "Whack-a-Mole",      en: "Whack-a-Mole" },     keywords: ["whack", "mole", "reflex"] },
+  { id: "qw-dots",       icon: "✏️", path: "/games/connect-dots",                  category: "game",  title: { el: "Ένωσε τις Τελείες", en: "Connect the Dots" }, keywords: ["dots", "connect", "draw"] },
+  { id: "qw-draw",       icon: "🎨", path: "/games/drawing",                       category: "game",  title: { el: "Καμβάς",            en: "Drawing Pad" },      keywords: ["draw", "paint", "canvas", "ζωγραφική"] },
+
+  // Educational Games
+  { id: "edu-show",      icon: "🎓", path: "/games/educational",                   category: "game",  title: { el: "Εκπαιδευτικά Παιχνίδια", en: "Educational Games" }, keywords: ["educational", "learn", "εκπαιδευτικά"] },
+  { id: "edu-spell",     icon: "🐝", path: "/games/spelling-bee",                  category: "game",  title: { el: "Spelling Bee",      en: "Spelling Bee" },     keywords: ["spelling", "voice", "ορθογραφία"] },
+  { id: "edu-time",      icon: "🕐", path: "/games/tell-time",                     category: "game",  title: { el: "Πες την Ώρα",       en: "Tell the Time" },    keywords: ["clock", "time", "ώρα", "ρολόι"] },
+  { id: "edu-money",     icon: "💶", path: "/games/money",                         category: "game",  title: { el: "Μέτρα Χρήματα",     en: "Money Counter" },    keywords: ["money", "coins", "χρήματα"] },
+  { id: "edu-times",     icon: "✖️", path: "/games/times-tables",                  category: "game",  title: { el: "Αγώνας Προπαίδειας", en: "Times Tables Race" }, keywords: ["multiplication", "tables", "προπαίδεια"] },
+  { id: "edu-map",       icon: "🇬🇷", path: "/games/map-greece",                    category: "game",  title: { el: "Χάρτης Ελλάδας",    en: "Map of Greece" },    keywords: ["map", "greece", "regions", "χάρτης"] },
+  { id: "edu-periodic",  icon: "🧪", path: "/games/periodic",                      category: "game",  title: { el: "Περιοδικός Πίνακας", en: "Periodic Table" },   keywords: ["chemistry", "elements", "χημεία"] },
+  { id: "edu-anatomy",   icon: "🫀", path: "/games/anatomy",                       category: "game",  title: { el: "Σώμα Ανθρώπου",     en: "Body Parts" },       keywords: ["anatomy", "body", "σώμα", "ανατομία"] },
+  { id: "edu-math",      icon: "⚡", path: "/games/math-sprint",                   category: "game",  title: { el: "Math Sprint",       en: "Math Sprint" },      keywords: ["math", "speed", "μαθηματικά"] },
+  { id: "edu-verbs",     icon: "📖", path: "/games/verbs",                         category: "game",  title: { el: "Κλίση Ρημάτων",    en: "Verb Conjugation" }, keywords: ["verb", "grammar", "ρήμα", "γραμματική"] },
+  { id: "edu-pquiz",     icon: "⚛️", path: "/games/periodic-quiz",                 category: "game",  title: { el: "Quiz Στοιχείων",    en: "Periodic Quiz" },    keywords: ["chemistry", "quiz", "elements"] },
+  { id: "edu-cap",       icon: "🌍", path: "/games/capitals",                      category: "game",  title: { el: "Πρωτεύουσες",       en: "Capitals" },         keywords: ["capitals", "geography", "γεωγραφία"] },
+  { id: "edu-history",   icon: "⏳", path: "/games/history-timeline",              category: "game",  title: { el: "Χρονογραμμή",       en: "History Timeline" }, keywords: ["history", "timeline", "ιστορία"] },
+  { id: "edu-code",      icon: "🤖", path: "/games/code-puzzles",                  category: "game",  title: { el: "Παζλ Κώδικα",      en: "Code Puzzles" },     keywords: ["code", "programming", "robot"] },
+  { id: "edu-logic",     icon: "🔌", path: "/games/logic-gates",                   category: "game",  title: { el: "Λογικές Πύλες",    en: "Logic Gates" },      keywords: ["logic", "AND", "OR", "XOR"] },
+  { id: "edu-frac",      icon: "🍕", path: "/games/fraction-pizza",                category: "game",  title: { el: "Πίτσα Κλασμάτων",  en: "Fraction Pizza" },   keywords: ["fractions", "pizza", "κλάσματα"] },
+  { id: "edu-music",     icon: "🎵", path: "/games/music-notes",                   category: "game",  title: { el: "Μουσικές Νότες",   en: "Music Notes" },      keywords: ["music", "notes", "μουσική"] },
+
+  // Creative & Wow Games
+  { id: "cr-show",       icon: "🎨", path: "/games/creative",                      category: "game",  title: { el: "Δημιουργικά Παιχνίδια", en: "Creative Games" }, keywords: ["creative", "wow", "δημιουργικά"] },
+  { id: "cr-story",      icon: "📖", path: "/games/story-builder",                 category: "game",  title: { el: "Φτιάξε Ιστορία",   en: "Story Builder" },     keywords: ["story", "build", "ιστορία"] },
+  { id: "cr-comic",      icon: "💬", path: "/games/comic-maker",                   category: "game",  title: { el: "Comic Maker",       en: "Comic Maker" },       keywords: ["comic", "panels", "κόμικ"] },
+  { id: "cr-composer",   icon: "🎼", path: "/games/music-composer",                category: "game",  title: { el: "Συνθέτης Μουσικής", en: "Music Composer" },   keywords: ["music", "compose", "σύνθεση"] },
+  { id: "cr-patterns",   icon: "🎨", path: "/games/patterns",                      category: "game",  title: { el: "Σχέδια & Μοτίβα",  en: "Pattern Designer" },  keywords: ["pattern", "symmetry", "μοτίβα"] },
+  { id: "cr-pixel",      icon: "🟦", path: "/games/pixel-art",                     category: "game",  title: { el: "Pixel Art",         en: "Pixel Art" },         keywords: ["pixel", "art", "8bit"] },
+  { id: "cr-madlibs",    icon: "🎭", path: "/games/mad-libs",                      category: "game",  title: { el: "Mad Libs",          en: "Mad Libs" },          keywords: ["madlibs", "fill", "story"] },
+  { id: "cr-anim",       icon: "🎬", path: "/games/animation",                     category: "game",  title: { el: "Animation Studio",  en: "Animation Studio" },  keywords: ["animation", "frames", "animation"] },
+  { id: "cr-emoji",      icon: "🎭", path: "/games/emoji-story",                   category: "game",  title: { el: "Ιστορία Emoji",     en: "Emoji Story" },       keywords: ["emoji", "story"] },
+  { id: "cr-voice",      icon: "🎤", path: "/games/voice-recorder",                category: "game",  title: { el: "Φωνητική Εγγραφή", en: "Voice Recorder" },     keywords: ["voice", "record", "audio"] },
+  { id: "cr-stopmot",    icon: "🎥", path: "/games/stop-motion",                   category: "game",  title: { el: "Stop Motion",       en: "Stop Motion" },       keywords: ["stop", "motion", "animation"] },
+  { id: "cr-block",      icon: "🧩", path: "/games/block-coding",                  category: "game",  title: { el: "Block Coding",      en: "Block Coding" },      keywords: ["block", "coding", "scratch"] },
+  { id: "cr-robot",      icon: "🤖", path: "/games/robot-maze",                    category: "game",  title: { el: "Λαβύρινθος Ρομπότ", en: "Robot Maze" },        keywords: ["robot", "maze", "λαβύρινθος"] },
+  { id: "cr-beat",       icon: "🎚️", path: "/games/beat-maker",                    category: "game",  title: { el: "Beat Maker",        en: "Beat Maker" },        keywords: ["beat", "drums", "music"] },
+
+  // Multiplayer
+  { id: "mp-show",       icon: "🤝", path: "/games/multiplayer",                   category: "game",  title: { el: "Παιχνίδια Πολλαπλών", en: "Multiplayer Games" }, keywords: ["multiplayer", "1v1", "πολλαπλών"] },
+  { id: "mp-battle",     icon: "⚔️", path: "/games/battle-quiz",                   category: "game",  title: { el: "Battle Quiz",       en: "Battle Quiz" },       keywords: ["battle", "quiz", "1v1"] },
+  { id: "mp-coop",       icon: "🧭", path: "/games/coop-maze",                     category: "game",  title: { el: "Co-op Λαβύρινθος",  en: "Co-op Maze" },        keywords: ["coop", "maze", "συνεργασία"] },
+  { id: "mp-word",       icon: "🔤", path: "/games/word-battle",                   category: "game",  title: { el: "Word Battle",       en: "Word Battle" },       keywords: ["word", "battle", "λέξεις"] },
+  { id: "mp-mduel",      icon: "➗", path: "/games/math-duel",                     category: "game",  title: { el: "Math Duel",         en: "Math Duel" },         keywords: ["math", "duel", "μαθηματικά"] },
+  { id: "mp-pict",       icon: "🖌️", path: "/games/pictionary",                    category: "game",  title: { el: "Pictionary",         en: "Pictionary" },        keywords: ["pictionary", "draw", "guess"] },
+
+  // Action / Reflex
+  { id: "ac-show",       icon: "⚡", path: "/games/action",                        category: "game",  title: { el: "Παιχνίδια Δράσης",  en: "Action Games" },      keywords: ["action", "reflex", "speed", "δράση"] },
+  { id: "ac-react",      icon: "⚡", path: "/games/reaction",                      category: "game",  title: { el: "Χρόνος Αντίδρασης", en: "Reaction Time" },     keywords: ["reaction", "speed", "αντίδραση"] },
+  { id: "ac-color",      icon: "🌈", path: "/games/color-match",                   category: "game",  title: { el: "Ταίριαξε Χρώμα",    en: "Color Match" },       keywords: ["stroop", "color", "χρώμα"] },
+  { id: "ac-fall",       icon: "🔡", path: "/games/falling-letters",               category: "game",  title: { el: "Πέφτουν Γράμματα",  en: "Falling Letters" },   keywords: ["typing", "letters", "γράμματα"] },
+  { id: "ac-bubble",     icon: "🫧", path: "/games/bubble-pop",                    category: "game",  title: { el: "Σκάσε Φούσκες",     en: "Bubble Pop" },        keywords: ["bubble", "pop", "φούσκες"] },
+  { id: "ac-memseq",     icon: "🧠", path: "/games/memory-sequence",               category: "game",  title: { el: "Memory Sequence",   en: "Memory Sequence" },   keywords: ["simon", "memory", "μνήμη"] },
+  { id: "ac-qmath",      icon: "🧮", path: "/games/quick-math",                    category: "game",  title: { el: "Quick Math",        en: "Quick Math" },        keywords: ["math", "quick", "true", "false"] },
+  { id: "ac-speed",      icon: "📚", path: "/games/speed-reading",                 category: "game",  title: { el: "Γρήγορη Ανάγνωση", en: "Speed Reading" },      keywords: ["reading", "speed", "ανάγνωση"] },
+  { id: "ac-tap",        icon: "🎮", path: "/games/tap-dance",                     category: "game",  title: { el: "Tap Dance",         en: "Tap Dance" },         keywords: ["rhythm", "tap", "ρυθμός"] },
 ];
 
 const STOP_WORDS = ["the", "a", "an", "to", "of", "in", "on", "για", "και", "το", "η", "ο"];

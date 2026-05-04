@@ -339,6 +339,19 @@ service cloud.firestore {
                     && (resource.data.hostUid == request.auth.uid || isAdmin());
     }
 
+    // Tic-Tac-Toe online matches.
+    match /ticTacToe/{matchId} {
+      allow read: if true;
+      allow create: if request.auth != null
+                    && request.resource.data.xUid == request.auth.uid;
+      allow update: if request.auth != null
+                    && (resource.data.xUid == request.auth.uid
+                        || resource.data.oUid == request.auth.uid
+                        || resource.data.oUid == null /* joining as O */);
+      allow delete: if request.auth != null
+                    && (resource.data.xUid == request.auth.uid || isAdmin());
+    }
+
     // User feedback (NPS-style 1-5 + optional comment).
     // Anyone (incl. anonymous) can submit; only admins can read/manage.
     match /feedback/{feedbackId} {
