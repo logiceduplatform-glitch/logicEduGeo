@@ -148,6 +148,77 @@ export const AffiliateService = {
     return { code };
   },
 
+  /**
+   * Public leaderboard of top affiliates. We expose only display-name +
+   * referrals so we don't leak commission amounts.
+   */
+  async getLeaderboard(topN = 20) {
+    try {
+      const q = query(
+        collection(db, AFFILIATES),
+        orderBy("totalReferrals", "desc"),
+        limit(topN),
+      );
+      const snap = await getDocs(q);
+      return snap.docs.map((d, i) => {
+        const data = d.data();
+        return {
+          rank: i + 1,
+          uid: d.id,
+          code: data.code,
+          referrals: data.totalReferrals || 0,
+          // displayName/avatar should come from publicProfiles separately
+        };
+      });
+    } catch {
+      return [];
+    }
+  },
+
+  /**
+   * Pre-formatted share copy in EL/EN. The link is appended automatically.
+   * Returns { subject, body } suitable for mailto: / WhatsApp / Twitter.
+   */
+  buildShareCopy({ link, lang = "el", channel = "generic" }) {
+    const isEl = lang === "el";
+
+    const templates = {
+      generic: {
+        el: {
+          subject: "Δες την εκπαιδευτική πλατφόρμα που χρησιμοποιώ",
+          body: `Έχω δοκιμάσει την Kibloo με τα παιδιά μου και είναι φανταστική: 350+ εκπαιδευτικά παιχνίδια χωρίς διαφημίσεις. Δοκίμασέ τη δωρεάν με το link μου: ${link}`,
+        },
+        en: {
+          subject: "The educational platform my kids love",
+          body: `I've been using Kibloo with my kids — 350+ educational games, no ads. Try it free with my link: ${link}`,
+        },
+      },
+      teacher: {
+        el: {
+          subject: "Πρόταση εκπαιδευτικού εργαλείου",
+          body: `Συνάδελφε, χρησιμοποιώ την Kibloo στην τάξη μου εδώ και μήνες — δωρεάν εργαλεία διαχείρισης τάξης + 350+ έτοιμα quiz. Σύστημά μου: ${link}`,
+        },
+        en: {
+          subject: "Educational tool recommendation",
+          body: `Fellow educator — I've been using Kibloo in my classroom for months. Free class management tools + 350+ ready quizzes. My link: ${link}`,
+        },
+      },
+      twitter: {
+        el: {
+          subject: "",
+          body: `📚 Δωρεάν εκπαιδευτικά παιχνίδια για παιδιά 2-12. Δοκίμασα την @kibloo και τα παιδιά την λατρεύουν. ${link} #εκπαίδευση #παιδιά`,
+        },
+        en: {
+          subject: "",
+          body: `📚 Free educational games for kids 2-12. Tried @kibloo and my kids love it. ${link} #edtech #kids`,
+        },
+      },
+    };
+
+    const tpl = templates[channel] || templates.generic;
+    return isEl ? tpl.el : tpl.en;
+  },
+
   // ── Constants ─────────────────────────────────────────────────────────
   COMMISSION_RATE,
   PRICE_BY_PLAN,

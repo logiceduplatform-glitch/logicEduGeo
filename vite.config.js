@@ -16,6 +16,25 @@ export default defineConfig({
   },
   build: {
     chunkSizeWarningLimit: 600,
+    // Exclude on-demand-only chunks from <link rel="modulepreload"> hints
+    // so they aren't fetched at page load. They will still load on demand
+    // when their dynamic import runs.
+    modulePreload: {
+      polyfill: true,
+      resolveDependencies: (filename, deps) => {
+        return deps.filter(
+          (d) =>
+            !d.includes("vendor-html2pdf") &&
+            !d.includes("vendor-charts") &&
+            !d.includes("vendor-chess") &&
+            !d.includes("vendor-qrcode") &&
+            !d.includes("page-admin") &&
+            !d.includes("page-teacher") &&
+            !d.includes("page-parent") &&
+            !d.includes("data-"),
+        );
+      },
+    },
     rollupOptions: {
       output: {
         manualChunks(id) {

@@ -122,7 +122,7 @@ export default function HomePage() {
                 <span className="text-slate-800 dark:text-white font-bold text-sm block">
                   {t(cat.key, cat.key)}
                 </span>
-                <span className="text-xs text-slate-400 dark:text-slate-500 mt-0.5 block">
+                <span className="text-xs text-slate-600 dark:text-slate-300 mt-0.5 block">
                   {cat.desc[isEl ? "el" : "en"]}
                 </span>
               </div>

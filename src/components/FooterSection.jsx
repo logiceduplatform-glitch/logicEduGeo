@@ -29,9 +29,9 @@ export default function FooterSection({ t }) {
 
           {/* Links */}
           <div>
-            <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-3">
+            <h2 className="text-sm font-semibold text-white uppercase tracking-wider mb-3">
               {isEl ? "Πλοήγηση" : "Navigate"}
-            </h4>
+            </h2>
             <ul className="space-y-2 text-sm">
               <li><a href="/#categories" className="hover:text-white transition-colors">{isEl ? "Κατηγορίες" : "Categories"}</a></li>
               <li><a href="/#features" className="hover:text-white transition-colors">{isEl ? "Χαρακτηριστικά" : "Features"}</a></li>
@@ -50,10 +50,10 @@ export default function FooterSection({ t }) {
 
           {/* Newsletter + Contact & Social */}
           <div>
-            <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-3">
+            <h2 className="text-sm font-semibold text-white uppercase tracking-wider mb-3">
               {isEl ? "Μείνε ενημερωμένος" : "Stay updated"}
-            </h4>
-            <p className="text-xs text-slate-500 mb-3">
+            </h2>
+            <p className="text-xs text-slate-300 mb-3">
               {isEl ? "Νέα παιχνίδια, συμβουλές & προσφορές στο inbox σου." : "New games, tips & offers in your inbox."}
             </p>
             <div className="mb-5">

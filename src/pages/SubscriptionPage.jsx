@@ -50,7 +50,12 @@ const T = {
       "Προτεραιότητα υποστήριξης",
     ],
     popular: "Δημοφιλές",
-    guarantee: "7 ημέρες δωρεάν δοκιμή. Ακύρωσε οποτεδήποτε.",
+    guarantee: "14 ημέρες δωρεάν δοκιμή. Ακύρωσε οποτεδήποτε.",
+    trialBanner: "🎁 Δοκίμασε Premium δωρεάν για 14 ημέρες — χωρίς κάρτα!",
+    startTrial: "Ξεκίνα δωρεάν δοκιμή",
+    trialActive: "✨ Premium Trial — απομένουν {n} ημέρες",
+    trialEnded: "Η δοκιμή έληξε. Αναβάθμισε για να συνεχίσεις!",
+    trialStarted: "🎉 Η δοκιμή ξεκίνησε! Έχεις 14 ημέρες πλήρους πρόσβασης.",
     successTitle: "Η πληρωμή ολοκληρώθηκε!",
     successMsg: "Η συνδρομή σου ενεργοποιήθηκε. Απόλαυσε πλήρη πρόσβαση!",
     cancelledTitle: "Η πληρωμή ακυρώθηκε",
@@ -100,7 +105,12 @@ const T = {
       "Priority support",
     ],
     popular: "Popular",
-    guarantee: "7-day free trial. Cancel anytime.",
+    guarantee: "14-day free trial. Cancel anytime.",
+    trialBanner: "🎁 Try Premium free for 14 days — no card required!",
+    startTrial: "Start free trial",
+    trialActive: "✨ Premium Trial — {n} days left",
+    trialEnded: "Your trial ended. Upgrade to keep premium access!",
+    trialStarted: "🎉 Trial started! You have 14 days of full access.",
     successTitle: "Payment successful!",
     successMsg: "Your subscription is now active. Enjoy full access!",
     cancelledTitle: "Payment cancelled",
@@ -121,7 +131,20 @@ export default function SubscriptionPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { lang } = useContext(LanguageContext);
   const { user } = useContext(AuthContext);
-  const { tier, isPremium, startCheckout, startPortalSession, unsubscribe, loading, checkoutError } = useSubscription();
+  const {
+    tier,
+    isPremium,
+    isTrialing,
+    trialDaysLeft,
+    trialEnded,
+    canStartTrial,
+    startTrial,
+    startCheckout,
+    startPortalSession,
+    unsubscribe,
+    loading,
+    checkoutError,
+  } = useSubscription();
   const isEl = lang === "el";
   const l = T[lang] || T.en;
 
@@ -292,7 +315,7 @@ export default function SubscriptionPage() {
             <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-800 dark:text-white mb-3">
               {l.subtitle}
             </h1>
-            {isPremium && (
+            {isPremium && !isTrialing && (
               <p className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-sm font-medium">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
@@ -300,7 +323,35 @@ export default function SubscriptionPage() {
                 {l.current}: {tier === "family" ? l.family : l.premium}
               </p>
             )}
+            {isTrialing && (
+              <p className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-sm font-bold">
+                {l.trialActive.replace("{n}", String(trialDaysLeft))}
+              </p>
+            )}
+            {trialEnded && tier === "free" && (
+              <p className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-rose-100 dark:bg-rose-900/40 text-rose-700 dark:text-rose-300 text-sm font-medium">
+                {l.trialEnded}
+              </p>
+            )}
           </div>
+
+          {/* Free trial CTA */}
+          {user && canStartTrial && tier === "free" && !isTrialing && !trialEnded && (
+            <div className="mb-8 p-5 rounded-2xl bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 border-2 border-purple-300 dark:border-purple-700/50 text-center">
+              <p className="text-base sm:text-lg font-bold text-slate-800 dark:text-slate-100 mb-3">
+                {l.trialBanner}
+              </p>
+              <button
+                onClick={async () => {
+                  const ok = await startTrial();
+                  if (ok) alert(l.trialStarted);
+                }}
+                className="px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold hover:from-purple-700 hover:to-pink-700 transition-all shadow-lg hover:shadow-xl active:scale-95"
+              >
+                {l.startTrial}
+              </button>
+            </div>
+          )}
 
           {/* Monthly / Yearly toggle */}
           <div className="flex justify-center mb-10">

@@ -13,6 +13,9 @@ import AdminModeration from "../../components/admin/AdminModeration";
 import AdminSubscriptions from "../../components/admin/AdminSubscriptions";
 import AdminSystem from "../../components/admin/AdminSystem";
 import AdminLogs from "../../components/admin/AdminLogs";
+import AdminErrorReports from "../../components/admin/AdminErrorReports";
+import AdminEmailQueue from "../../components/admin/AdminEmailQueue";
+import AdminPush from "../../components/admin/AdminPush";
 
 const T = {
   el: {
@@ -28,6 +31,9 @@ const T = {
     subs: "Subscriptions",
     system: "Σύστημα",
     logs: "Logs",
+    errors: "Σφάλματα",
+    emails: "Emails",
+    push: "Push",
   },
   en: {
     title: "🛠️ Admin Dashboard",
@@ -42,6 +48,9 @@ const T = {
     subs: "Subscriptions",
     system: "System",
     logs: "Logs",
+    errors: "Errors",
+    emails: "Emails",
+    push: "Push",
   },
 };
 
@@ -55,6 +64,9 @@ const TABS = [
   { id: "subs",        icon: "💰", key: "subs",        Comp: AdminSubscriptions },
   { id: "system",      icon: "⚙️", key: "system",      Comp: AdminSystem },
   { id: "logs",        icon: "📋", key: "logs",        Comp: AdminLogs },
+  { id: "errors",      icon: "🐞", key: "errors",      Comp: AdminErrorReports },
+  { id: "emails",      icon: "📧", key: "emails",      Comp: AdminEmailQueue },
+  { id: "push",        icon: "🔔", key: "push",        Comp: AdminPush },
 ];
 
 export default function AdminDashboard() {

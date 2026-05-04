@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LanguageContext } from "../i18n/LanguageContext";
 import { ProfileService } from "../services/ProfileService";
+import { useExperiment, ABTestService } from "../services/ABTestService";
 import {
   ageToQuizRoute,
   adultObjectiveRoutes,
@@ -142,6 +143,10 @@ export default function HeroSection({ t, loginWithGoogle, beginGuest, guest, use
               </button>
             </div>
           ) : (
+            <GuestCTAs navigate={navigate} t={t} isEl={isEl} />
+          )}
+          {/* legacy code path retained for reference; unreachable */}
+          {false && (
             <div className="flex flex-col sm:flex-row gap-3 mt-2">
               <button
                 onClick={() => navigate("/auth?mode=register")}
@@ -220,5 +225,83 @@ export default function HeroSection({ t, loginWithGoogle, beginGuest, guest, use
         </div>
       </div>
     </section>
+  );
+}
+
+/**
+ * A/B-tested guest CTA block. Three variants:
+ *   - control: "Sign Up" + "Log in" + "Try as guest"
+ *   - urgency: "Start free 14-day trial →" prominent
+ *   - benefit: "Unlock 350+ games" + secondary buttons
+ *
+ * Conversion event: ABTestService.trackConversion("hero_cta_v1", "signup_click")
+ */
+function GuestCTAs({ navigate, t, isEl }) {
+  const variant = useExperiment("hero_cta_v1", ["control", "urgency", "benefit"]);
+
+  const handleSignup = () => {
+    ABTestService.trackConversion("hero_cta_v1", "signup_click");
+    navigate("/auth?mode=register");
+  };
+  const handleLogin = () => navigate("/auth");
+  const handleGuest = () => {
+    ABTestService.trackConversion("hero_cta_v1", "guest_click");
+    navigate("/guest-setup");
+  };
+
+  if (variant === "urgency") {
+    return (
+      <div className="flex flex-col sm:flex-row gap-3 mt-2" data-ab-variant="urgency">
+        <button
+          onClick={handleSignup}
+          className="group px-8 py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-rose-500 text-white font-bold text-lg hover:from-amber-600 hover:to-rose-600 shadow-xl shadow-rose-300/40 hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300 active:scale-95"
+        >
+          {isEl ? "🎁 Δοκίμασε δωρεάν 14 ημέρες" : "🎁 Start free 14-day trial"}
+          <span className="inline-block ml-2 group-hover:translate-x-1 transition-transform">&rarr;</span>
+        </button>
+        <button onClick={handleLogin} className="px-8 py-4 rounded-2xl border-2 border-purple-200 dark:border-purple-600 text-purple-700 dark:text-purple-300 font-semibold hover:border-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/30 transition-all duration-300">
+          {t("logIn", "Log in")}
+        </button>
+        <button onClick={handleGuest} className="px-8 py-4 rounded-2xl bg-white/70 dark:bg-emerald-900/30 backdrop-blur border-2 border-emerald-200 dark:border-emerald-600 text-emerald-700 dark:text-emerald-300 font-semibold hover:bg-emerald-50 dark:hover:bg-emerald-900/50 hover:border-emerald-400 transition-all duration-300">
+          {t("tryAsGuest", "Try as guest")}
+        </button>
+      </div>
+    );
+  }
+
+  if (variant === "benefit") {
+    return (
+      <div className="flex flex-col sm:flex-row gap-3 mt-2" data-ab-variant="benefit">
+        <button
+          onClick={handleSignup}
+          className="group px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold text-lg hover:from-emerald-700 hover:to-teal-700 shadow-xl hover:-translate-y-0.5 transition-all duration-300 active:scale-95"
+        >
+          {isEl ? "🎮 Ξεκλείδωσε 350+ παιχνίδια" : "🎮 Unlock 350+ games"}
+          <span className="inline-block ml-2 group-hover:translate-x-1 transition-transform">&rarr;</span>
+        </button>
+        <button onClick={handleLogin} className="px-8 py-4 rounded-2xl border-2 border-purple-200 dark:border-purple-600 text-purple-700 dark:text-purple-300 font-semibold hover:border-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/30 transition-all duration-300">
+          {t("logIn", "Log in")}
+        </button>
+        <button onClick={handleGuest} className="px-8 py-4 rounded-2xl bg-white/70 dark:bg-emerald-900/30 backdrop-blur border-2 border-emerald-200 dark:border-emerald-600 text-emerald-700 dark:text-emerald-300 font-semibold hover:bg-emerald-50 dark:hover:bg-emerald-900/50 hover:border-emerald-400 transition-all duration-300">
+          {t("tryAsGuest", "Try as guest")}
+        </button>
+      </div>
+    );
+  }
+
+  // control
+  return (
+    <div className="flex flex-col sm:flex-row gap-3 mt-2" data-ab-variant="control">
+      <button onClick={handleSignup} className="group px-8 py-4 rounded-2xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold text-lg hover:from-purple-700 hover:to-pink-700 shadow-xl shadow-purple-300/40 hover:shadow-2xl hover:shadow-purple-400/50 hover:-translate-y-0.5 transition-all duration-300 active:scale-95">
+        {t("register", "Sign Up")}
+        <span className="inline-block ml-2 group-hover:translate-x-1 transition-transform">&rarr;</span>
+      </button>
+      <button onClick={handleLogin} className="px-8 py-4 rounded-2xl border-2 border-purple-200 dark:border-purple-600 text-purple-700 dark:text-purple-300 font-semibold hover:border-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/30 transition-all duration-300">
+        {t("logIn", "Log in")}
+      </button>
+      <button onClick={handleGuest} className="px-8 py-4 rounded-2xl bg-white/70 dark:bg-emerald-900/30 backdrop-blur border-2 border-emerald-200 dark:border-emerald-600 text-emerald-700 dark:text-emerald-300 font-semibold hover:bg-emerald-50 dark:hover:bg-emerald-900/50 hover:border-emerald-400 transition-all duration-300">
+        {t("tryAsGuest", "Try as guest")}
+      </button>
+    </div>
   );
 }

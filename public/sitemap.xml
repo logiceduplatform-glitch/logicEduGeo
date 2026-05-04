@@ -1,23 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://geoloplatform.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://geoloplatform.com/auth</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://geoloplatform.com/subscription</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://geoloplatform.com/for-teachers</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://geoloplatform.com/for-parents</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://geoloplatform.com/about</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://geoloplatform.com/faq</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://geoloplatform.com/contact</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
-  <url><loc>https://geoloplatform.com/curriculum</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://geoloplatform.com/blog</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://geoloplatform.com/blog/math-magic-tricks</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://geoloplatform.com/blog/word-games-school-performance</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://geoloplatform.com/blog/puzzles-make-kids-smarter</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://geoloplatform.com/blog/teaching-kids-to-lose</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://geoloplatform.com/blog/school-readiness-checklist</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://geoloplatform.com/blog/fun-educational-holidays</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://geoloplatform.com/privacy</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://geoloplatform.com/terms</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://geoloplatform.com/achievements</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://geoloplatform.com/online-multiplayer</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Core marketing pages -->
+  <url>
+    <loc>https://kibloo.app/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kibloo.app/?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="el" href="https://kibloo.app/?lang=el"/>
+  </url>
+  <url><loc>https://kibloo.app/auth</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://kibloo.app/subscription</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://kibloo.app/for-teachers</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://kibloo.app/for-parents</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://kibloo.app/about</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://kibloo.app/faq</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://kibloo.app/contact</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://kibloo.app/curriculum</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Game category landing pages — high SEO value -->
+  <url><loc>https://kibloo.app/play/2-3-school</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/play/2-3-fun</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/play/4-5-school</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/play/4-5-fun</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/play/6</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/play/6-fun</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/play/7-8</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/play/7-8-fun</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/play/9-10</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/play/9-10-fun</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/play/11-12-school</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/play/11-12-fun</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/play/board-games</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/play/adult-games</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Blog -->
+  <url><loc>https://kibloo.app/blog</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/blog/math-magic-tricks</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://kibloo.app/blog/word-games-school-performance</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://kibloo.app/blog/puzzles-make-kids-smarter</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://kibloo.app/blog/teaching-kids-to-lose</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://kibloo.app/blog/school-readiness-checklist</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://kibloo.app/blog/fun-educational-holidays</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+
+  <!-- Discovery features -->
+  <url><loc>https://kibloo.app/achievements</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://kibloo.app/leaderboard</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://kibloo.app/daily</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://kibloo.app/events</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://kibloo.app/online-multiplayer</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://kibloo.app/accessibility</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
+
+  <!-- Legal -->
+  <url><loc>https://kibloo.app/privacy</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://kibloo.app/terms</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+
 </urlset>

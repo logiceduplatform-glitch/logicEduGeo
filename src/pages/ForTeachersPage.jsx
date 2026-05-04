@@ -301,6 +301,72 @@ export default function ForTeachersPage() {
         </div>
       </section>
 
+      {/* FAQ */}
+      <section className="py-16 sm:py-20 bg-slate-50 dark:bg-slate-900">
+        <div className="mx-auto max-w-3xl px-4">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-800 dark:text-white mb-10 text-center">
+            {isEl ? "Συχνές ερωτήσεις" : "Frequently asked questions"}
+          </h2>
+          <div className="space-y-3">
+            {[
+              {
+                q: isEl ? "Είναι πραγματικά δωρεάν;" : "Is it really free?",
+                a: isEl
+                  ? "Ναι. Το βασικό πακέτο για εκπαιδευτικούς είναι 100% δωρεάν για πάντα. Premium χαρακτηριστικά (απεριόριστα custom quiz, advanced analytics) σε χαμηλή τιμή."
+                  : "Yes. The base teacher plan is 100% free forever. Premium features (unlimited custom quizzes, advanced analytics) at a low price.",
+              },
+              {
+                q: isEl ? "Χρειάζονται οι μαθητές μου email;" : "Do my students need an email?",
+                a: isEl
+                  ? "Όχι. Με το school student mode, οι μαθητές συνδέονται με QR code ή απλό username — ιδανικό για παιδιά κάτω των 13."
+                  : "No. With school student mode, students log in via QR code or a simple username — perfect for kids under 13.",
+              },
+              {
+                q: isEl ? "Συμμορφώνεται με GDPR/COPPA;" : "Are you GDPR/COPPA compliant?",
+                a: isEl
+                  ? "Ναι. Δεν συλλέγουμε προσωπικά δεδομένα από παιδιά <13 χωρίς γονική συγκατάθεση. Όλα τα δεδομένα παραμένουν στην ΕΕ."
+                  : "Yes. We don't collect personal data from children <13 without parental consent. All data is stored in the EU.",
+              },
+              {
+                q: isEl ? "Λειτουργεί σε tablet/Chromebook;" : "Does it work on tablets/Chromebooks?",
+                a: isEl
+                  ? "Ναι. Η Kibloo είναι responsive και τρέχει άψογα σε όλα τα μοντέρνα browsers — δεν χρειάζεται εγκατάσταση."
+                  : "Yes. Kibloo is responsive and runs in any modern browser — no installation needed.",
+              },
+            ].map((item, i) => (
+              <details
+                key={i}
+                className="group bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden"
+              >
+                <summary className="px-5 py-4 cursor-pointer font-semibold text-slate-800 dark:text-white flex justify-between items-center hover:bg-slate-50 dark:hover:bg-slate-700/50">
+                  {item.q}
+                  <span className="text-indigo-500 group-open:rotate-45 transition-transform text-xl">+</span>
+                </summary>
+                <div className="px-5 pb-4 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                  {item.a}
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* TRUST BADGES */}
+      <section className="py-10 bg-white dark:bg-slate-800 border-y border-slate-100 dark:border-slate-700">
+        <div className="mx-auto max-w-5xl px-4">
+          <p className="text-center text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-6">
+            {isEl ? "Εμπιστεύονται την Kibloo" : "Trusted by educators"}
+          </p>
+          <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-10 text-slate-400 dark:text-slate-500">
+            <span className="flex items-center gap-2 text-sm font-semibold">🇪🇺 GDPR</span>
+            <span className="flex items-center gap-2 text-sm font-semibold">👶 COPPA</span>
+            <span className="flex items-center gap-2 text-sm font-semibold">🔒 SSL</span>
+            <span className="flex items-center gap-2 text-sm font-semibold">♿ WCAG 2.1 AA</span>
+            <span className="flex items-center gap-2 text-sm font-semibold">🚫 No ads</span>
+          </div>
+        </div>
+      </section>
+
       {/* FINAL CTA */}
       <section className="py-16 sm:py-20 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-center">
         <div className="mx-auto max-w-3xl px-4">
@@ -309,17 +375,25 @@ export default function ForTeachersPage() {
           </h2>
           <p className="text-lg text-white/80 mb-8">
             {isEl
-              ? "Εγγραφείτε δωρεάν σε 30 δευτερόλεπτα. Δεν χρειάζεται πιστωτική κάρτα."
-              : "Sign up free in 30 seconds. No credit card required."}
+              ? "Εγγραφείτε δωρεάν σε 30 δευτερόλεπτα. Δεν χρειάζεται πιστωτική κάρτα. + 14 ημέρες δωρεάν Premium trial."
+              : "Sign up free in 30 seconds. No credit card required. + 14-day free Premium trial."}
           </p>
-          <button
-            onClick={() => navigate(user ? "/teacher-dashboard" : "/auth")}
-            className="px-10 py-4 rounded-2xl bg-white text-indigo-700 font-bold text-lg shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all"
-          >
-            {isEl
-              ? (user ? "Μετάβαση στο Dashboard" : "Δημιουργία Δωρεάν Λογαριασμού")
-              : (user ? "Go to Dashboard" : "Create Free Account")}
-          </button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              onClick={() => navigate(user ? "/teacher-dashboard" : "/auth")}
+              className="px-10 py-4 rounded-2xl bg-white text-indigo-700 font-bold text-lg shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all"
+            >
+              {isEl
+                ? (user ? "Μετάβαση στο Dashboard" : "Δημιουργία Δωρεάν Λογαριασμού")
+                : (user ? "Go to Dashboard" : "Create Free Account")}
+            </button>
+            <button
+              onClick={() => navigate("/subscription")}
+              className="px-8 py-4 rounded-2xl border-2 border-white/40 text-white font-bold text-lg hover:bg-white/10 transition-all"
+            >
+              {isEl ? "Δείτε τα Premium πλάνα" : "See Premium plans"}
+            </button>
+          </div>
         </div>
       </section>
 

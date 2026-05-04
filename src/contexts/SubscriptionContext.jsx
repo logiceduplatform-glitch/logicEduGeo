@@ -1,18 +1,24 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
+import React, { createContext, useContext, useState, useCallback, useEffect, useMemo } from "react";
 import { AuthContext } from "../auth/AuthContext";
-import { db, auth } from "../auth/firebase";
-import { doc, onSnapshot } from "firebase/firestore";
+import { db, auth, app as firebaseApp } from "../auth/firebase";
+import { doc, onSnapshot, setDoc, serverTimestamp } from "firebase/firestore";
+import { getFunctions, httpsCallable } from "firebase/functions";
 import { AnalyticsService } from "../services/AnalyticsService";
 
 const SUB_KEY = "geo:subscription";
-const FREE_GAMES_PER_CATEGORY = 5;
+const TRIAL_KEY = "geo:trialStart";
+const TRIAL_DURATION_DAYS = 14;
 
 const STRIPE_API_URL = import.meta.env.VITE_STRIPE_API_URL || "";
 
 const SubscriptionContext = createContext({
   tier: "free",
   isPremium: false,
+  isTrialing: false,
+  trialDaysLeft: 0,
+  trialEnded: false,
   isGameFree: () => true,
+  startTrial: () => {},
   startCheckout: () => {},
   startPortalSession: () => {},
   subscribe: () => {},
@@ -33,7 +39,28 @@ export function SubscriptionProvider({ children }) {
   const [loading, setLoading] = useState(false);
   const [syncError, setSyncError] = useState(false);
 
-  const isPremium = tier === "premium" || tier === "family";
+  // Trial state — independent of paid tier so we can show "trial active" badge
+  // and gracefully downgrade when the trial expires without losing the user's
+  // historical state.
+  const [trialStart, setTrialStart] = useState(() => {
+    try {
+      const v = localStorage.getItem(TRIAL_KEY);
+      return v ? Number(v) : 0;
+    } catch {
+      return 0;
+    }
+  });
+
+  const trial = useMemo(() => {
+    if (!trialStart) return { active: false, daysLeft: 0, ended: false };
+    const elapsedMs = Date.now() - trialStart;
+    const totalMs = TRIAL_DURATION_DAYS * 24 * 60 * 60 * 1000;
+    const daysLeft = Math.max(0, Math.ceil((totalMs - elapsedMs) / (24 * 60 * 60 * 1000)));
+    const ended = elapsedMs >= totalMs;
+    return { active: !ended, daysLeft, ended };
+  }, [trialStart]);
+
+  const isPremium = tier === "premium" || tier === "family" || trial.active;
 
   // Listen to Firestore for real-time subscription updates
   useEffect(() => {
@@ -87,30 +114,51 @@ export function SubscriptionProvider({ children }) {
         setCheckoutError("not_logged_in");
         return;
       }
-      if (!STRIPE_API_URL) {
-        setCheckoutError("not_configured");
-        return;
-      }
 
       setLoading(true);
       try {
-        const token = await auth.currentUser.getIdToken();
-        const res = await fetch(`${STRIPE_API_URL}/stripe-checkout.php`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ plan, period }),
-        });
+        AnalyticsService.subscribe(plan, period);
 
-        const data = await res.json();
-        if (data.url) {
-          AnalyticsService.subscribe(plan, period);
-          window.location.href = data.url;
-        } else {
-          setCheckoutError("no_url");
+        // Preferred path: Firebase Cloud Function callable.
+        // Falls back to legacy PHP endpoint if VITE_STRIPE_API_URL is set.
+        if (firebaseApp) {
+          try {
+            const fns = getFunctions(firebaseApp, "europe-west1");
+            const call = httpsCallable(fns, "createCheckoutSession");
+            const result = await call({ plan, period });
+            const url = result?.data?.url;
+            if (url) {
+              window.location.href = url;
+              return;
+            }
+            setCheckoutError("no_url");
+            return;
+          } catch (e) {
+            if (import.meta.env.DEV) console.warn("[Subscription] Functions checkout failed, trying fallback:", e);
+            // fall through to legacy endpoint if configured
+          }
         }
+
+        if (STRIPE_API_URL) {
+          const token = await auth.currentUser.getIdToken();
+          const res = await fetch(`${STRIPE_API_URL}/stripe-checkout.php`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ plan, period }),
+          });
+          const data = await res.json();
+          if (data.url) {
+            window.location.href = data.url;
+            return;
+          }
+          setCheckoutError("no_url");
+          return;
+        }
+
+        setCheckoutError("not_configured");
       } catch (e) {
         if (import.meta.env.DEV) console.error("[Subscription] Checkout error:", e);
         setCheckoutError("network");
@@ -128,29 +176,46 @@ export function SubscriptionProvider({ children }) {
         setCheckoutError("not_logged_in");
         return;
       }
-      if (!STRIPE_API_URL) {
-        setCheckoutError("not_configured");
-        return;
-      }
 
       setLoading(true);
       try {
-        const token = await auth.currentUser.getIdToken();
-        const res = await fetch(`${STRIPE_API_URL}/stripe-portal.php`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ returnUrl: window.location.href }),
-        });
-
-        const data = await res.json();
-        if (data.url) {
-          window.location.href = data.url;
-        } else {
-          setCheckoutError("no_url");
+        if (firebaseApp) {
+          try {
+            const fns = getFunctions(firebaseApp, "europe-west1");
+            const call = httpsCallable(fns, "createPortalSession");
+            const result = await call({ returnUrl: window.location.href });
+            const url = result?.data?.url;
+            if (url) {
+              window.location.href = url;
+              return;
+            }
+            setCheckoutError("no_url");
+            return;
+          } catch (e) {
+            if (import.meta.env.DEV) console.warn("[Subscription] Functions portal failed, trying fallback:", e);
+          }
         }
+
+        if (STRIPE_API_URL) {
+          const token = await auth.currentUser.getIdToken();
+          const res = await fetch(`${STRIPE_API_URL}/stripe-portal.php`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ returnUrl: window.location.href }),
+          });
+          const data = await res.json();
+          if (data.url) {
+            window.location.href = data.url;
+            return;
+          }
+          setCheckoutError("no_url");
+          return;
+        }
+
+        setCheckoutError("not_configured");
       } catch (e) {
         if (import.meta.env.DEV) console.error("[Subscription] Portal error:", e);
         setCheckoutError("network");
@@ -176,11 +241,57 @@ export function SubscriptionProvider({ children }) {
     setTier("free");
   }, []);
 
+  const startTrial = useCallback(async () => {
+    if (trialStart) return false; // can only start once
+    const now = Date.now();
+    try { localStorage.setItem(TRIAL_KEY, String(now)); } catch { /* */ }
+    setTrialStart(now);
+    AnalyticsService.trialStarted?.();
+
+    // Mirror to Firestore so it's enforced across devices.
+    if (user?.uid && db) {
+      try {
+        await setDoc(
+          doc(db, "users", user.uid, "data", "trial"),
+          {
+            startedAt: serverTimestamp(),
+            durationDays: TRIAL_DURATION_DAYS,
+            startedAtMs: now,
+          },
+          { merge: true },
+        );
+      } catch {
+        /* Firestore unavailable — local trial still works */
+      }
+    }
+    return true;
+  }, [trialStart, user?.uid]);
+
+  // On login, sync trial start from Firestore so the trial is device-portable.
+  useEffect(() => {
+    if (!user?.uid || !db) return;
+    const trialRef = doc(db, "users", user.uid, "data", "trial");
+    const unsub = onSnapshot(trialRef, (snap) => {
+      if (!snap.exists()) return;
+      const data = snap.data();
+      if (data.startedAtMs && (!trialStart || data.startedAtMs < trialStart)) {
+        try { localStorage.setItem(TRIAL_KEY, String(data.startedAtMs)); } catch { /* */ }
+        setTrialStart(data.startedAtMs);
+      }
+    }, () => {});
+    return () => unsub();
+  }, [user?.uid, trialStart]);
+
   return (
     <SubscriptionContext.Provider
       value={{
         tier,
         isPremium,
+        isTrialing: trial.active && !(tier === "premium" || tier === "family"),
+        trialDaysLeft: trial.daysLeft,
+        trialEnded: trial.ended,
+        canStartTrial: !trialStart,
+        startTrial,
         isGameFree,
         startCheckout,
         startPortalSession,

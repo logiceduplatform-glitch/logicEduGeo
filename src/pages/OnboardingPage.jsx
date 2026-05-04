@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { updateProfile } from "firebase/auth";
 import SEO from "../components/SEO";
 import { AnalyticsService } from "../services/AnalyticsService";
+import { ModerationService } from "../services/ModerationService";
 import { AuthContext } from "../auth/AuthContext";
 import { LanguageContext } from "../i18n/LanguageContext";
 import {
@@ -206,6 +207,27 @@ export default function OnboardingPage() {
   };
 
   const handleFinish = () => {
+    // Local profanity / spam check on user-supplied names. Hard-block only
+    // on "high" severity (slurs / explicit terms); otherwise silently allow.
+    if (name.trim()) {
+      const r = ModerationService.checkLocal(name.trim(), { minLen: 1, maxLen: 60 });
+      if (!r.ok && r.severity === "high") {
+        alert(lang === "el"
+          ? "Παρακαλώ διάλεξε άλλο όνομα — αυτό περιέχει ακατάλληλους όρους."
+          : "Please pick another name — this one contains inappropriate words.");
+        return;
+      }
+    }
+    if (childName.trim()) {
+      const r = ModerationService.checkLocal(childName.trim(), { minLen: 1, maxLen: 60 });
+      if (!r.ok && r.severity === "high") {
+        alert(lang === "el"
+          ? "Παρακαλώ διάλεξε άλλο όνομα παιδιού — περιέχει ακατάλληλους όρους."
+          : "Please pick another child name — it contains inappropriate words.");
+        return;
+      }
+    }
+
     if (user && name.trim() && !user.displayName) {
       updateProfile(user, { displayName: name.trim() }).catch(() => {});
     }

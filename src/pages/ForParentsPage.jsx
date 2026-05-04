@@ -331,6 +331,22 @@ export default function ForParentsPage() {
         </div>
       </section>
 
+      {/* TRUST BADGES */}
+      <section className="py-10 bg-white dark:bg-slate-800 border-y border-slate-100 dark:border-slate-700">
+        <div className="mx-auto max-w-5xl px-4">
+          <p className="text-center text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-6">
+            {isEl ? "Ασφαλές & αξιόπιστο" : "Safe & trusted"}
+          </p>
+          <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-10 text-slate-400 dark:text-slate-500">
+            <span className="flex items-center gap-2 text-sm font-semibold">🇪🇺 GDPR</span>
+            <span className="flex items-center gap-2 text-sm font-semibold">👶 COPPA</span>
+            <span className="flex items-center gap-2 text-sm font-semibold">🔒 SSL</span>
+            <span className="flex items-center gap-2 text-sm font-semibold">🚫 No ads</span>
+            <span className="flex items-center gap-2 text-sm font-semibold">🛡️ No tracking</span>
+          </div>
+        </div>
+      </section>
+
       {/* FINAL CTA */}
       <section className="py-16 sm:py-20 bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-center">
         <div className="mx-auto max-w-3xl px-4">
@@ -339,8 +355,8 @@ export default function ForParentsPage() {
           </h2>
           <p className="text-lg text-white/80 mb-8">
             {isEl
-              ? "Δωρεάν, ασφαλές, εκπαιδευτικό. Εγγραφείτε σε 30 δευτερόλεπτα."
-              : "Free, safe, educational. Sign up in 30 seconds."}
+              ? "Δωρεάν, ασφαλές, εκπαιδευτικό. Εγγραφείτε σε 30 δευτερόλεπτα. + 14 ημέρες δωρεάν Premium trial."
+              : "Free, safe, educational. Sign up in 30 seconds. + 14-day free Premium trial."}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button

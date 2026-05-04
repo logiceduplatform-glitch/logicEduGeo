@@ -1,5 +1,90 @@
 const AI_API_URL = import.meta.env.VITE_AI_API_URL || "";
 
+// ── Client-side rate limiter ─────────────────────────────────────────────
+// This is a defense-in-depth layer; the real enforcement should also live
+// server-side in your AI proxy (Cloud Function). We track per-action and
+// per-day caps so a runaway bug or malicious user can't burn through quota.
+const RATE_KEY = "edu:aiRateLimit";
+const LIMITS = {
+  chat:   { perMinute: 8,  perHour: 40,  perDay: 100 },
+  lesson: { perMinute: 2,  perHour: 10,  perDay: 25  },
+};
+
+function loadRate() {
+  try {
+    return JSON.parse(localStorage.getItem(RATE_KEY) || "{}");
+  } catch {
+    return {};
+  }
+}
+
+function saveRate(data) {
+  try {
+    localStorage.setItem(RATE_KEY, JSON.stringify(data));
+  } catch {
+    /* storage full */
+  }
+}
+
+function pruneOld(arr, windowMs) {
+  const now = Date.now();
+  return (arr || []).filter((ts) => now - ts < windowMs);
+}
+
+/**
+ * Returns { allowed: boolean, retryAfterMs?: number, reason?: string }
+ */
+function checkRateLimit(action) {
+  const limits = LIMITS[action] || LIMITS.chat;
+  const data = loadRate();
+  const bucket = data[action] || { calls: [] };
+
+  const calls = pruneOld(bucket.calls, 24 * 60 * 60 * 1000); // keep 24h
+  const now = Date.now();
+
+  const callsLastMin  = calls.filter((ts) => now - ts < 60_000).length;
+  const callsLastHour = calls.filter((ts) => now - ts < 3_600_000).length;
+  const callsLastDay  = calls.length;
+
+  if (callsLastMin >= limits.perMinute) {
+    return { allowed: false, reason: "minute", retryAfterMs: 60_000 };
+  }
+  if (callsLastHour >= limits.perHour) {
+    return { allowed: false, reason: "hour", retryAfterMs: 3_600_000 };
+  }
+  if (callsLastDay >= limits.perDay) {
+    return { allowed: false, reason: "day", retryAfterMs: 24 * 60 * 60 * 1000 };
+  }
+  return { allowed: true };
+}
+
+function recordCall(action) {
+  const data = loadRate();
+  const bucket = data[action] || { calls: [] };
+  bucket.calls = pruneOld(bucket.calls, 24 * 60 * 60 * 1000);
+  bucket.calls.push(Date.now());
+  data[action] = bucket;
+  saveRate(data);
+}
+
+export function getRateLimitStatus() {
+  const out = {};
+  for (const action of Object.keys(LIMITS)) {
+    const check = checkRateLimit(action);
+    const data = loadRate();
+    const calls = data[action]?.calls || [];
+    const now = Date.now();
+    out[action] = {
+      ...check,
+      callsLastMin:  calls.filter((ts) => now - ts < 60_000).length,
+      callsLastHour: calls.filter((ts) => now - ts < 3_600_000).length,
+      callsLastDay:  calls.filter((ts) => now - ts < 24 * 60 * 60 * 1000).length,
+      limits: LIMITS[action],
+    };
+  }
+  return out;
+}
+
 const SYSTEM_PROMPT_EL = `Είσαι ο "Βοηθός Μελέτης" στην εκπαιδευτική πλατφόρμα Kibloo.
 Βοηθάς παιδιά 2-12 ετών και ενήλικες να μάθουν μέσα από παιχνίδια.
 Απαντάς ΠΑΝΤΑ στα ελληνικά, σύντομα (2-4 προτάσεις), φιλικά, ενθαρρυντικά.
@@ -25,6 +110,15 @@ export const AIService = {
     if (!this.isConfigured()) {
       return null;
     }
+
+    const rate = checkRateLimit("chat");
+    if (!rate.allowed) {
+      const minutes = Math.ceil(rate.retryAfterMs / 60_000);
+      return lang === "el"
+        ? `🚦 Έφτασες στο όριο μηνυμάτων (${rate.reason}). Δοκίμασε ξανά σε ~${minutes} λεπτά.`
+        : `🚦 You've hit the message limit (${rate.reason}). Try again in ~${minutes} min.`;
+    }
+    recordCall("chat");
 
     const systemPrompt = lang === "el" ? SYSTEM_PROMPT_EL : SYSTEM_PROMPT_EN;
     let contextNote = "";
@@ -73,6 +167,12 @@ export const AIService = {
    */
   async generateLesson({ topic, subject, ageGroup, difficulty = "medium", lang = "el" }) {
     if (this.isConfigured()) {
+      const rate = checkRateLimit("lesson");
+      if (!rate.allowed) {
+        // Quietly fall through to local generator instead of erroring out.
+        return _localLesson({ topic, subject, ageGroup, difficulty, lang });
+      }
+      recordCall("lesson");
       const prompt = lang === "el"
         ? `Δημιούργησε ΠΛΗΡΕΣ μάθημα στα Ελληνικά για παιδιά (ηλικία ${ageGroup || "-"}, δυσκολία ${difficulty}).
 Θέμα: "${topic}". Μάθημα: ${subject || "-"}.

@@ -285,6 +285,45 @@ service cloud.firestore {
       allow update, delete: if isAdmin();
     }
 
+    // Error reports: anyone (incl. anonymous visitors) can write; only admins
+    // can read. Documents are write-only with strict size limits to prevent
+    // abuse of the free-tier quota.
+    match /errorReports/{reportId} {
+      allow read: if isAdmin();
+      allow create: if request.resource.data.message is string
+                    && request.resource.data.message.size() < 2000
+                    && request.resource.data.size() < 30;
+      allow update, delete: if isAdmin();
+    }
+
+    // Stripe subscription status mirror: read by owner, write only by Cloud Functions
+    match /subscriptions/{uid} {
+      allow read: if request.auth != null
+                  && (request.auth.uid == uid || isAdmin());
+      allow write: if false; // server-only via Cloud Functions / webhooks
+    }
+
+    // Stripe checkout sessions (write by user, read by user, server processes)
+    match /checkoutSessions/{sessionId} {
+      allow read: if request.auth != null
+                  && (resource.data.uid == request.auth.uid || isAdmin());
+      allow create: if request.auth != null
+                    && request.resource.data.uid == request.auth.uid;
+      allow update, delete: if isAdmin();
+    }
+
+    // Email queue — server-only (Cloud Function workers). Admins can read for
+    // debugging; no client writes.
+    match /emailQueue/{itemId} {
+      allow read: if isAdmin();
+      allow write: if false; // server-only
+    }
+
+    // Push notification campaigns — admins create, server consumes
+    match /pushCampaigns/{campaignId} {
+      allow read, create, update, delete: if isAdmin();
+    }
+
     // Block everything else
     match /{document=**} {
       allow read, write: if false;

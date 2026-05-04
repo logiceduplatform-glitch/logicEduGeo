@@ -2,6 +2,7 @@ import React from 'react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import ErrorBoundary from '../components/ErrorBoundary';
+import { ErrorReportingService } from '../services/ErrorReportingService';
 
 function BrokenComponent() {
   throw new Error('Test explosion');
@@ -14,6 +15,7 @@ function GoodComponent() {
 describe('ErrorBoundary', () => {
   beforeEach(() => {
     localStorage.clear();
+    ErrorReportingService._resetForTests?.();
     vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 

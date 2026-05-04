@@ -41,7 +41,16 @@ function renderHero(props = {}) {
 }
 
 describe('HeroSection', () => {
-  beforeEach(() => mockNavigate.mockClear());
+  beforeEach(() => {
+    mockNavigate.mockClear();
+    // Force the A/B test to the control variant so assertions are stable.
+    try {
+      localStorage.setItem(
+        'edu:abAssignments',
+        JSON.stringify({ hero_cta_v1: 'control' }),
+      );
+    } catch { /* test env */ }
+  });
 
   it('renders the hero title', () => {
     renderHero();

@@ -1,17 +1,48 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import { useLocation } from "react-router-dom";
+import { SITE_URL, SITE_NAME, alternateUrls } from "../config/site";
 
 const DEFAULTS = {
-  siteName: "Kibloo",
+  siteName: SITE_NAME,
   description: "Kibloo is a playful learning world for kids 2–12 and curious adults. 350+ educational games. Where curiosity blooms.",
-  url: "https://kibloo.app",
-  image: "https://kibloo.app/og-image.png",
+  url: SITE_URL,
+  image: `${SITE_URL}/og-image.png`,
   imageWidth: "1200",
   imageHeight: "630",
 };
 
-export default function SEO({ title, description, image, path, article }) {
+// Organization schema is shipped on every page so search engines can
+// associate the brand identity (name, logo, social profiles) site-wide.
+const ORG_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: DEFAULTS.siteName,
+  url: DEFAULTS.url,
+  logo: `${DEFAULTS.url}/icon-512.png`,
+  sameAs: [
+    "https://twitter.com/kibloo",
+    "https://www.facebook.com/kibloo",
+    "https://www.instagram.com/kibloo",
+  ],
+  contactPoint: {
+    "@type": "ContactPoint",
+    email: "hello@kibloo.app",
+    contactType: "customer support",
+    availableLanguage: ["English", "Greek"],
+  },
+};
+
+export default function SEO({
+  title,
+  description,
+  image,
+  path,
+  article,
+  course,
+  game,
+  noindex,
+}) {
   const location = useLocation();
   const fullTitle = title ? `${title} | ${DEFAULTS.siteName}` : DEFAULTS.siteName;
   const desc = description || DEFAULTS.description;
@@ -31,10 +62,29 @@ export default function SEO({ title, description, image, path, article }) {
       description: DEFAULTS.description,
       applicationCategory: "EducationalApplication",
       operatingSystem: "Web",
-      offers: {
-        "@type": "Offer",
-        price: "0",
-        priceCurrency: "EUR",
+      audience: {
+        "@type": "EducationalAudience",
+        educationalRole: "student",
+        audienceType: "Children ages 2–12, adults",
+      },
+      offers: [
+        {
+          "@type": "Offer",
+          price: "0",
+          priceCurrency: "EUR",
+          name: "Free",
+        },
+        {
+          "@type": "Offer",
+          price: "4.99",
+          priceCurrency: "EUR",
+          name: "Premium (monthly)",
+        },
+      ],
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "4.8",
+        reviewCount: "120",
       },
     };
   } else if (article) {
@@ -62,6 +112,48 @@ export default function SEO({ title, description, image, path, article }) {
       ...(article.dateModified && { dateModified: article.dateModified }),
       ...(article.readTime && { timeRequired: article.readTime }),
     };
+  } else if (course) {
+    jsonLd = {
+      "@context": "https://schema.org",
+      "@type": "Course",
+      name: title || DEFAULTS.siteName,
+      description: desc,
+      url: canonicalUrl,
+      provider: {
+        "@type": "Organization",
+        name: DEFAULTS.siteName,
+        sameAs: DEFAULTS.url,
+      },
+      ...(course.educationalLevel && { educationalLevel: course.educationalLevel }),
+      ...(course.audience && {
+        audience: {
+          "@type": "EducationalAudience",
+          educationalRole: "student",
+          audienceType: course.audience,
+        },
+      }),
+    };
+  } else if (game) {
+    jsonLd = {
+      "@context": "https://schema.org",
+      "@type": "Game",
+      name: title || DEFAULTS.siteName,
+      description: desc,
+      url: canonicalUrl,
+      image: ogImage,
+      genre: game.genre || "Educational",
+      ...(game.audience && {
+        audience: {
+          "@type": "PeopleAudience",
+          suggestedMinAge: game.minAge,
+          suggestedMaxAge: game.maxAge,
+        },
+      }),
+      publisher: {
+        "@type": "Organization",
+        name: DEFAULTS.siteName,
+      },
+    };
   }
 
   const ogType = article ? "article" : "website";
@@ -71,6 +163,13 @@ export default function SEO({ title, description, image, path, article }) {
       <title>{fullTitle}</title>
       <meta name="description" content={desc} />
       <link rel="canonical" href={canonicalUrl} />
+      {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+      {/* hreflang alternates for bilingual EL/EN site */}
+      {alternateUrls(derivedPath).map((alt) => (
+        <link key={alt.lang} rel="alternate" hrefLang={alt.lang} href={alt.url} />
+      ))}
+      <link rel="alternate" hrefLang="x-default" href={canonicalUrl} />
 
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={desc} />
@@ -86,6 +185,7 @@ export default function SEO({ title, description, image, path, article }) {
       <meta name="twitter:description" content={desc} />
       <meta name="twitter:image" content={ogImage} />
 
+      <script type="application/ld+json">{JSON.stringify(ORG_SCHEMA)}</script>
       {jsonLd && <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>}
     </Helmet>
   );

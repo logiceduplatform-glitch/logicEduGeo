@@ -44,6 +44,15 @@ const T = {
     qrCode: "QR Code για εκτύπωση",
     print: "🖨️ Εκτύπωση",
     earnings: "Συνολικά κέρδη",
+    shareTemplates: "Έτοιμα μηνύματα",
+    shareTemplatesSub: "Διάλεξε ένα έτοιμο μήνυμα και αντιγράψτο",
+    channelGeneric: "Φίλος / γονιός",
+    channelTeacher: "Συνάδελφος εκπαιδευτικός",
+    channelTwitter: "Social media",
+    leaderboard: "🏆 Top Affiliates",
+    leaderboardSub: "Οι κορυφαίοι φέτος",
+    you: "Εσύ",
+    rank: "Θέση",
   },
   en: {
     title: "💼 Affiliate Program",
@@ -81,6 +90,15 @@ const T = {
     qrCode: "Printable QR code",
     print: "🖨️ Print",
     earnings: "Total earnings",
+    shareTemplates: "Ready-to-send messages",
+    shareTemplatesSub: "Pick a template and copy it",
+    channelGeneric: "Friend / parent",
+    channelTeacher: "Fellow teacher",
+    channelTwitter: "Social media",
+    leaderboard: "🏆 Top Affiliates",
+    leaderboardSub: "This year's top performers",
+    you: "You",
+    rank: "Rank",
   },
 };
 
@@ -96,6 +114,8 @@ export default function AffiliatePage() {
   const [paypalInput, setPaypalInput] = useState("");
   const [savedFlash, setSavedFlash] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [leaderboard, setLeaderboard] = useState([]);
+  const [tplCopied, setTplCopied] = useState(null);
 
   const load = useCallback(async () => {
     if (!user?.uid) return;
@@ -104,11 +124,25 @@ export default function AffiliatePage() {
       const a = await AffiliateService.getOrCreate(user.uid);
       setAff(a);
       setPaypalInput(a.paypalEmail || "");
-      const refs = await AffiliateService.getReferrals(user.uid);
+      const [refs, lb] = await Promise.all([
+        AffiliateService.getReferrals(user.uid),
+        AffiliateService.getLeaderboard(10),
+      ]);
       setReferrals(refs);
+      setLeaderboard(lb);
     } catch (e) { /* ignore */ }
     setBusy(false);
   }, [user?.uid]);
+
+  const copyTemplate = async (channel) => {
+    if (!aff) return;
+    const { body } = AffiliateService.buildShareCopy({ link: aff.link, lang, channel });
+    try {
+      await navigator.clipboard.writeText(body);
+      setTplCopied(channel);
+      setTimeout(() => setTplCopied(null), 1500);
+    } catch { /* clipboard blocked */ }
+  };
 
   useEffect(() => { load(); }, [load]);
 
@@ -249,6 +283,74 @@ export default function AffiliatePage() {
                     {r.commission > 0 && <span className="font-bold text-emerald-600">€{r.commission.toFixed(2)}</span>}
                   </li>
                 ))}
+              </ul>
+            )}
+          </div>
+
+          {/* Share templates */}
+          {aff && (
+            <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-700">
+              <h3 className="font-bold text-slate-800 dark:text-white">{l.shareTemplates}</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">{l.shareTemplatesSub}</p>
+              <div className="space-y-2">
+                {[
+                  { k: "generic", icon: "👋", label: l.channelGeneric },
+                  { k: "teacher", icon: "🍎", label: l.channelTeacher },
+                  { k: "twitter", icon: "🐦", label: l.channelTwitter },
+                ].map((c) => {
+                  const { body } = AffiliateService.buildShareCopy({ link: aff.link, lang, channel: c.k });
+                  return (
+                    <div key={c.k} className="rounded-xl border border-slate-200 dark:border-slate-700 p-3 bg-slate-50 dark:bg-slate-900/30">
+                      <div className="flex items-center justify-between mb-2 gap-2">
+                        <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+                          {c.icon} {c.label}
+                        </span>
+                        <button
+                          onClick={() => copyTemplate(c.k)}
+                          className="px-3 py-1 rounded-lg bg-emerald-500 text-white text-xs font-bold"
+                        >
+                          {tplCopied === c.k ? l.copied : l.copy}
+                        </button>
+                      </div>
+                      <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">{body}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Leaderboard */}
+          <div className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-slate-800 dark:to-slate-800 rounded-2xl p-5 border border-amber-200 dark:border-slate-700">
+            <h3 className="font-bold text-slate-800 dark:text-white">{l.leaderboard}</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">{l.leaderboardSub}</p>
+            {!leaderboard.length ? (
+              <p className="text-sm text-slate-500 text-center py-4">—</p>
+            ) : (
+              <ul className="space-y-1">
+                {leaderboard.map((row) => {
+                  const isMe = row.uid === user?.uid;
+                  const medal = row.rank === 1 ? "🥇" : row.rank === 2 ? "🥈" : row.rank === 3 ? "🥉" : `#${row.rank}`;
+                  return (
+                    <li
+                      key={row.uid}
+                      className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm ${
+                        isMe
+                          ? "bg-amber-200 dark:bg-amber-900/40 font-bold"
+                          : "bg-white/60 dark:bg-slate-900/30"
+                      }`}
+                    >
+                      <span className="flex items-center gap-2">
+                        <span className="font-mono w-8">{medal}</span>
+                        <span className="font-mono text-xs text-slate-600 dark:text-slate-300">{row.code}</span>
+                        {isMe && <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500 text-white">{l.you}</span>}
+                      </span>
+                      <span className="text-xs text-slate-600 dark:text-slate-300">
+                        👥 {row.referrals}
+                      </span>
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </div>

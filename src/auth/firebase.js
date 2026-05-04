@@ -14,6 +14,7 @@ let auth = null;
 let googleProvider = null;
 let db = null;
 let analytics = null;
+let app = null;
 
 if (hasConfig) {
   const firebaseConfig = {
@@ -23,7 +24,7 @@ if (hasConfig) {
     appId: import.meta.env.VITE_FIREBASE_APP_ID,
     measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || undefined,
   };
-  const app = initializeApp(firebaseConfig);
+  app = initializeApp(firebaseConfig);
   auth = getAuth(app);
   googleProvider = new GoogleAuthProvider();
   db = getFirestore(app);
@@ -45,11 +46,10 @@ if (hasConfig) {
 function enableAnalytics() {
   if (analytics || !hasConfig) return;
   isSupported().then((yes) => {
-    if (yes) {
-      const app = auth?.app;
-      if (app) analytics = getAnalytics(app);
+    if (yes && app) {
+      analytics = getAnalytics(app);
     }
   }).catch(() => {});
 }
 
-export { auth, googleProvider, db, analytics, enableAnalytics };
+export { app, auth, googleProvider, db, analytics, enableAnalytics };
