@@ -56,6 +56,14 @@ function getBestVoice(lang) {
 }
 
 export const VoiceService = {
+  stopSpeaking() {
+    try { window.speechSynthesis?.cancel(); } catch { /* */ }
+  },
+
+  isAvailable() {
+    return typeof window !== "undefined" && !!window.speechSynthesis;
+  },
+
   speak(text, lang = "el") {
     const prefs = getPrefs();
     if (!prefs.enabled || !window.speechSynthesis) return;

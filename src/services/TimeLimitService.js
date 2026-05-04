@@ -106,6 +106,47 @@ export const TimeLimitService = {
     return result;
   },
 
+  // ── Schedule windows ────────────────────────────────────────────
+  // A "schedule" lets parents say e.g. "no play before 8am or after 9pm".
+  // Stored on the same per-child limit object: { schedule: { start, end } }
+  // where start/end are HH:MM strings. End < start means overnight is OK.
+  setSchedule(childId, schedule) {
+    const limits = this.getLimits();
+    limits[childId] = { ...this.getChildLimit(childId), schedule };
+    StorageService.set(LIMITS_KEY, limits);
+  },
+
+  getSchedule(childId) {
+    return this.getChildLimit(childId).schedule || null;
+  },
+
+  isWithinSchedule(childId, now = new Date()) {
+    const sched = this.getSchedule(childId);
+    if (!sched || !sched.start || !sched.end) return true;
+    const minutes = now.getHours() * 60 + now.getMinutes();
+    const [sH, sM] = sched.start.split(":").map(Number);
+    const [eH, eM] = sched.end.split(":").map(Number);
+    const startM = sH * 60 + sM;
+    const endM = eH * 60 + eM;
+    if (startM <= endM) return minutes >= startM && minutes <= endM;
+    // Window crosses midnight: e.g. 20:00 → 02:00
+    return minutes >= startM || minutes <= endM;
+  },
+
+  // Aggregate usage across all children — used by parent dashboard.
+  getAllChildrenUsage(days = 7) {
+    const profiles = ProfileService.getAll();
+    return profiles.map((p) => ({
+      child: p,
+      todayMinutes: this.getTodayUsage(p.id),
+      limit: this.getChildLimit(p.id),
+      remaining: this.getRemainingMinutes(p.id),
+      schedule: this.getSchedule(p.id),
+      history: this.getUsageHistory(p.id, days),
+      withinSchedule: this.isWithinSchedule(p.id),
+    }));
+  },
+
   cleanOldData() {
     const usage = StorageService.get(DAILY_USAGE_KEY) || {};
     const cutoff = new Date();

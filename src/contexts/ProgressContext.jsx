@@ -23,6 +23,23 @@ export function ProgressProvider({ children }) {
     const result = ProgressService.recordGameComplete(data);
     bump();
     window.dispatchEvent(new CustomEvent("progressUpdate", { detail: data }));
+    // Welcome Quest hook: mark "play_one" the first time any game completes.
+    try {
+      import("../components/WelcomeQuest").then((m) => m.completeQuest && m.completeQuest("play_one"));
+    } catch { /* no-op */ }
+    // SRS hook: log the result against the game/topic id so we can review it later.
+    try {
+      import("../services/SRSService").then((m) => {
+        const cardId = data?.cardId || data?.gameId || data?.topic;
+        if (cardId && m.SRSService) {
+          m.SRSService.logQuizResult({
+            cardId: String(cardId),
+            correct: data?.correct !== false && (data?.score == null || data.score > 0),
+            timeMs: data?.timeMs || 0,
+          });
+        }
+      });
+    } catch { /* no-op */ }
     return result;
   }, [bump]);
 

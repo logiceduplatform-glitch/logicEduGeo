@@ -7,6 +7,7 @@ import { AuthContext } from "../auth/AuthContext";
 import { useSubscription } from "../contexts/SubscriptionContext";
 import { AnalyticsService } from "../services/AnalyticsService";
 import { FeatureFlagService } from "../services/FeatureFlagService";
+import FoundingMemberBadge from "../components/FoundingMemberBadge";
 
 const T = {
   el: {
@@ -334,6 +335,13 @@ export default function SubscriptionPage() {
               </p>
             )}
           </div>
+
+          {/* Founding Member discount banner (auto-hides for non-eligible users) */}
+          {user && (
+            <div className="mb-6">
+              <FoundingMemberBadge variant="card" />
+            </div>
+          )}
 
           {/* Free trial CTA */}
           {user && canStartTrial && tier === "free" && !isTrialing && !trialEnded && (

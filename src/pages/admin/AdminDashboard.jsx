@@ -16,6 +16,7 @@ import AdminLogs from "../../components/admin/AdminLogs";
 import AdminErrorReports from "../../components/admin/AdminErrorReports";
 import AdminEmailQueue from "../../components/admin/AdminEmailQueue";
 import AdminPush from "../../components/admin/AdminPush";
+import AdminFeedback from "../../components/admin/AdminFeedback";
 
 const T = {
   el: {
@@ -34,6 +35,7 @@ const T = {
     errors: "Σφάλματα",
     emails: "Emails",
     push: "Push",
+    feedback: "Γνώμες",
   },
   en: {
     title: "🛠️ Admin Dashboard",
@@ -51,6 +53,7 @@ const T = {
     errors: "Errors",
     emails: "Emails",
     push: "Push",
+    feedback: "Feedback",
   },
 };
 
@@ -67,6 +70,7 @@ const TABS = [
   { id: "errors",      icon: "🐞", key: "errors",      Comp: AdminErrorReports },
   { id: "emails",      icon: "📧", key: "emails",      Comp: AdminEmailQueue },
   { id: "push",        icon: "🔔", key: "push",        Comp: AdminPush },
+  { id: "feedback",    icon: "💬", key: "feedback",    Comp: AdminFeedback },
 ];
 
 export default function AdminDashboard() {

@@ -4,6 +4,7 @@ import { db, auth, app as firebaseApp } from "../auth/firebase";
 import { doc, onSnapshot, setDoc, serverTimestamp } from "firebase/firestore";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { AnalyticsService } from "../services/AnalyticsService";
+import { SchoolLicenseService } from "../services/SchoolLicenseService";
 
 const SUB_KEY = "geo:subscription";
 const TRIAL_KEY = "geo:trialStart";
@@ -60,7 +61,11 @@ export function SubscriptionProvider({ children }) {
     return { active: !ended, daysLeft, ended };
   }, [trialStart]);
 
-  const isPremium = tier === "premium" || tier === "family" || trial.active;
+  // School licence grants Premium without modifying the user's own tier.
+  const hasSchoolLicense = SchoolLicenseService.isActiveLocally();
+
+  const isPremium = tier === "premium" || tier === "family" || tier === "school"
+                    || trial.active || hasSchoolLicense;
 
   // Listen to Firestore for real-time subscription updates
   useEffect(() => {

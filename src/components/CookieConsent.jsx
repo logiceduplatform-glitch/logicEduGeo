@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import { LanguageContext } from "../i18n/LanguageContext";
 import { enableAnalytics } from "../auth/firebase";
+import { ClarityService } from "../services/ClarityService";
 
 const STORAGE_KEY = "edu:cookieConsent";
 const CONSENT_LOG_KEY = "edu:cookieConsentLog";
@@ -65,7 +66,10 @@ export default function CookieConsent() {
     const consent = { ...p, necessary: true, version: CONSENT_VERSION, ts: Date.now() };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(consent));
     logConsentEvent(consent);
-    if (consent.analytics) enableAnalytics();
+    if (consent.analytics) {
+      enableAnalytics();
+      ClarityService.init();
+    }
     setVisible(false);
   }, []);
 

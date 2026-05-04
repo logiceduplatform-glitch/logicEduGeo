@@ -296,6 +296,63 @@ service cloud.firestore {
       allow update, delete: if isAdmin();
     }
 
+    // School licenses (B2B). Public read by key (so a teacher can validate
+    // before activation), admins issue/update; activation appends the
+    // current user to members[] (handled below).
+    match /schoolLicenses/{key} {
+      allow read: if true; // public lookup by key
+      allow create, delete: if isAdmin();
+      // Admins can update everything; non-admins can only append themselves
+      // to members[] and increment activeCount by 1 (license activation).
+      allow update: if isAdmin()
+        || (request.auth != null
+            && request.resource.data.diff(resource.data).affectedKeys()
+                 .hasOnly(['members', 'activeCount', 'updatedAt'])
+            && request.resource.data.activeCount == resource.data.activeCount + 1);
+    }
+
+    // Friend challenges — async 1v1 quizzes.
+    match /challenges/{challengeId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null
+                    && request.resource.data.fromUid == request.auth.uid
+                    && request.resource.data.size() < 20;
+      allow update: if request.auth != null
+                    && (resource.data.fromUid == request.auth.uid
+                        || resource.data.toUid == request.auth.uid
+                        || resource.data.toUid == null /* open challenge */);
+      allow delete: if request.auth != null
+                    && (resource.data.fromUid == request.auth.uid || isAdmin());
+    }
+
+    // Live classroom rooms (Kahoot-style).
+    match /liveRooms/{roomId} {
+      allow read: if true; // anyone with the code can see room state
+      allow create: if request.auth != null
+                    && request.resource.data.hostUid == request.auth.uid;
+      allow update: if request.auth != null
+                    && (resource.data.hostUid == request.auth.uid
+                        || /* players can submit answers */
+                           request.resource.data.diff(resource.data).affectedKeys()
+                             .hasOnly(['players', 'updatedAt']));
+      allow delete: if request.auth != null
+                    && (resource.data.hostUid == request.auth.uid || isAdmin());
+    }
+
+    // User feedback (NPS-style 1-5 + optional comment).
+    // Anyone (incl. anonymous) can submit; only admins can read/manage.
+    match /feedback/{feedbackId} {
+      allow read: if isAdmin();
+      allow create: if request.resource.data.score is int
+                    && request.resource.data.score >= 1
+                    && request.resource.data.score <= 5
+                    && (!('comment' in request.resource.data)
+                        || (request.resource.data.comment is string
+                            && request.resource.data.comment.size() < 1000))
+                    && request.resource.data.size() < 20;
+      allow update, delete: if isAdmin();
+    }
+
     // Stripe subscription status mirror: read by owner, write only by Cloud Functions
     match /subscriptions/{uid} {
       allow read: if request.auth != null

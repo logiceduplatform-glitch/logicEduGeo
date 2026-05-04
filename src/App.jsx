@@ -9,6 +9,8 @@ import { SubscriptionProvider } from "./contexts/SubscriptionContext";
 import ErrorBoundary from "./components/ErrorBoundary";
 import CookieConsent from "./components/CookieConsent";
 import InstallPrompt from "./components/InstallPrompt";
+import WelcomeQuest from "./components/WelcomeQuest";
+import FeedbackWidget from "./components/FeedbackWidget";
 import SWUpdateBanner from "./components/SWUpdateBanner";
 import OfflineBanner from "./components/OfflineBanner";
 import SystemAnnouncementBanner from "./components/SystemAnnouncementBanner";
@@ -74,6 +76,12 @@ const NarrativeAdventurePage = React.lazy(() => import("./pages/NarrativeAdventu
 const VoiceQuizPage = React.lazy(() => import("./pages/VoiceQuizPage"));
 const LearningPathPage = React.lazy(() => import("./pages/LearningPathPage"));
 const SchoolAdminPage = React.lazy(() => import("./pages/SchoolAdminPage"));
+const SchoolLicensePage = React.lazy(() => import("./pages/SchoolLicensePage"));
+const FriendChallengesPage = React.lazy(() => import("./pages/FriendChallengesPage"));
+const LiveClassroomPage = React.lazy(() => import("./pages/LiveClassroomPage"));
+const PhotoSolverPage = React.lazy(() => import("./pages/PhotoSolverPage"));
+const AIStoryPage = React.lazy(() => import("./pages/AIStoryPage"));
+const TimeManagementPage = React.lazy(() => import("./pages/TimeManagementPage"));
 const KidLoginPage = React.lazy(() => import("./pages/KidLoginPage"));
 const AffiliatePage = React.lazy(() => import("./pages/AffiliatePage"));
 const CurriculumPacksPage = React.lazy(() => import("./pages/CurriculumPacksPage"));
@@ -325,6 +333,13 @@ export default function App() {
                 <Route path="/voice-quiz" element={<FeatureGate flag="voiceQuiz"><ErrorBoundary><VoiceQuizPage /></ErrorBoundary></FeatureGate>} />
                 <Route path="/learning-path" element={<FeatureGate flag="learningPath"><ErrorBoundary><LearningPathPage /></ErrorBoundary></FeatureGate>} />
                 <Route path="/school-admin" element={<FeatureGate flag="schoolAdmin"><RoleGate roles={["teacher", "admin"]}><ErrorBoundary><SchoolAdminPage /></ErrorBoundary></RoleGate></FeatureGate>} />
+                <Route path="/school-license" element={<ErrorBoundary><SchoolLicensePage /></ErrorBoundary>} />
+                <Route path="/challenges" element={<ErrorBoundary><FriendChallengesPage /></ErrorBoundary>} />
+                <Route path="/live" element={<ErrorBoundary><LiveClassroomPage /></ErrorBoundary>} />
+                <Route path="/live/:code" element={<ErrorBoundary><LiveClassroomPage /></ErrorBoundary>} />
+                <Route path="/photo-solver" element={<ErrorBoundary><PhotoSolverPage /></ErrorBoundary>} />
+                <Route path="/ai-story" element={<ErrorBoundary><AIStoryPage /></ErrorBoundary>} />
+                <Route path="/time-management" element={<ErrorBoundary><TimeManagementPage /></ErrorBoundary>} />
                 <Route path="/k" element={<FeatureGate flag="kidLogin"><ErrorBoundary><KidLoginPage /></ErrorBoundary></FeatureGate>} />
                 <Route path="/k/:code" element={<FeatureGate flag="kidLogin"><ErrorBoundary><KidLoginPage /></ErrorBoundary></FeatureGate>} />
                 <Route path="/affiliate" element={<FeatureGate flag="affiliate"><ErrorBoundary><AffiliatePage /></ErrorBoundary></FeatureGate>} />
@@ -362,6 +377,8 @@ export default function App() {
             <MilestoneListener />
             <CookieConsent />
             <InstallPrompt />
+            <WelcomeQuest />
+            <FeedbackWidget />
             <SWUpdateBanner />
             <OfflineBanner />
             <SystemAnnouncementBanner />

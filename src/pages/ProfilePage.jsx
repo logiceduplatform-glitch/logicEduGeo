@@ -14,6 +14,8 @@ import { StorageService } from "../services/StorageService";
 import ProfileSwitcher from "../components/ProfileSwitcher";
 import ReferralCard from "../components/ReferralCard";
 import AchievementShowcase from "../components/AchievementShowcase";
+import FoundingMemberBadge from "../components/FoundingMemberBadge";
+import SRSDashboard from "../components/SRSDashboard";
 import SeasonalThemeSelector from "../components/SeasonalThemeSelector";
 import { FeatureFlagService } from "../services/FeatureFlagService";
 import OfflineDownloadCard from "../components/OfflineDownloadCard";
@@ -940,8 +942,14 @@ export default function ProfilePage() {
           </div>
         )}
 
+        {/* Founding Member badge (auto-hides if not eligible) */}
+        {tab === "account" && user && <div className="mb-6"><FoundingMemberBadge variant="card" /></div>}
+
         {/* Achievement Showcase */}
         {tab === "account" && user && <div className="mb-6"><AchievementShowcase /></div>}
+
+        {/* Spaced Repetition stats */}
+        {tab === "account" && user && <div className="mb-6"><SRSDashboard /></div>}
 
         {/* Seasonal Theme */}
         {tab === "account" && user && FeatureFlagService.isEnabled("seasonalThemes") && <div className="mb-6"><SeasonalThemeSelector /></div>}

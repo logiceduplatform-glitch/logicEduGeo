@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { ProfileService } from "../services/ProfileService";
+import { FamilyPlanService } from "../services/FamilyPlanService";
+import { useSubscription } from "../contexts/SubscriptionContext";
 import {
   ageToQuizRoute,
   adultObjectiveRoutes,
@@ -46,6 +48,7 @@ function getObjectiveRoutes(ageKey) {
 export default function ProfileSwitcher({ lang, onSwitch, compact = false, readOnly = false }) {
   const isEl = lang === "el";
   const navigate = useNavigate();
+  const { tier } = useSubscription() || { tier: "free" };
   const [profiles, setProfiles] = useState(() => ProfileService.getAll());
   const [active, setActive] = useState(() => ProfileService.getActive());
   const [open, setOpen] = useState(false);
@@ -97,6 +100,15 @@ export default function ProfileSwitcher({ lang, onSwitch, compact = false, readO
 
   const handleAdd = () => {
     if (!newName.trim() || !newAge) return;
+    if (!FamilyPlanService.canAddMember(tier)) {
+      const limit = FamilyPlanService.getMemberLimit(tier);
+      window.alert(
+        `Έφτασες το όριο των ${limit} προφίλ για το πλάνο σου. ` +
+        `Αναβάθμισε σε Family Plan (έως 6 μέλη).`
+      );
+      navigate("/subscription");
+      return;
+    }
     const ageVal = newAge;
     const objVal = newObjective || "fun";
     ProfileService.add({

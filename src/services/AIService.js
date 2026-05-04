@@ -223,7 +223,114 @@ Give 5 exercises, 5 quiz questions, 8 worksheet items.`;
     // Fallback: local deterministic lesson
     return _localLesson({ topic, subject, ageGroup, difficulty, lang });
   },
+
+  /**
+   * Generate a short, age-appropriate story containing optional learning hooks
+   * (e.g. embedded math facts). Falls back to a deterministic template when
+   * no AI proxy is configured.
+   *
+   * @param {{ keywords?: string[], lang?: "el"|"en", ageGroup?: string,
+   *           subject?: "math"|"science"|"language"|"general" }} opts
+   * @returns {Promise<{ title: string, paragraphs: string[],
+   *                     question?: { q: string, a: string } }>}
+   */
+  async generateStory({ keywords = [], lang = "el", ageGroup = "6-8", subject = "general" } = {}) {
+    const rate = checkRateLimit("chat");
+    if (rate.allowed && AI_API_URL) {
+      const prompt = lang === "el"
+        ? `Γράψε μια σύντομη ιστορία (~150 λέξεις) για παιδιά ${ageGroup} χρονών χρησιμοποιώντας τις λέξεις: ${keywords.join(", ")}. Μάθημα: ${subject}. Επιστροφή σε JSON: {"title": "...", "paragraphs": ["...", "..."], "question": {"q": "...", "a": "..."}}`
+        : `Write a short story (~150 words) for children aged ${ageGroup} using the words: ${keywords.join(", ")}. Subject: ${subject}. Return as JSON: {"title": "...", "paragraphs": ["...", "..."], "question": {"q": "...", "a": "..."}}`;
+      try {
+        const reply = await this._callProxy([
+          { role: "system", content: lang === "el" ? "Είσαι παιδικός συγγραφέας. Πάντα επιστρέφεις έγκυρο JSON." : "You are a kids' story writer. Always return valid JSON." },
+          { role: "user", content: prompt },
+        ]);
+        if (reply) {
+          const m = reply.match(/\{[\s\S]*\}/);
+          if (m) {
+            try { return JSON.parse(m[0]); } catch { /* fall through */ }
+          }
+        }
+      } catch { /* fall through */ }
+    }
+    return _localStory({ keywords, lang, ageGroup, subject });
+  },
+
+  /**
+   * Solve a math problem captured as an image. The image must be a base64
+   * data URL (jpeg/png). Returns a step-by-step solution.
+   *
+   * NOTE: requires a vision-enabled AI proxy. If unavailable, returns a
+   * helpful "feature unavailable" object so the UI can degrade gracefully.
+   */
+  async solveImage({ imageDataUrl, lang = "el" } = {}) {
+    if (!imageDataUrl) return { ok: false, reason: "no_image" };
+    const rate = checkRateLimit("lesson");
+    if (!rate.allowed) return { ok: false, reason: "rate_limit", retryAfterMs: rate.retryAfterMs };
+    if (!AI_API_URL) return { ok: false, reason: "not_configured" };
+
+    try {
+      // Vision payload: most providers accept image_url with data URLs
+      const messages = [
+        {
+          role: "system",
+          content: lang === "el"
+            ? "Είσαι δάσκαλος μαθηματικών. Λύσε το πρόβλημα στην εικόνα βήμα-βήμα με απλά λόγια κατάλληλα για παιδιά. Επιστροφή σε JSON."
+            : "You are a math teacher. Solve the problem in the image step by step in simple words for children. Return as JSON.",
+        },
+        {
+          role: "user",
+          content: [
+            { type: "text", text: lang === "el"
+                ? 'Λύσε το με JSON: {"problem": "η άσκηση που βλέπεις", "steps": ["βήμα 1", ...], "answer": "τελική απάντηση"}'
+                : 'Solve as JSON: {"problem": "the exercise you see", "steps": ["step 1", ...], "answer": "final answer"}' },
+            { type: "image_url", image_url: { url: imageDataUrl } },
+          ],
+        },
+      ];
+      const reply = await this._callProxy(messages);
+      recordCall("lesson");
+      if (reply) {
+        const m = reply.match(/\{[\s\S]*\}/);
+        if (m) {
+          try { return { ok: true, ...JSON.parse(m[0]) }; } catch { /* */ }
+        }
+        return { ok: true, problem: "?", steps: [reply], answer: "—" };
+      }
+    } catch (e) {
+      console.warn("[AI] solveImage failed", e);
+    }
+    return { ok: false, reason: "ai_error" };
+  },
 };
+
+// ── Local fallback story generator ──────────────────────────────────
+// Deterministic template that mixes in the user-supplied keywords.
+function _localStory({ keywords = [], lang = "el", ageGroup = "6-8" }) {
+  const isEl = lang === "el";
+  const k = keywords.length > 0 ? keywords : (isEl ? ["μαγικός", "δράκος", "κήπος"] : ["magic", "dragon", "garden"]);
+  const [a, b, c] = [k[0] || "?", k[1] || "?", k[2] || "?"];
+  const title = isEl ? `Η ιστορία του ${a}` : `The tale of ${a}`;
+  const paragraphs = isEl ? [
+    `Μια φορά κι έναν καιρό ζούσε ο/η ${a} σε ένα μέρος γεμάτο ${b}.`,
+    `Κάθε πρωί έπαιρνε τον/την φίλο/η του/της ${c} και ξεκινούσαν για περιπέτεια.`,
+    `Μια μέρα συνάντησαν ένα γρίφο: αν ο/η ${a} είχε 3 ${b} και βρήκε ακόμη 4, πόσα είχε συνολικά;`,
+    `Με λίγη σκέψη βρήκαν την απάντηση και επέστρεψαν στο σπίτι, χαρούμενοι/ες ότι έλυσαν το μυστήριο.`,
+  ] : [
+    `Once upon a time there was ${a} in a place full of ${b}.`,
+    `Every morning ${a} took friend ${c} and headed off on an adventure.`,
+    `One day they met a riddle: if ${a} had 3 ${b} and found 4 more, how many in total?`,
+    `After a moment of thought they found the answer and went home, happy they cracked the mystery.`,
+  ];
+  return {
+    title,
+    paragraphs,
+    question: isEl
+      ? { q: `Πόσα ${b} είχε συνολικά ο/η ${a};`, a: "7" }
+      : { q: `How many ${b} did ${a} have in total?`, a: "7" },
+    ageGroup,
+  };
+}
 
 // ── Local fallback generator ─────────────────────────────────────────────
 function _localLesson({ topic, subject, ageGroup, difficulty, lang }) {
