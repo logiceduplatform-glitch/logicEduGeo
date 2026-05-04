@@ -138,6 +138,19 @@ export const SEARCH_INDEX = [
   { id: "ac-qmath",      icon: "🧮", path: "/games/quick-math",                    category: "game",  title: { el: "Quick Math",        en: "Quick Math" },        keywords: ["math", "quick", "true", "false"] },
   { id: "ac-speed",      icon: "📚", path: "/games/speed-reading",                 category: "game",  title: { el: "Γρήγορη Ανάγνωση", en: "Speed Reading" },      keywords: ["reading", "speed", "ανάγνωση"] },
   { id: "ac-tap",        icon: "🎮", path: "/games/tap-dance",                     category: "game",  title: { el: "Tap Dance",         en: "Tap Dance" },         keywords: ["rhythm", "tap", "ρυθμός"] },
+
+  // STEM
+  { id: "stem-show",     icon: "🔬", path: "/games/stem",                          category: "game",  title: { el: "STEM & Επιστήμη",   en: "STEM & Science" },    keywords: ["stem", "science", "επιστήμη"] },
+  { id: "stem-chem",     icon: "🧪", path: "/games/chemistry",                     category: "game",  title: { el: "Χημικό Εργαστήριο", en: "Chemistry Lab" },     keywords: ["chemistry", "lab", "χημεία"] },
+  { id: "stem-physics",  icon: "⚙️", path: "/games/physics",                       category: "game",  title: { el: "Φυσικό Sandbox",   en: "Physics Sandbox" },    keywords: ["physics", "gravity", "φυσική"] },
+  { id: "stem-solar",    icon: "🌌", path: "/games/solar-system",                  category: "game",  title: { el: "Ηλιακό Σύστημα",   en: "Solar System" },       keywords: ["solar", "planets", "πλανήτες"] },
+  { id: "stem-dna",      icon: "🧬", path: "/games/dna",                           category: "game",  title: { el: "DNA Builder",       en: "DNA Builder" },       keywords: ["dna", "biology", "γενετική"] },
+  { id: "stem-circuit",  icon: "🔌", path: "/games/circuit",                       category: "game",  title: { el: "Φτιάξε Κύκλωμα",    en: "Circuit Builder" },   keywords: ["circuit", "electricity", "κύκλωμα"] },
+  { id: "stem-weather",  icon: "🌦️", path: "/games/weather",                       category: "game",  title: { el: "Καιρός Σιμουλέισον", en: "Weather Sim" },      keywords: ["weather", "climate", "καιρός"] },
+  { id: "stem-eco",      icon: "🌳", path: "/games/ecosystem",                     category: "game",  title: { el: "Οικοσύστημα",       en: "Ecosystem" },         keywords: ["ecosystem", "food chain", "οικοσύστημα"] },
+
+  // Master showcase
+  { id: "all-games",     icon: "🎯", path: "/games/all",                           category: "game",  title: { el: "Όλα τα Νέα Παιχνίδια", en: "All New Games" },  keywords: ["all", "games", "showcase", "όλα"] },
 ];
 
 const STOP_WORDS = ["the", "a", "an", "to", "of", "in", "on", "για", "και", "το", "η", "ο"];

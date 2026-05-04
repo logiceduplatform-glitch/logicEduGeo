@@ -139,6 +139,15 @@ const MemorySequencePage = React.lazy(() => import("./pages/games/MemorySequence
 const QuickMathPage = React.lazy(() => import("./pages/games/QuickMathPage"));
 const SpeedReadingPage = React.lazy(() => import("./pages/games/SpeedReadingPage"));
 const TapDancePage = React.lazy(() => import("./pages/games/TapDancePage"));
+const STEMGamesShowcasePage = React.lazy(() => import("./pages/games/STEMGamesShowcasePage"));
+const AllGamesShowcasePage = React.lazy(() => import("./pages/games/AllGamesShowcasePage"));
+const ChemistryLabPage = React.lazy(() => import("./pages/games/ChemistryLabPage"));
+const PhysicsSandboxPage = React.lazy(() => import("./pages/games/PhysicsSandboxPage"));
+const SolarSystemPage = React.lazy(() => import("./pages/games/SolarSystemPage"));
+const DNABuilderPage = React.lazy(() => import("./pages/games/DNABuilderPage"));
+const CircuitBuilderPage = React.lazy(() => import("./pages/games/CircuitBuilderPage"));
+const WeatherSimPage = React.lazy(() => import("./pages/games/WeatherSimPage"));
+const EcosystemPage = React.lazy(() => import("./pages/games/EcosystemPage"));
 const KidLoginPage = React.lazy(() => import("./pages/KidLoginPage"));
 const AffiliatePage = React.lazy(() => import("./pages/AffiliatePage"));
 const CurriculumPacksPage = React.lazy(() => import("./pages/CurriculumPacksPage"));
@@ -455,6 +464,15 @@ export default function App() {
                 <Route path="/games/quick-math" element={<ErrorBoundary><QuickMathPage /></ErrorBoundary>} />
                 <Route path="/games/speed-reading" element={<ErrorBoundary><SpeedReadingPage /></ErrorBoundary>} />
                 <Route path="/games/tap-dance" element={<ErrorBoundary><TapDancePage /></ErrorBoundary>} />
+                <Route path="/games/stem" element={<ErrorBoundary><STEMGamesShowcasePage /></ErrorBoundary>} />
+                <Route path="/games/all" element={<ErrorBoundary><AllGamesShowcasePage /></ErrorBoundary>} />
+                <Route path="/games/chemistry" element={<ErrorBoundary><ChemistryLabPage /></ErrorBoundary>} />
+                <Route path="/games/physics" element={<ErrorBoundary><PhysicsSandboxPage /></ErrorBoundary>} />
+                <Route path="/games/solar-system" element={<ErrorBoundary><SolarSystemPage /></ErrorBoundary>} />
+                <Route path="/games/dna" element={<ErrorBoundary><DNABuilderPage /></ErrorBoundary>} />
+                <Route path="/games/circuit" element={<ErrorBoundary><CircuitBuilderPage /></ErrorBoundary>} />
+                <Route path="/games/weather" element={<ErrorBoundary><WeatherSimPage /></ErrorBoundary>} />
+                <Route path="/games/ecosystem" element={<ErrorBoundary><EcosystemPage /></ErrorBoundary>} />
                 <Route path="/k" element={<FeatureGate flag="kidLogin"><ErrorBoundary><KidLoginPage /></ErrorBoundary></FeatureGate>} />
                 <Route path="/k/:code" element={<FeatureGate flag="kidLogin"><ErrorBoundary><KidLoginPage /></ErrorBoundary></FeatureGate>} />
                 <Route path="/affiliate" element={<FeatureGate flag="affiliate"><ErrorBoundary><AffiliatePage /></ErrorBoundary></FeatureGate>} />

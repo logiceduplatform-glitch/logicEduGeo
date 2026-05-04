@@ -246,84 +246,46 @@ export default function HomePage() {
         <FunZoneSection />
       </RevealSection>
 
-      {/* NEW GAMES BANNERS */}
+      {/* NEW GAMES MEGA BANNER */}
       <RevealSection>
-        <div className="max-w-6xl mx-auto px-4 py-6 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="max-w-6xl mx-auto px-4 py-6">
           <a
-            href="/games"
-            className="block rounded-3xl p-6 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 text-white shadow-xl hover:shadow-2xl hover:scale-[1.01] transition-all"
+            href="/games/all"
+            className="block rounded-3xl p-8 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 text-white shadow-2xl hover:shadow-2xl hover:scale-[1.01] transition-all mb-4"
           >
-            <div className="text-sm font-bold uppercase tracking-wider opacity-90">
-              {lang === "el" ? "Νέα στην Kibloo" : "New on Kibloo"}
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <div className="text-sm font-bold uppercase tracking-wider opacity-90">
+                  {lang === "el" ? "🎉 Νέα στην Kibloo" : "🎉 New on Kibloo"}
+                </div>
+                <h3 className="text-2xl sm:text-4xl font-extrabold mt-1">
+                  {lang === "el" ? "59 νέα παιχνίδια — 6 κατηγορίες!" : "59 new games — 6 categories!"}
+                </h3>
+                <div className="text-sm opacity-90 mt-1">
+                  {lang === "el" ? "Κλασικά · Εκπαιδευτικά · Δημιουργικά · Multiplayer · Δράσης · STEM" : "Classics · Educational · Creative · Multiplayer · Action · STEM"}
+                </div>
+              </div>
+              <span className="px-5 py-3 bg-white/20 hover:bg-white/30 rounded-full font-bold">
+                {lang === "el" ? "Δες όλα →" : "Browse all →"}
+              </span>
             </div>
-            <h3 className="text-xl sm:text-2xl font-extrabold mt-1">
-              {lang === "el" ? "🎮 10 κλασικά παιχνίδια" : "🎮 10 classic games"}
-            </h3>
-            <div className="text-sm opacity-90 mt-1">Wordle · 2048 · Snake · Tetris · Tic-Tac-Toe...</div>
-            <span className="inline-block mt-3 px-3 py-1 bg-white/20 rounded-full font-bold text-sm">
-              {lang === "el" ? "Παίξε τώρα →" : "Play now →"}
-            </span>
           </a>
-          <a
-            href="/games/educational"
-            className="block rounded-3xl p-6 bg-gradient-to-r from-emerald-500 via-teal-600 to-blue-600 text-white shadow-xl hover:shadow-2xl hover:scale-[1.01] transition-all"
-          >
-            <div className="text-sm font-bold uppercase tracking-wider opacity-90">
-              {lang === "el" ? "Μάθηση + Διασκέδαση" : "Learn + Play"}
-            </div>
-            <h3 className="text-xl sm:text-2xl font-extrabold mt-1">
-              {lang === "el" ? "🎓 16 εκπαιδευτικά παιχνίδια" : "🎓 16 educational games"}
-            </h3>
-            <div className="text-sm opacity-90 mt-1">Spelling · Math · Geography · Periodic Table...</div>
-            <span className="inline-block mt-3 px-3 py-1 bg-white/20 rounded-full font-bold text-sm">
-              {lang === "el" ? "Δες όλα →" : "See all →"}
-            </span>
-          </a>
-          <a
-            href="/games/creative"
-            className="block rounded-3xl p-6 bg-gradient-to-r from-pink-600 via-fuchsia-600 to-purple-700 text-white shadow-xl hover:shadow-2xl hover:scale-[1.01] transition-all"
-          >
-            <div className="text-sm font-bold uppercase tracking-wider opacity-90">
-              {lang === "el" ? "Δημιουργικότητα" : "Creativity"}
-            </div>
-            <h3 className="text-xl sm:text-2xl font-extrabold mt-1">
-              {lang === "el" ? "🎨 13 δημιουργικά παιχνίδια" : "🎨 13 creative games"}
-            </h3>
-            <div className="text-sm opacity-90 mt-1">Pixel Art · Beat Maker · Stop Motion...</div>
-            <span className="inline-block mt-3 px-3 py-1 bg-white/20 rounded-full font-bold text-sm">
-              {lang === "el" ? "Δημιούργησε →" : "Create →"}
-            </span>
-          </a>
-          <a
-            href="/games/multiplayer"
-            className="block rounded-3xl p-6 bg-gradient-to-r from-rose-500 via-red-600 to-orange-600 text-white shadow-xl hover:shadow-2xl hover:scale-[1.01] transition-all"
-          >
-            <div className="text-sm font-bold uppercase tracking-wider opacity-90">
-              {lang === "el" ? "Με φίλο" : "With a friend"}
-            </div>
-            <h3 className="text-xl sm:text-2xl font-extrabold mt-1">
-              {lang === "el" ? "🤝 Multiplayer 1v1" : "🤝 Multiplayer 1v1"}
-            </h3>
-            <div className="text-sm opacity-90 mt-1">Battle Quiz · Co-op Maze · Pictionary...</div>
-            <span className="inline-block mt-3 px-3 py-1 bg-white/20 rounded-full font-bold text-sm">
-              {lang === "el" ? "Παίξτε μαζί →" : "Play together →"}
-            </span>
-          </a>
-          <a
-            href="/games/action"
-            className="block rounded-3xl p-6 bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 text-white shadow-xl hover:shadow-2xl hover:scale-[1.01] transition-all"
-          >
-            <div className="text-sm font-bold uppercase tracking-wider opacity-90">
-              {lang === "el" ? "Δράση" : "Action"}
-            </div>
-            <h3 className="text-xl sm:text-2xl font-extrabold mt-1">
-              {lang === "el" ? "⚡ 8 παιχνίδια ταχύτητας" : "⚡ 8 reflex games"}
-            </h3>
-            <div className="text-sm opacity-90 mt-1">Reaction · Bubble Pop · Tap Dance...</div>
-            <span className="inline-block mt-3 px-3 py-1 bg-white/20 rounded-full font-bold text-sm">
-              {lang === "el" ? "Δοκίμασε →" : "Try →"}
-            </span>
-          </a>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+            {[
+              { p: "/games", e: "🎮", el: "Κλασικά", en: "Classics", n: 10 },
+              { p: "/games/educational", e: "🎓", el: "Μάθηση", en: "Learn", n: 16 },
+              { p: "/games/creative", e: "🎨", el: "Τέχνη", en: "Create", n: 13 },
+              { p: "/games/multiplayer", e: "🤝", el: "1v1", en: "1v1", n: 5 },
+              { p: "/games/action", e: "⚡", el: "Δράση", en: "Action", n: 8 },
+              { p: "/games/stem", e: "🔬", el: "STEM", en: "STEM", n: 7 },
+            ].map((c) => (
+              <a key={c.p} href={c.p} className="bg-white dark:bg-slate-800 hover:scale-[1.05] transition-transform border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-center shadow">
+                <div className="text-3xl">{c.e}</div>
+                <div className="text-xs font-bold text-slate-700 dark:text-slate-200 mt-1">{lang === "el" ? c.el : c.en}</div>
+                <div className="text-[10px] text-slate-500">{c.n} {lang === "el" ? "παιχνίδια" : "games"}</div>
+              </a>
+            ))}
+          </div>
         </div>
       </RevealSection>
 
