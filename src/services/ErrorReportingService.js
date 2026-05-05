@@ -1,5 +1,6 @@
 import { db } from "../auth/firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { SentryService } from "./SentryService";
 
 const ERROR_LOG_KEY = "geo:errorLog";
 const MAX_LOG_SIZE = 50;
@@ -118,6 +119,9 @@ export const ErrorReportingService = {
 
     // Firestore upload (production only, rate-limited).
     uploadToFirestore(entry);
+
+    // Sentry forwarding (no-op if Sentry is disabled or DSN missing).
+    try { SentryService.captureException(error, context); } catch { /* never throw */ }
 
     if (import.meta.env.DEV) {
       console.error("[ErrorReporting]", entry.message, context);

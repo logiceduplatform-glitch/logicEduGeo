@@ -8,6 +8,13 @@ import { hasConsent } from './components/CookieConsent';
 import { ClarityService } from './services/ClarityService';
 import { enableAnalytics } from './auth/firebase';
 import { FeatureFlagService } from './services/FeatureFlagService';
+import { SentryService } from './services/SentryService';
+import { AppCheckService } from './services/AppCheckService';
+
+// Initialise error tracking ASAP so we capture early errors too.
+SentryService.init();
+// Anti-abuse layer for Firebase services. No-op if site key isn't configured.
+AppCheckService.init();
 import './index.css';
 
 try {

@@ -30,6 +30,8 @@ import UseCasesSection from "../components/UseCasesSection";
 import ParentPeaceSection from "../components/ParentPeaceSection";
 import BlogTipsSection from "../components/BlogTipsSection";
 import ValuePillarsSection from "../components/ValuePillarsSection";
+import ComparisonSection from "../components/ComparisonSection";
+import NewsletterSignup from "../components/NewsletterSignup";
 
 const CATEGORIES = [
   { key: "Age 2-3", icon: "👶", gradient: "from-rose-400 to-pink-400", route: "/play/2-3-school", desc: { el: "Πρώτα βήματα", en: "First steps" } },
@@ -324,10 +326,24 @@ export default function HomePage() {
       <TrustSignals />
       </RevealSection>
 
+      {/* COMPARISON vs competitors */}
+      {FeatureFlagService.isEnabled("marketing_comparison") && (
+        <RevealSection>
+          <ComparisonSection />
+        </RevealSection>
+      )}
+
       {/* PRICING */}
       <RevealSection>
       <PricingSection />
       </RevealSection>
+
+      {/* NEWSLETTER SIGNUP */}
+      {FeatureFlagService.isEnabled("marketing_newsletter") && (
+        <RevealSection>
+          <NewsletterSignup />
+        </RevealSection>
+      )}
 
       {/* FAQ */}
       <RevealSection>

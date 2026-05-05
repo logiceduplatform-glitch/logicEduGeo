@@ -180,6 +180,8 @@ export const DEFAULT_FLAGS = {
   analytics_clarity:        { enabled: true, label: { el: "Microsoft Clarity (heatmaps, session recordings)", en: "Microsoft Clarity (heatmaps, sessions)" }, category: "analytics" },
   analytics_gameEvents:     { enabled: true, label: { el: "Game events (start/complete/score)", en: "Game events (start/complete/score)" }, category: "analytics" },
   analytics_milestones:     { enabled: true, label: { el: "Milestone tracking", en: "Milestone tracking" }, category: "analytics" },
+  sentry_enabled:           { enabled: true, label: { el: "Sentry · Error tracking & performance", en: "Sentry · Error tracking & performance" }, category: "analytics" },
+  appcheck_enabled:         { enabled: true, label: { el: "Firebase App Check (anti-abuse)", en: "Firebase App Check (anti-abuse)" }, category: "analytics" },
 
   // ─── Onboarding & Engagement ────────────────────────────
   welcomeQuest:             { enabled: true, label: { el: "Welcome Quest (interactive onboarding)", en: "Welcome Quest (interactive onboarding)" }, category: "onboarding" },

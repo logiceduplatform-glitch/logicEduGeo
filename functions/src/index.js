@@ -28,3 +28,9 @@ export {
   sendPushToUser,
   processPushCampaign,
 } from "./modules/push.js";
+
+// Firestore daily backups (disaster recovery)
+export {
+  scheduledFirestoreBackup,
+  manualFirestoreBackup,
+} from "./modules/backups.js";

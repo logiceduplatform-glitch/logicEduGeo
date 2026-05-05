@@ -107,6 +107,13 @@ export default function CookieConsent() {
               >
                 {isEl ? "Πολιτική απορρήτου" : "Privacy policy"}
               </a>
+              {" · "}
+              <a
+                href="/cookies"
+                className="text-purple-600 dark:text-purple-400 hover:underline font-medium"
+              >
+                {isEl ? "Πολιτική Cookies" : "Cookie policy"}
+              </a>
             </p>
           </div>
         </div>

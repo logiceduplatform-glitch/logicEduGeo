@@ -55,5 +55,7 @@
   <!-- Legal -->
   <url><loc>https://kibloo.app/privacy</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://kibloo.app/terms</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://kibloo.app/cookies</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://kibloo.app/dpa</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
 
 </urlset>

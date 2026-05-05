@@ -15,7 +15,20 @@ export default defineConfig({
     ],
   },
   build: {
-    chunkSizeWarningLimit: 600,
+    // Larger limit because vendor-html2pdf is intentionally a lazy chunk
+    // (only used on demand from teacher Reports / certificates).
+    chunkSizeWarningLimit: 1000,
+    // Inline very small assets (≤4KB) to reduce HTTP requests.
+    assetsInlineLimit: 4096,
+    // Use modern target — Firebase Hosting clients are all evergreen.
+    target: 'es2020',
+    // Source maps for Sentry / debugging in production.
+    // Hidden = .map files exist but are not referenced by JS files
+    // (so DevTools won't fetch them automatically; only Sentry uploads them).
+    sourcemap: 'hidden',
+    // Minify with esbuild (faster than terser, similar output).
+    minify: 'esbuild',
+    cssCodeSplit: true,
     // Exclude on-demand-only chunks from <link rel="modulepreload"> hints
     // so they aren't fetched at page load. They will still load on demand
     // when their dynamic import runs.
@@ -28,6 +41,7 @@ export default defineConfig({
             !d.includes("vendor-charts") &&
             !d.includes("vendor-chess") &&
             !d.includes("vendor-qrcode") &&
+            !d.includes("vendor-firebase-analytics") &&
             !d.includes("page-admin") &&
             !d.includes("page-teacher") &&
             !d.includes("page-parent") &&

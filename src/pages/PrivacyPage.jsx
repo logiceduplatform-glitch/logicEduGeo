@@ -3,11 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { LanguageContext } from "../i18n/LanguageContext";
 import Navbar from "../components/Navbar";
 import SEO from "../components/SEO";
+import { LEGAL_INFO as L } from "../config/legalInfo";
 
 const CONTENT = {
   el: {
     title: "Πολιτική Απορρήτου",
-    updated: "Τελευταία ενημέρωση: Απρίλιος 2026",
+    updated: `Τελευταία ενημέρωση: ${L.policyUpdated}`,
     sections: [
       {
         heading: "1. Εισαγωγή",
@@ -61,7 +62,7 @@ const CONTENT = {
   },
   en: {
     title: "Privacy Policy",
-    updated: "Last updated: April 2026",
+    updated: `Last updated: ${L.policyUpdated}`,
     sections: [
       {
         heading: "1. Introduction",

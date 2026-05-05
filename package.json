@@ -20,6 +20,7 @@
     "test:bundle": "vitest run --reporter=verbose src/test/bundleSize.test.js"
   },
   "dependencies": {
+    "@sentry/react": "^10.51.0",
     "chess.js": "^1.4.0",
     "firebase": "^12.5.0",
     "html2pdf.js": "^0.14.0",

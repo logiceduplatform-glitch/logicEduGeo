@@ -78,13 +78,26 @@ export default function FooterSection({ t }) {
 
         <div className="border-t border-slate-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm">
           <span>&copy; {new Date().getFullYear()} Kibloo</span>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
             <a href="/privacy" className="hover:text-white transition-colors">
               {isEl ? "Απόρρητο" : "Privacy"}
             </a>
             <span className="text-slate-700">|</span>
             <a href="/terms" className="hover:text-white transition-colors">
               {isEl ? "Όροι χρήσης" : "Terms"}
+            </a>
+            <span className="text-slate-700">|</span>
+            <a href="/cookies" className="hover:text-white transition-colors">
+              {isEl ? "Cookies" : "Cookies"}
+            </a>
+            <span className="text-slate-700">|</span>
+            <a href="/dpa" className="hover:text-white transition-colors">
+              {isEl ? "DPA Σχολείων" : "School DPA"}
+            </a>
+            <span className="text-slate-700">|</span>
+            <a href="/status" className="hover:text-white transition-colors flex items-center gap-1">
+              <span className="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
+              Status
             </a>
           </div>
           <span className="text-slate-500">

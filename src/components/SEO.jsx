@@ -41,6 +41,8 @@ export default function SEO({
   article,
   course,
   game,
+  faq,           // [{ q, a }] for FAQPage schema
+  breadcrumbs,   // [{ name, url }]
   noindex,
 }) {
   const location = useLocation();
@@ -158,6 +160,29 @@ export default function SEO({
 
   const ogType = article ? "article" : "website";
 
+  // FAQPage schema — boosts Google "People also ask" rich results.
+  const faqSchema = (faq && faq.length > 0) ? {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map(({ q, a }) => ({
+      "@type": "Question",
+      name: q,
+      acceptedAnswer: { "@type": "Answer", text: a },
+    })),
+  } : null;
+
+  // BreadcrumbList schema — shows trail in Google results.
+  const breadcrumbSchema = (breadcrumbs && breadcrumbs.length > 0) ? {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: breadcrumbs.map((b, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: b.name,
+      item: b.url.startsWith("http") ? b.url : `${DEFAULTS.url}${b.url}`,
+    })),
+  } : null;
+
   return (
     <Helmet>
       <title>{fullTitle}</title>
@@ -187,6 +212,8 @@ export default function SEO({
 
       <script type="application/ld+json">{JSON.stringify(ORG_SCHEMA)}</script>
       {jsonLd && <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>}
+      {faqSchema && <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>}
+      {breadcrumbSchema && <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>}
     </Helmet>
   );
 }

@@ -51,6 +51,9 @@ const PlayerStatsPage = React.lazy(() => import("./pages/PlayerStatsPage"));
 const MyGamesPage = React.lazy(() => import("./pages/MyGamesPage"));
 const PrivacyPage = React.lazy(() => import("./pages/PrivacyPage"));
 const TermsPage = React.lazy(() => import("./pages/TermsPage"));
+const CookiesPage = React.lazy(() => import("./pages/CookiesPage"));
+const DPAPage = React.lazy(() => import("./pages/DPAPage"));
+const StatusPage = React.lazy(() => import("./pages/StatusPage"));
 const FAQPage = React.lazy(() => import("./pages/FAQPage"));
 const ContactPage = React.lazy(() => import("./pages/ContactPage"));
 const AboutPage = React.lazy(() => import("./pages/AboutPage"));
@@ -254,7 +257,7 @@ function ScrollToTop() {
 function OnboardingGuard() {
   const { user, userProfile, loading } = React.useContext(AuthContext);
   const { pathname } = useLocation();
-  const skipPaths = ["/onboarding", "/auth", "/guest-setup", "/guest-expired", "/privacy", "/terms", "/faq", "/contact", "/about"];
+  const skipPaths = ["/onboarding", "/auth", "/guest-setup", "/guest-expired", "/privacy", "/terms", "/cookies", "/dpa", "/status", "/faq", "/contact", "/about"];
   if (loading) return null;
   if (user && !userProfile && !skipPaths.includes(pathname)) {
     return <Navigate to="/onboarding" replace />;
@@ -345,6 +348,9 @@ export default function App() {
                 <Route path="/guest-setup" element={<GuestSetup />} />
                 <Route path="/privacy" element={<PrivacyPage />} />
                 <Route path="/terms" element={<TermsPage />} />
+                <Route path="/cookies" element={<CookiesPage />} />
+                <Route path="/dpa" element={<DPAPage />} />
+                <Route path="/status" element={<StatusPage />} />
                 <Route path="/faq" element={<FAQPage />} />
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="/about" element={<AboutPage />} />
