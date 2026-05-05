@@ -367,7 +367,7 @@ export default function App() {
                 <Route path="/blog/:slug" element={<FeatureGate flag="blog"><BlogPage /></FeatureGate>} />
                 <Route path="/blog" element={<FeatureGate flag="blog"><BlogPage /></FeatureGate>} />
                 <Route path="/for-teachers" element={<ForTeachersPage />} />
-                <Route path="/for-schools" element={<ForSchoolsPage />} />
+                <Route path="/for-schools" element={<FeatureGate flag="forSchoolsPage"><ForSchoolsPage /></FeatureGate>} />
                 <Route path="/for-parents" element={<ForParentsPage />} />
                 <Route path="/my-records" element={<LeaderboardPage />} />
                 <Route path="/leaderboard" element={<FeatureGate flag="leaderboard"><PremiumGate id="feature_leaderboard"><GlobalLeaderboardPage /></PremiumGate></FeatureGate>} />
@@ -429,9 +429,9 @@ export default function App() {
                 <Route path="/games/2048" element={<ErrorBoundary><Game2048Page /></ErrorBoundary>} />
                 <Route path="/games/snake" element={<ErrorBoundary><SnakePage /></ErrorBoundary>} />
                 <Route path="/games/tetris" element={<ErrorBoundary><TetrisPage /></ErrorBoundary>} />
-                <Route path="/games/lights-out" element={<ErrorBoundary><LightsOutPage /></ErrorBoundary>} />
-                <Route path="/games/sudoku-mini" element={<ErrorBoundary><SudokuMiniPage /></ErrorBoundary>} />
-                <Route path="/games/memory-pairs" element={<ErrorBoundary><MemoryPairsPage /></ErrorBoundary>} />
+                <Route path="/games/lights-out" element={<FeatureGate flag="game_lights_out"><ErrorBoundary><LightsOutPage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/games/sudoku-mini" element={<FeatureGate flag="game_sudoku_mini"><ErrorBoundary><SudokuMiniPage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/games/memory-pairs" element={<FeatureGate flag="game_memory_pairs"><ErrorBoundary><MemoryPairsPage /></ErrorBoundary></FeatureGate>} />
                 <Route path="/games/tic-tac-toe" element={<ErrorBoundary><TicTacToeOnlinePage /></ErrorBoundary>} />
                 <Route path="/games/tic-tac-toe/:code" element={<ErrorBoundary><TicTacToeOnlinePage /></ErrorBoundary>} />
                 <Route path="/games/24" element={<ErrorBoundary><Game24Page /></ErrorBoundary>} />

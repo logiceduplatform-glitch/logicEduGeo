@@ -5,14 +5,20 @@ const TEXTS = {
   el: {
     title: "Ωχ! Κάτι πήγε στραβά",
     fallbackMsg: "Παρουσιάστηκε ένα απροσδόκητο σφάλμα.",
+    chunkTitle: "Νέα έκδοση είναι διαθέσιμη",
+    chunkMsg: "Φόρτωσε ξανά τη σελίδα για να δεις τα τελευταία updates.",
     retry: "Δοκίμασε ξανά",
     goHome: "Αρχική σελίδα",
+    reloadFresh: "🔄 Φόρτωση νέας έκδοσης",
   },
   en: {
     title: "Oops! Something went wrong",
     fallbackMsg: "An unexpected error occurred.",
+    chunkTitle: "A new version is available",
+    chunkMsg: "Please reload the page to see the latest updates.",
     retry: "Try again",
     goHome: "Go home",
+    reloadFresh: "🔄 Load latest version",
   },
 };
 
@@ -31,14 +37,25 @@ function isChunkLoadError(err) {
   );
 }
 
-const RELOAD_KEY = "geo:chunkReloadOnce";
+const RELOAD_KEY = "geo:chunkReloadAt";
+const RELOAD_COOLDOWN_MS = 30_000; // allow another reload after 30s
+
 function maybeAutoReload() {
   try {
-    // Avoid reload loops
-    const did = sessionStorage.getItem(RELOAD_KEY);
-    if (did) return false;
-    sessionStorage.setItem(RELOAD_KEY, String(Date.now()));
-    // Hard reload to force fetching fresh index.html
+    const last = parseInt(sessionStorage.getItem(RELOAD_KEY) || "0", 10);
+    const now = Date.now();
+    // If we already reloaded in the last 30s, don't loop — show fallback UI instead.
+    if (last && now - last < RELOAD_COOLDOWN_MS) return false;
+    sessionStorage.setItem(RELOAD_KEY, String(now));
+
+    // Best-effort: clear caches & unregister SW so the new index.html is fetched fresh.
+    try {
+      if ("caches" in window) {
+        caches.keys().then((keys) => keys.forEach((k) => caches.delete(k))).catch(() => {});
+      }
+    } catch { /* noop */ }
+
+    // Hard reload bypassing cache
     window.location.reload();
     return true;
   } catch {
@@ -50,9 +67,23 @@ function maybeAutoReload() {
 if (typeof window !== "undefined") {
   window.addEventListener("unhandledrejection", (event) => {
     if (isChunkLoadError(event.reason)) {
+      // Prevent the noisy console error before the reload
+      try { event.preventDefault?.(); } catch { /* noop */ }
       maybeAutoReload();
     }
   });
+  // Module/script load failures fire `error` (not `unhandledrejection`) on some browsers
+  window.addEventListener("error", (event) => {
+    const target = event?.target;
+    if (target && (target.tagName === "SCRIPT" || target.tagName === "LINK")) {
+      const src = target.src || target.href || "";
+      if (src && /\/assets\/.+\.(js|mjs|css)$/i.test(src)) {
+        maybeAutoReload();
+      }
+    } else if (isChunkLoadError(event?.error || event?.message)) {
+      maybeAutoReload();
+    }
+  }, true);
 }
 
 export default class ErrorBoundary extends React.Component {
@@ -75,11 +106,50 @@ export default class ErrorBoundary extends React.Component {
 
   handleReset = () => this.setState({ hasError: false, error: null });
 
+  hardReload = () => {
+    try {
+      sessionStorage.removeItem(RELOAD_KEY);
+      if ("caches" in window) {
+        caches.keys().then((keys) => keys.forEach((k) => caches.delete(k))).finally(() => {
+          window.location.reload();
+        });
+      } else {
+        window.location.reload();
+      }
+    } catch {
+      window.location.reload();
+    }
+  };
+
   render() {
     if (!this.state.hasError) return this.props.children;
 
     const lang = document.documentElement.lang === "el" ? "el" : "en";
     const t = TEXTS[lang];
+    const isChunk = isChunkLoadError(this.state.error);
+
+    // Stale-chunk specific UI: friendly "new version" message instead of crash UI.
+    if (isChunk) {
+      return (
+        <div className="min-h-[300px] flex items-center justify-center p-8">
+          <div className="text-center max-w-md">
+            <div className="text-6xl mb-4">✨</div>
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100 mb-2">
+              {t.chunkTitle}
+            </h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
+              {t.chunkMsg}
+            </p>
+            <button
+              onClick={this.hardReload}
+              className="px-6 py-2.5 rounded-xl bg-emerald-600 text-white font-bold hover:bg-emerald-700 transition-colors shadow-lg"
+            >
+              {t.reloadFresh}
+            </button>
+          </div>
+        </div>
+      );
+    }
 
     return (
       <div className="min-h-[300px] flex items-center justify-center p-8">
