@@ -11,6 +11,7 @@ import CookieConsent from "./components/CookieConsent";
 import InstallPrompt from "./components/InstallPrompt";
 import WelcomeQuest from "./components/WelcomeQuest";
 import FeedbackWidget from "./components/FeedbackWidget";
+import RewardToast from "./components/games/RewardToast";
 import SWUpdateBanner from "./components/SWUpdateBanner";
 import OfflineBanner from "./components/OfflineBanner";
 import SystemAnnouncementBanner from "./components/SystemAnnouncementBanner";
@@ -148,6 +149,8 @@ const DNABuilderPage = React.lazy(() => import("./pages/games/DNABuilderPage"));
 const CircuitBuilderPage = React.lazy(() => import("./pages/games/CircuitBuilderPage"));
 const WeatherSimPage = React.lazy(() => import("./pages/games/WeatherSimPage"));
 const EcosystemPage = React.lazy(() => import("./pages/games/EcosystemPage"));
+const ReflexLeaderboardPage = React.lazy(() => import("./pages/games/ReflexLeaderboardPage"));
+const WhatsNewPage = React.lazy(() => import("./pages/WhatsNewPage"));
 const KidLoginPage = React.lazy(() => import("./pages/KidLoginPage"));
 const AffiliatePage = React.lazy(() => import("./pages/AffiliatePage"));
 const CurriculumPacksPage = React.lazy(() => import("./pages/CurriculumPacksPage"));
@@ -473,6 +476,8 @@ export default function App() {
                 <Route path="/games/circuit" element={<ErrorBoundary><CircuitBuilderPage /></ErrorBoundary>} />
                 <Route path="/games/weather" element={<ErrorBoundary><WeatherSimPage /></ErrorBoundary>} />
                 <Route path="/games/ecosystem" element={<ErrorBoundary><EcosystemPage /></ErrorBoundary>} />
+                <Route path="/games/leaderboard" element={<ErrorBoundary><ReflexLeaderboardPage /></ErrorBoundary>} />
+                <Route path="/whats-new" element={<ErrorBoundary><WhatsNewPage /></ErrorBoundary>} />
                 <Route path="/k" element={<FeatureGate flag="kidLogin"><ErrorBoundary><KidLoginPage /></ErrorBoundary></FeatureGate>} />
                 <Route path="/k/:code" element={<FeatureGate flag="kidLogin"><ErrorBoundary><KidLoginPage /></ErrorBoundary></FeatureGate>} />
                 <Route path="/affiliate" element={<FeatureGate flag="affiliate"><ErrorBoundary><AffiliatePage /></ErrorBoundary></FeatureGate>} />
@@ -512,6 +517,7 @@ export default function App() {
             <InstallPrompt />
             <WelcomeQuest />
             <FeedbackWidget />
+            <RewardToast />
             <SWUpdateBanner />
             <OfflineBanner />
             <SystemAnnouncementBanner />

@@ -151,6 +151,8 @@ export const SEARCH_INDEX = [
 
   // Master showcase
   { id: "all-games",     icon: "🎯", path: "/games/all",                           category: "game",  title: { el: "Όλα τα Νέα Παιχνίδια", en: "All New Games" },  keywords: ["all", "games", "showcase", "όλα"] },
+  { id: "whats-new",     icon: "🎉", path: "/whats-new",                           category: "page",  title: { el: "Τι Νέο", en: "What's New" }, keywords: ["new", "whats new", "νέα", "release"] },
+  { id: "reflex-lb",     icon: "🏆", path: "/games/leaderboard",                   category: "page",  title: { el: "Personal Bests", en: "Personal Bests" }, keywords: ["leaderboard", "best", "ρεκόρ", "scores"] },
 ];
 
 const STOP_WORDS = ["the", "a", "an", "to", "of", "in", "on", "για", "και", "το", "η", "ο"];

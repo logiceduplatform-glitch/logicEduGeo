@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import GameShell from "../../components/games/GameShell";
+import FirstTimeTip from "../../components/games/FirstTimeTip";
 import { LanguageContext } from "../../i18n/LanguageContext";
 
 export default function EcosystemPage() {
@@ -46,6 +47,13 @@ export default function EcosystemPage() {
 
   return (
     <GameShell title={isEl ? "Οικοσύστημα" : "Ecosystem"} description={isEl ? "Δες την τροφική αλυσίδα ζωντανά" : "Watch the food chain in action"} emoji="🌳" canonical="/games/ecosystem" back="/games">
+      <FirstTimeTip
+        id="ecosystem"
+        title={isEl ? "🌳 Πώς δουλεύει" : "🌳 How it works"}
+        body={isEl
+          ? "🌱 Γρασίδι μεγαλώνει αλλά τρώγεται από κουνέλια.\n🐰 Τα κουνέλια πληθαίνουν αν έχουν φαγητό αλλά τρώγονται από αλεπούδες.\n🦊 Οι αλεπούδες χρειάζονται κουνέλια για να επιβιώσουν.\n\nΠάτα ▶ και πρόσθεσε ζώα για να κρατήσεις την ισορροπία!"
+          : "🌱 Grass grows but rabbits eat it.\n🐰 Rabbits multiply with food but foxes eat them.\n🦊 Foxes need rabbits to survive.\n\nHit ▶ and add creatures to keep the balance!"}
+      />
       <div className="text-center text-sm mb-2">⏱️ Tick: <b>{tick}</b></div>
 
       <div className="space-y-3">

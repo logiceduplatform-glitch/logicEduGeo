@@ -250,7 +250,7 @@ export default function HomePage() {
       <RevealSection>
         <div className="max-w-6xl mx-auto px-4 py-6">
           <a
-            href="/games/all"
+            href="/whats-new"
             className="block rounded-3xl p-8 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 text-white shadow-2xl hover:shadow-2xl hover:scale-[1.01] transition-all mb-4"
           >
             <div className="flex flex-wrap items-center justify-between gap-3">
@@ -266,7 +266,7 @@ export default function HomePage() {
                 </div>
               </div>
               <span className="px-5 py-3 bg-white/20 hover:bg-white/30 rounded-full font-bold">
-                {lang === "el" ? "Δες όλα →" : "Browse all →"}
+                {lang === "el" ? "Τι Νέο →" : "What's New →"}
               </span>
             </div>
           </a>

@@ -1,5 +1,6 @@
 import React, { useContext, useMemo, useState } from "react";
 import GameShell from "../../components/games/GameShell";
+import FirstTimeTip from "../../components/games/FirstTimeTip";
 import { LanguageContext } from "../../i18n/LanguageContext";
 
 const BASES = ["A", "T", "G", "C"];
@@ -40,6 +41,13 @@ export default function DNABuilderPage() {
 
   return (
     <GameShell title={isEl ? "DNA Builder" : "DNA Builder"} description={isEl ? "Ταίριαξε τα ζεύγη βάσεων (A-T, G-C)" : "Pair the bases (A-T, G-C)"} emoji="🧬" canonical="/games/dna" back="/games">
+      <FirstTimeTip
+        id="dna"
+        title={isEl ? "🧬 Κανόνες ζεύγους" : "🧬 Pairing rules"}
+        body={isEl
+          ? "Στο DNA, η Αδενίνη (A) ζευγαρώνει πάντα με τη Θυμίνη (T) και η Γουανίνη (G) με την Κυτοσίνη (C). Χτίσε τη συμπληρωματική κλώνο!"
+          : "In DNA, Adenine (A) always pairs with Thymine (T) and Guanine (G) with Cytosine (C). Build the complementary strand!"}
+      />
       <div className="text-center text-sm mb-3">{isEl ? "Λυμένα" : "Solved"}: <b>{solved}</b></div>
       <div className="bg-slate-100 dark:bg-slate-700 rounded-2xl p-3 overflow-x-auto">
         <div className="inline-block">

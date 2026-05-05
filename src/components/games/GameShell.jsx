@@ -1,25 +1,54 @@
-import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect, useMemo } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { LanguageContext } from "../../i18n/LanguageContext";
 import Navbar from "../Navbar";
 import SEO from "../SEO";
+import useGameRewards from "../../hooks/useGameRewards";
 
 /**
- * Shared chrome for the new "Quick Wins" games. Keeps each game file
- * focused on its mechanics and gives us a single place to add things
- * like badges, share buttons, or analytics later.
+ * Shared chrome for the new mini-games. Keeps each game file focused on its
+ * mechanics and centralises analytics, first-play coin bonus, SEO/OG and a
+ * consistent header. Each game gets a derived `gameId` from the route so we
+ * don't need to wire it manually.
  */
 export default function GameShell({
   title,
   description,
   emoji,
   canonical,
-  back = "/play",
+  back = "/games/all",
   children,
   toolbar = null,
+  category = "game",
 }) {
   const { lang } = useContext(LanguageContext) || { lang: "el" };
   const isEl = lang === "el";
+  const loc = useLocation();
+  const gameId = useMemo(() => (loc.pathname.split("/").pop() || "game").toLowerCase(), [loc.pathname]);
+
+  // Side-effect only: registers game_start, first-play coin bonus etc.
+  useGameRewards(gameId, category);
+
+  // Friendlier OG meta for socials (description already passed to SEO).
+  const ogTitle = title ? `${title} · Kibloo` : "Kibloo";
+
+  useEffect(() => {
+    const upd = (selector, attr, value) => {
+      let m = document.head.querySelector(selector);
+      if (!m) {
+        m = document.createElement("meta");
+        const [k, v] = selector.replace(/[[\]"]/g, "").split("=");
+        m.setAttribute(k, v); document.head.appendChild(m);
+      }
+      m.setAttribute(attr, value);
+    };
+    if (title) upd('meta[property="og:title"]', "content", ogTitle);
+    if (description) upd('meta[property="og:description"]', "content", description);
+    upd('meta[property="og:type"]', "content", "website");
+    upd('meta[name="twitter:card"]', "content", "summary_large_image");
+    if (title) upd('meta[name="twitter:title"]', "content", ogTitle);
+    if (description) upd('meta[name="twitter:description"]', "content", description);
+  }, [ogTitle, description, title]);
 
   return (
     <>

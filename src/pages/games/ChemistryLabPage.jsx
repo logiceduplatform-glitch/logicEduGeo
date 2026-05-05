@@ -1,5 +1,6 @@
 import React, { useContext, useMemo, useState } from "react";
 import GameShell from "../../components/games/GameShell";
+import FirstTimeTip from "../../components/games/FirstTimeTip";
 import { LanguageContext } from "../../i18n/LanguageContext";
 
 const ELEMENTS = [
@@ -55,6 +56,13 @@ export default function ChemistryLabPage() {
 
   return (
     <GameShell title={isEl ? "Χημικό Εργαστήριο" : "Chemistry Lab"} description={isEl ? "Συνδύασε στοιχεία και δες τι θα φτιάξεις!" : "Mix elements and discover compounds!"} emoji="🧪" canonical="/games/chemistry" back="/games">
+      <FirstTimeTip
+        id="chemistry"
+        title={isEl ? "🧪 Πώς παίζεται" : "🧪 How to play"}
+        body={isEl
+          ? "Πάτα στοιχεία για να τα προσθέσεις στο μπεκερ. Δοκίμασε π.χ. 2 H + 1 O = Νερό! Ψάξε όλες τις 9 ενώσεις."
+          : "Tap elements to add them to the beaker. Try e.g. 2 H + 1 O = Water! Discover all 9 compounds."}
+      />
       <div className="text-center mb-3">
         <div className="text-xs text-slate-500 mb-2">{isEl ? "Πάτα στοιχεία για να τα προσθέσεις (μέχρι 6)" : "Tap elements to add (max 6)"}</div>
         <div className="grid grid-cols-4 gap-2">

@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import GameShell from "../../components/games/GameShell";
+import FirstTimeTip from "../../components/games/FirstTimeTip";
 import { LanguageContext } from "../../i18n/LanguageContext";
 
 const BLOCKS = [
@@ -57,6 +58,13 @@ export default function BlockCodingPage() {
 
   return (
     <GameShell title={isEl ? "Block Coding" : "Block Coding"} description={isEl ? "Σύρε μπλοκ για να κινήσεις τον ήρωα" : "Stack blocks to move the hero"} emoji="🧩" canonical="/games/block-coding" back="/games">
+      <FirstTimeTip
+        id="block-coding"
+        title={isEl ? "🧩 Πώς παίζεται" : "🧩 How to play"}
+        body={isEl
+          ? "1. Πάτα μπλοκ από αριστερά για να τα προσθέσεις στο πρόγραμμα.\n2. Πάτα ▶ για να εκτελεστούν με τη σειρά.\n3. Πάτα ένα μπλοκ στο πρόγραμμα για να το διαγράψεις."
+          : "1. Tap blocks on the left to add them to your program.\n2. Hit ▶ to run them in order.\n3. Tap a block in your program to remove it."}
+      />
       <div className="grid grid-cols-2 gap-3">
         <div>
           <div className="text-xs font-bold text-slate-500 uppercase mb-2">{isEl ? "Μπλοκ" : "Blocks"}</div>
