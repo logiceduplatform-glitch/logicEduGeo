@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../auth/AuthContext";
 import { LanguageContext } from "../i18n/LanguageContext";
+import { ProfileService } from "../services/ProfileService";
 
 const AGE_ROUTES = {
   "Age 2-3": "/play/2-3-fun",
@@ -69,7 +70,11 @@ export default function TryFreeSection({ t }) {
             <>
               <button
                 onClick={() => {
-                  const age = userProfile?.age || guest?.age || "";
+                  // Active child profile (when a parent has switched into a
+                  // kid view) takes precedence — otherwise we'd send the
+                  // child to the parent's adult catalog.
+                  const child = ProfileService.getActive();
+                  const age = child?.age || userProfile?.age || guest?.age || "";
                   navigate(AGE_ROUTES[age] || "/play");
                 }}
                 className="px-8 py-4 rounded-2xl bg-white text-purple-700 font-bold text-lg hover:bg-purple-50 shadow-xl shadow-black/20 hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300"
