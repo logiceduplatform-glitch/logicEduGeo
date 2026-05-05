@@ -33,7 +33,7 @@ describe('FooterSection', () => {
     expect(screen.getByText('Games')).toBeInTheDocument();
     expect(screen.getByText('How it works')).toBeInTheDocument();
     expect(screen.getByText('Pricing')).toBeInTheDocument();
-    expect(screen.getByText('FAQ')).toBeInTheDocument();
+    expect(screen.getByText(/Help Center/i)).toBeInTheDocument();
   });
 
   it('renders navigation links in Greek', () => {

@@ -353,8 +353,8 @@ export default function App() {
                 <Route path="/cookies" element={<CookiesPage />} />
                 <Route path="/dpa" element={<DPAPage />} />
                 <Route path="/status" element={<StatusPage />} />
-                <Route path="/faq" element={<FAQPage />} />
-                <Route path="/help" element={<FAQPage />} />
+                <Route path="/faq" element={<FeatureGate flag="helpCenter"><FAQPage /></FeatureGate>} />
+                <Route path="/help" element={<FeatureGate flag="helpCenter"><FAQPage /></FeatureGate>} />
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/subscription" element={<FeatureGate flag="subs_enabled"><SubscriptionPage /></FeatureGate>} />
@@ -520,18 +520,18 @@ export default function App() {
               </Routes>
             </Suspense>
             </ErrorBoundary>
-            <TimeLimitOverlay />
-            <MilestoneListener />
-            <CookieConsent />
-            <InstallPrompt />
+            {FeatureFlagService.isEnabled("global_timeLimitOverlay") && <TimeLimitOverlay />}
+            {FeatureFlagService.isEnabled("global_milestoneListener") && <MilestoneListener />}
+            {FeatureFlagService.isEnabled("global_cookieConsent") && <CookieConsent />}
+            {FeatureFlagService.isEnabled("global_installPrompt") && <InstallPrompt />}
             {FeatureFlagService.isEnabled("welcomeQuest") && <WelcomeQuest />}
             {FeatureFlagService.isEnabled("roleOnboarding") && <RoleOnboarding />}
             {FeatureFlagService.isEnabled("feedbackWidget") && <FeedbackWidget />}
             {FeatureFlagService.isEnabled("classicGames_rewardToast") && <RewardToast />}
             <SupportBubble />
-            <SWUpdateBanner />
-            <OfflineBanner />
-            <SystemAnnouncementBanner />
+            {FeatureFlagService.isEnabled("global_swUpdateBanner") && <SWUpdateBanner />}
+            {FeatureFlagService.isEnabled("global_offlineBanner") && <OfflineBanner />}
+            {FeatureFlagService.isEnabled("global_systemAnnouncement") && <SystemAnnouncementBanner />}
             </ToastProvider>
           </BrowserRouter>
         </ProgressProvider>

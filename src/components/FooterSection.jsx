@@ -28,6 +28,7 @@ export default function FooterSection({ t }) {
           </div>
 
           {/* Links */}
+          {FeatureFlagService.isEnabled("footer_links") && (
           <div>
             <h2 className="text-sm font-semibold text-white uppercase tracking-wider mb-3">
               {isEl ? "Πλοήγηση" : "Navigate"}
@@ -38,7 +39,9 @@ export default function FooterSection({ t }) {
               <li><a href="/#games" className="hover:text-white transition-colors">{isEl ? "Παιχνίδια" : "Games"}</a></li>
               <li><a href="/#how-it-works" className="hover:text-white transition-colors">{isEl ? "Πώς λειτουργεί" : "How it works"}</a></li>
               <li><a href="/#pricing" className="hover:text-white transition-colors">{isEl ? "Τιμές" : "Pricing"}</a></li>
-              <li><a href="/help" className="hover:text-white transition-colors">{isEl ? "💬 Κέντρο Βοήθειας" : "💬 Help Center"}</a></li>
+              {FeatureFlagService.isEnabled("footer_helpLink") && (
+                <li><a href="/help" className="hover:text-white transition-colors">{isEl ? "💬 Κέντρο Βοήθειας" : "💬 Help Center"}</a></li>
+              )}
               <li><a href="/curriculum" className="hover:text-white transition-colors">{isEl ? "Χάρτης Μαθημάτων" : "Curriculum Map"}</a></li>
               <li><a href="/blog" className="hover:text-white transition-colors">{isEl ? "Blog" : "Blog"}</a></li>
               <li><a href="/for-parents" className="hover:text-white transition-colors">{isEl ? "Για Γονείς" : "For Parents"}</a></li>
@@ -47,6 +50,7 @@ export default function FooterSection({ t }) {
               <li><a href="/about" className="hover:text-white transition-colors">{isEl ? "Σχετικά" : "About"}</a></li>
             </ul>
           </div>
+          )}
 
           {/* Newsletter + Contact & Social */}
           <div>
@@ -62,6 +66,7 @@ export default function FooterSection({ t }) {
             <a href="mailto:hello@kibloo.app" className="text-sm hover:text-white transition-colors block mb-4">
               hello@kibloo.app
             </a>
+            {FeatureFlagService.isEnabled("footer_socialIcons") && (
             <div className="flex items-center gap-3">
               <a href="https://www.facebook.com/kibloo" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="w-8 h-8 rounded-lg bg-slate-800 hover:bg-purple-600 flex items-center justify-center text-slate-400 hover:text-white transition-all">
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
@@ -73,11 +78,13 @@ export default function FooterSection({ t }) {
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
               </a>
             </div>
+            )}
           </div>
         </div>
 
         <div className="border-t border-slate-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm">
           <span>&copy; {new Date().getFullYear()} Kibloo</span>
+          {FeatureFlagService.isEnabled("footer_legalLinks") && (
           <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
             <a href="/privacy" className="hover:text-white transition-colors">
               {isEl ? "Απόρρητο" : "Privacy"}
@@ -94,17 +101,26 @@ export default function FooterSection({ t }) {
             <a href="/dpa" className="hover:text-white transition-colors">
               {isEl ? "DPA Σχολείων" : "School DPA"}
             </a>
-            <span className="text-slate-700">|</span>
-            <a href="/status" className="hover:text-white transition-colors flex items-center gap-1">
-              <span className="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
-              Status
-            </a>
-            <span className="text-slate-700">|</span>
-            <a href="/rss.xml" className="hover:text-white transition-colors flex items-center gap-1" title="RSS feed">
-              <span aria-hidden="true">📡</span>
-              RSS
-            </a>
+            {FeatureFlagService.isEnabled("footer_statusLink") && (
+              <>
+                <span className="text-slate-700">|</span>
+                <a href="/status" className="hover:text-white transition-colors flex items-center gap-1">
+                  <span className="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
+                  Status
+                </a>
+              </>
+            )}
+            {FeatureFlagService.isEnabled("footer_rssLink") && (
+              <>
+                <span className="text-slate-700">|</span>
+                <a href="/rss.xml" className="hover:text-white transition-colors flex items-center gap-1" title="RSS feed">
+                  <span aria-hidden="true">📡</span>
+                  RSS
+                </a>
+              </>
+            )}
           </div>
+          )}
         </div>
       </div>
     </footer>

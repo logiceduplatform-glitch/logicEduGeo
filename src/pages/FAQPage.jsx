@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import SEO from "../components/SEO";
 import { LanguageContext } from "../i18n/LanguageContext";
+import { FeatureFlagService } from "../services/FeatureFlagService";
 
 // ─── FAQ data ─────────────────────────────────────────────
 // Each item belongs to one or more categories.
@@ -349,6 +350,7 @@ export default function FAQPage() {
             <p className="text-slate-600 dark:text-slate-400 mb-6">{subtitle}</p>
 
             {/* Search bar */}
+            {FeatureFlagService.isEnabled("helpCenter_search") && (
             <div className="relative mb-6">
               <svg
                 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400"
@@ -374,8 +376,10 @@ export default function FAQPage() {
                 </button>
               )}
             </div>
+            )}
 
             {/* Category tabs */}
+            {FeatureFlagService.isEnabled("helpCenter_categories") && (
             <div className="flex flex-wrap gap-2">
               {CATEGORIES.map((c) => {
                 const active = activeCat === c.id;
@@ -395,6 +399,7 @@ export default function FAQPage() {
                 );
               })}
             </div>
+            )}
           </div>
 
           {/* Results count */}
@@ -475,6 +480,7 @@ export default function FAQPage() {
           )}
 
           {/* Still need help CTA */}
+          {FeatureFlagService.isEnabled("helpCenter_contactCta") && (
           <div className="mt-10 rounded-2xl bg-gradient-to-br from-purple-600 to-pink-600 text-white p-6 sm:p-8">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
@@ -509,6 +515,7 @@ export default function FAQPage() {
               </div>
             </div>
           </div>
+          )}
 
           {/* Quick links */}
           <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-sm">

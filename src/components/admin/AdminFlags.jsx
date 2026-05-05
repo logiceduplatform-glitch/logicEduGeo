@@ -74,10 +74,25 @@ const CATEGORY_LABELS = {
   multiplayerNew:   { el: "🤝 Multiplayer (νέα modes)", en: "🤝 Multiplayer (new modes)" },
   aiNew:            { el: "🤖 AI Tools (νέα)", en: "🤖 AI Tools (new)" },
   business:         { el: "💼 Business Operations (Invoicing · Support · Onboarding emails)", en: "💼 Business Operations (Invoicing · Support · Onboarding emails)" },
+  homepage:         { el: "🏠 Αρχική Σελίδα · Sections", en: "🏠 Homepage · Sections" },
+  uiHeader:         { el: "🧭 Navbar · UI elements (Header)", en: "🧭 Navbar · UI elements (Header)" },
+  uiFooter:         { el: "📋 Footer · Sections", en: "📋 Footer · Sections" },
+  uiGlobal:         { el: "🌍 Global UI (Cookie banner, Install prompt, Banners)", en: "🌍 Global UI (Cookie banner, Install prompt, Banners)" },
+  documentation:    { el: "📚 Documentation & Help", en: "📚 Documentation & Help" },
+  adminTabs:        { el: "🛠️ Admin Dashboard · Tabs (κρύψε/εμφάνισε admin tabs)", en: "🛠️ Admin Dashboard · Tabs (hide/show admin tabs)" },
 };
 
 // Order categories for display
 const CATEGORY_ORDER = [
+  // Admin Dashboard meta-controls first
+  "adminTabs",
+  // High-traffic UI surfaces (so admins find them quickly)
+  "homepage",
+  "uiHeader",
+  "uiFooter",
+  "uiGlobal",
+  "documentation",
+  // Core platform
   "subscriptions",
   "games_age_2_3",
   "games_age_4_5",

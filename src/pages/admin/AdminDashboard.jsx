@@ -1,13 +1,15 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LanguageContext } from "../../i18n/LanguageContext";
 import { AuthContext } from "../../auth/AuthContext";
 import AdminGate from "../../components/admin/AdminGate";
 import SEO from "../../components/SEO";
+import { FeatureFlagService } from "../../services/FeatureFlagService";
 import AdminOverview from "../../components/admin/AdminOverview";
 import AdminUsers from "../../components/admin/AdminUsers";
 import AdminFlags from "../../components/admin/AdminFlags";
 import AdminPremium from "../../components/admin/AdminPremium";
+import AdminGames from "../../components/admin/AdminGames";
 import AdminContent from "../../components/admin/AdminContent";
 import AdminModeration from "../../components/admin/AdminModeration";
 import AdminSubscriptions from "../../components/admin/AdminSubscriptions";
@@ -29,6 +31,7 @@ const T = {
     users: "Χρήστες",
     flags: "Feature Flags",
     premium: "Premium",
+    games: "Παιχνίδια",
     content: "Περιεχόμενο",
     moderation: "Moderation",
     subs: "Subscriptions",
@@ -49,6 +52,7 @@ const T = {
     users: "Users",
     flags: "Feature Flags",
     premium: "Premium",
+    games: "Games",
     content: "Content",
     moderation: "Moderation",
     subs: "Subscriptions",
@@ -63,22 +67,26 @@ const T = {
   },
 };
 
+// `flag` controls visibility from Admin → Feature Flags → 🛠️ Admin Dashboard · Tabs.
+// Note: the "Feature Flags" tab itself is intentionally always visible —
+// otherwise an admin who disables it would have no way to re-enable anything.
 const TABS = [
-  { id: "overview",    icon: "📊", key: "overview",    Comp: AdminOverview },
-  { id: "users",       icon: "👥", key: "users",       Comp: AdminUsers },
-  { id: "flags",       icon: "🎛️", key: "flags",       Comp: AdminFlags },
-  { id: "premium",     icon: "💎", key: "premium",     Comp: AdminPremium },
-  { id: "content",     icon: "📝", key: "content",     Comp: AdminContent },
-  { id: "moderation",  icon: "🛡️", key: "moderation",  Comp: AdminModeration },
-  { id: "subs",        icon: "💰", key: "subs",        Comp: AdminSubscriptions },
-  { id: "invoicing",   icon: "💼", key: "invoicing",   Comp: AdminInvoicing },
-  { id: "analytics",   icon: "📈", key: "analytics",   Comp: AdminAnalytics },
-  { id: "system",      icon: "⚙️", key: "system",      Comp: AdminSystem },
-  { id: "logs",        icon: "📋", key: "logs",        Comp: AdminLogs },
-  { id: "errors",      icon: "🐞", key: "errors",      Comp: AdminErrorReports },
-  { id: "emails",      icon: "📧", key: "emails",      Comp: AdminEmailQueue },
-  { id: "push",        icon: "🔔", key: "push",        Comp: AdminPush },
-  { id: "feedback",    icon: "💬", key: "feedback",    Comp: AdminFeedback },
+  { id: "overview",    icon: "📊", key: "overview",    Comp: AdminOverview,     flag: "adminTab_overview"  },
+  { id: "users",       icon: "👥", key: "users",       Comp: AdminUsers,        flag: "adminTab_users"     },
+  { id: "flags",       icon: "🎛️", key: "flags",       Comp: AdminFlags,        flag: null                 },
+  { id: "premium",     icon: "💎", key: "premium",     Comp: AdminPremium,      flag: "adminTab_premium"   },
+  { id: "games",       icon: "🎮", key: "games",       Comp: AdminGames,        flag: "adminTab_games"     },
+  { id: "content",     icon: "📝", key: "content",     Comp: AdminContent,      flag: "adminTab_content"   },
+  { id: "moderation",  icon: "🛡️", key: "moderation",  Comp: AdminModeration,   flag: "adminTab_moderation"},
+  { id: "subs",        icon: "💰", key: "subs",        Comp: AdminSubscriptions,flag: "adminTab_subs"      },
+  { id: "invoicing",   icon: "💼", key: "invoicing",   Comp: AdminInvoicing,    flag: "adminTab_invoicing" },
+  { id: "analytics",   icon: "📈", key: "analytics",   Comp: AdminAnalytics,    flag: "adminTab_analytics" },
+  { id: "system",      icon: "⚙️", key: "system",      Comp: AdminSystem,       flag: "adminTab_system"    },
+  { id: "logs",        icon: "📋", key: "logs",        Comp: AdminLogs,         flag: "adminTab_logs"      },
+  { id: "errors",      icon: "🐞", key: "errors",      Comp: AdminErrorReports, flag: "adminTab_errors"    },
+  { id: "emails",      icon: "📧", key: "emails",      Comp: AdminEmailQueue,   flag: "adminTab_emails"    },
+  { id: "push",        icon: "🔔", key: "push",        Comp: AdminPush,         flag: "adminTab_push"      },
+  { id: "feedback",    icon: "💬", key: "feedback",    Comp: AdminFeedback,     flag: "adminTab_feedback"  },
 ];
 
 export default function AdminDashboard() {
@@ -87,8 +95,14 @@ export default function AdminDashboard() {
   const navigate = useNavigate();
   const l = T[lang] || T.en;
 
-  const [tab, setTab] = useState("overview");
-  const ActiveComp = TABS.find((t) => t.id === tab)?.Comp || AdminOverview;
+  const visibleTabs = useMemo(
+    () => TABS.filter((t) => !t.flag || FeatureFlagService.isEnabled(t.flag)),
+    []
+  );
+
+  const [tab, setTab] = useState(() => visibleTabs[0]?.id || "flags");
+  const activeTab = visibleTabs.find((t) => t.id === tab) || visibleTabs[0];
+  const ActiveComp = activeTab?.Comp || AdminFlags;
 
   return (
     <AdminGate>
@@ -111,7 +125,7 @@ export default function AdminDashboard() {
         {/* Tabs */}
         <nav role="tablist" aria-label={l.title} className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 overflow-x-auto scrollbar-thin">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 flex gap-1">
-            {TABS.map((t) => {
+            {visibleTabs.map((t) => {
               const active = tab === t.id;
               return (
                 <button

@@ -17,6 +17,7 @@ import { shuffleArray } from "../utils/shuffle";
 import { EmptySearchState } from "../components/SkeletonLoader";
 import { AnalyticsService } from "../services/AnalyticsService";
 import { SoundService } from "../services/SoundService";
+import { FeatureFlagService } from "../services/FeatureFlagService";
 
 import TapPuzzle from "../components/puzzles/TapPuzzle";
 import PuzzleBoard from "../components/puzzles/PuzzleBoard";
@@ -146,7 +147,12 @@ export default function QuizPage_2_3_unified({ mode = "fun" }) {
   const isEl = lang === "el";
 
   const config = MODE_CONFIG[mode] || MODE_CONFIG.fun;
-  const games = GAMES_BY_MODE[mode] || FUN_GAMES;
+  const allGamesForMode = GAMES_BY_MODE[mode] || FUN_GAMES;
+  // Filter out games disabled by admin via per-game flags.
+  const games = React.useMemo(
+    () => allGamesForMode.filter((g) => FeatureFlagService.isGameEnabled("2_3", mode, g.id)),
+    [allGamesForMode, mode]
+  );
   const gameMap = Object.fromEntries(games.map((g) => [g.id, g]));
 
   const [activeGame, setActiveGame] = useState(null);

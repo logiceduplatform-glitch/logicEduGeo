@@ -85,24 +85,31 @@ export default function HomePage() {
       </div>
 
       {/* STATS BAR */}
-      <StatsBar />
+      {FeatureFlagService.isEnabled("home_statsBar") && <StatsBar />}
 
       {/* MISSION */}
-      <RevealSection>
-        <MissionBanner />
-      </RevealSection>
+      {FeatureFlagService.isEnabled("home_mission") && (
+        <RevealSection>
+          <MissionBanner />
+        </RevealSection>
+      )}
 
       {/* VALUE PILLARS */}
-      <RevealSection>
-        <ValuePillarsSection />
-      </RevealSection>
+      {FeatureFlagService.isEnabled("home_valuePillars") && (
+        <RevealSection>
+          <ValuePillarsSection />
+        </RevealSection>
+      )}
 
       {/* USE CASES */}
-      <RevealSection>
-        <UseCasesSection />
-      </RevealSection>
+      {FeatureFlagService.isEnabled("home_useCases") && (
+        <RevealSection>
+          <UseCasesSection />
+        </RevealSection>
+      )}
 
       {/* CATEGORIES */}
+      {FeatureFlagService.isEnabled("home_categories") && (
       <RevealSection>
       <section id="categories" className="mx-auto max-w-6xl px-4 py-14">
         <div className="text-center mb-10">
@@ -136,13 +143,17 @@ export default function HomePage() {
         </div>
       </section>
       </RevealSection>
+      )}
 
       {/* ROLE SHOWCASE */}
-      <RevealSection>
-        <RoleShowcase />
-      </RevealSection>
+      {FeatureFlagService.isEnabled("home_roleShowcase") && (
+        <RevealSection>
+          <RoleShowcase />
+        </RevealSection>
+      )}
 
       {/* HOW IT WORKS */}
+      {FeatureFlagService.isEnabled("home_howItWorks") && (
       <RevealSection>
       <section id="how-it-works" className="py-20 bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800">
         <div className="mx-auto max-w-6xl px-4">
@@ -177,14 +188,17 @@ export default function HomePage() {
         </div>
       </section>
       </RevealSection>
+      )}
 
       {/* PARENT PEACE OF MIND */}
-      <RevealSection>
-        <ParentPeaceSection />
-      </RevealSection>
+      {FeatureFlagService.isEnabled("home_parentPeace") && (
+        <RevealSection>
+          <ParentPeaceSection />
+        </RevealSection>
+      )}
 
       {/* START HERE banner for anonymous visitors */}
-      {!user && !guest && (
+      {FeatureFlagService.isEnabled("home_startHereBanner") && !user && !guest && (
         <RevealSection>
           <section className="mx-auto max-w-4xl px-4 py-8">
             <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-purple-600 via-pink-500 to-amber-500 p-[2px]">
@@ -213,7 +227,7 @@ export default function HomePage() {
       )}
 
       {/* RECOMMENDED GAMES for logged-in users */}
-      {(user || guest) && (
+      {FeatureFlagService.isEnabled("home_recommendations") && (user || guest) && (
         <RevealSection>
           <div className="mx-auto max-w-6xl px-4 pb-4">
             <HomeRecommendations lang={lang} />
@@ -222,7 +236,7 @@ export default function HomePage() {
       )}
 
       {/* DAILY MISSIONS for logged-in users */}
-      {(user || guest) && (
+      {FeatureFlagService.isEnabled("home_dailyMissions") && (user || guest) && (
         <RevealSection>
           <div className="mx-auto max-w-6xl px-4 pb-4">
             <DailyMissions />
@@ -231,7 +245,7 @@ export default function HomePage() {
       )}
 
       {/* PET WIDGET for logged-in users */}
-      {(user || guest) && (
+      {FeatureFlagService.isEnabled("home_petWidget") && (user || guest) && (
         <RevealSection>
           <div className="mx-auto max-w-md px-4 pb-4">
             <PetWidget />
@@ -240,16 +254,20 @@ export default function HomePage() {
       )}
 
       {/* DAILY CHALLENGE */}
-      <RevealSection>
-      <div className="mx-auto max-w-6xl px-4 pb-8">
-        <DailyChallenge />
-      </div>
-      </RevealSection>
+      {FeatureFlagService.isEnabled("home_dailyChallenge") && (
+        <RevealSection>
+          <div className="mx-auto max-w-6xl px-4 pb-8">
+            <DailyChallenge />
+          </div>
+        </RevealSection>
+      )}
 
       {/* FUN ZONE - Battle / Pet / Stories / Cards */}
-      <RevealSection>
-        <FunZoneSection />
-      </RevealSection>
+      {FeatureFlagService.isEnabled("home_funZone") && (
+        <RevealSection>
+          <FunZoneSection />
+        </RevealSection>
+      )}
 
       {/* CLASSIC GAMES MEGA BANNER */}
       {FeatureFlagService.isEnabled("classicGames_homeBanner") && (
@@ -297,36 +315,48 @@ export default function HomePage() {
       )}
 
       {/* FEATURES */}
-      <RevealSection>
-      <div id="features">
-        <FeaturesSection t={t} />
-      </div>
-      </RevealSection>
+      {FeatureFlagService.isEnabled("home_features") && (
+        <RevealSection>
+          <div id="features">
+            <FeaturesSection t={t} />
+          </div>
+        </RevealSection>
+      )}
 
       {/* GAME SHOWCASE */}
-      <RevealSection>
-      <GameShowcase lang={lang} />
-      </RevealSection>
+      {FeatureFlagService.isEnabled("home_gameShowcase") && (
+        <RevealSection>
+          <GameShowcase lang={lang} />
+        </RevealSection>
+      )}
 
       {/* MILESTONES */}
-      <RevealSection>
-      <MilestonesSection />
-      </RevealSection>
+      {FeatureFlagService.isEnabled("home_milestones") && (
+        <RevealSection>
+          <MilestonesSection />
+        </RevealSection>
+      )}
 
       {/* TESTIMONIALS */}
-      <RevealSection>
-      <TestimonialsSection lang={lang} />
-      </RevealSection>
+      {FeatureFlagService.isEnabled("home_testimonials") && (
+        <RevealSection>
+          <TestimonialsSection lang={lang} />
+        </RevealSection>
+      )}
 
       {/* BLOG TIPS */}
-      <RevealSection>
-        <BlogTipsSection />
-      </RevealSection>
+      {FeatureFlagService.isEnabled("home_blogTips") && (
+        <RevealSection>
+          <BlogTipsSection />
+        </RevealSection>
+      )}
 
       {/* TRUST SIGNALS */}
-      <RevealSection>
-      <TrustSignals />
-      </RevealSection>
+      {FeatureFlagService.isEnabled("home_trustSignals") && (
+        <RevealSection>
+          <TrustSignals />
+        </RevealSection>
+      )}
 
       {/* COMPARISON vs competitors */}
       {FeatureFlagService.isEnabled("marketing_comparison") && (
@@ -336,9 +366,11 @@ export default function HomePage() {
       )}
 
       {/* PRICING */}
-      <RevealSection>
-      <PricingSection />
-      </RevealSection>
+      {FeatureFlagService.isEnabled("home_pricing") && (
+        <RevealSection>
+          <PricingSection />
+        </RevealSection>
+      )}
 
       {/* Newsletter signup lives in the footer (variant="footer") to avoid
           double-asking for an email; the marketing_newsletter flag here is
@@ -350,14 +382,18 @@ export default function HomePage() {
       )}
 
       {/* FAQ */}
-      <RevealSection>
-      <FAQSection />
-      </RevealSection>
+      {FeatureFlagService.isEnabled("home_faq") && (
+        <RevealSection>
+          <FAQSection />
+        </RevealSection>
+      )}
 
       {/* CTA */}
-      <RevealSection>
-      <TryFreeSection t={t} />
-      </RevealSection>
+      {FeatureFlagService.isEnabled("home_tryFreeCta") && (
+        <RevealSection>
+          <TryFreeSection t={t} />
+        </RevealSection>
+      )}
 
       {/* FOOTER */}
       <FooterSection t={t} />

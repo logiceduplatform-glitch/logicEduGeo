@@ -227,6 +227,83 @@ export const DEFAULT_FLAGS = {
   aiPhotoSolver:            { enabled: true, label: { el: "AI Math Photo Solver", en: "AI Math Photo Solver" }, category: "aiNew" },
   aiStoryGen:               { enabled: true, label: { el: "AI Story Generator", en: "AI Story Generator" }, category: "aiNew" },
   aiVoiceQuiz:              { enabled: true, label: { el: "Φωνητικό Quiz με AI", en: "AI Voice Quiz" }, category: "aiNew" },
+
+  // ─── Homepage Sections (γενικές περιοχές της αρχικής) ─────────────────
+  home_statsBar:            { enabled: true, label: { el: "📊 Stats Bar (350+ παιχνίδια κλπ)", en: "📊 Stats Bar (350+ games etc)" }, category: "homepage" },
+  home_mission:             { enabled: true, label: { el: "🎯 Mission Banner", en: "🎯 Mission Banner" }, category: "homepage" },
+  home_valuePillars:        { enabled: true, label: { el: "💎 Value Pillars (3 πυλώνες)", en: "💎 Value Pillars" }, category: "homepage" },
+  home_useCases:            { enabled: true, label: { el: "🎯 Use Cases (περιπτώσεις χρήσης)", en: "🎯 Use Cases" }, category: "homepage" },
+  home_categories:          { enabled: true, label: { el: "🎮 Ηλικιακές Ομάδες (carousel)", en: "🎮 Age Categories carousel" }, category: "homepage" },
+  home_roleShowcase:        { enabled: true, label: { el: "👥 Role Showcase (Μαθητής/Γονιός/Δάσκαλος)", en: "👥 Role Showcase" }, category: "homepage" },
+  home_howItWorks:          { enabled: true, label: { el: "❓ Πώς λειτουργεί (3 βήματα)", en: "❓ How it works (3 steps)" }, category: "homepage" },
+  home_parentPeace:         { enabled: true, label: { el: "🛡️ Parent Peace of Mind", en: "🛡️ Parent Peace of Mind" }, category: "homepage" },
+  home_startHereBanner:     { enabled: true, label: { el: "🚀 'Ξεκίνα εδώ!' banner (anonymous users)", en: "🚀 'Start Here!' banner (anonymous)" }, category: "homepage" },
+  home_recommendations:     { enabled: true, label: { el: "💡 Συστάσεις παιχνιδιών (logged in)", en: "💡 Game recommendations (logged in)" }, category: "homepage" },
+  home_dailyMissions:       { enabled: true, label: { el: "🎯 Ημερήσιες Αποστολές widget", en: "🎯 Daily Missions widget" }, category: "homepage" },
+  home_petWidget:           { enabled: true, label: { el: "🐾 Pet Widget στην αρχική", en: "🐾 Pet Widget on home" }, category: "homepage" },
+  home_dailyChallenge:      { enabled: true, label: { el: "⭐ Daily Challenge banner", en: "⭐ Daily Challenge banner" }, category: "homepage" },
+  home_funZone:             { enabled: true, label: { el: "🎉 Fun Zone (Battle/Pet/Stories/Cards)", en: "🎉 Fun Zone" }, category: "homepage" },
+  home_features:            { enabled: true, label: { el: "✨ Features Section", en: "✨ Features Section" }, category: "homepage" },
+  home_gameShowcase:        { enabled: true, label: { el: "🖼️ Game Showcase carousel", en: "🖼️ Game Showcase carousel" }, category: "homepage" },
+  home_milestones:          { enabled: true, label: { el: "🏆 Milestones Section", en: "🏆 Milestones Section" }, category: "homepage" },
+  home_testimonials:        { enabled: true, label: { el: "💬 Testimonials (γνώμες χρηστών)", en: "💬 Testimonials" }, category: "homepage" },
+  home_blogTips:            { enabled: true, label: { el: "📝 Blog Tips Section", en: "📝 Blog Tips Section" }, category: "homepage" },
+  home_trustSignals:        { enabled: true, label: { el: "✅ Trust Signals (badges)", en: "✅ Trust Signals" }, category: "homepage" },
+  home_pricing:             { enabled: true, label: { el: "💎 Pricing Section", en: "💎 Pricing Section" }, category: "homepage" },
+  home_faq:                 { enabled: true, label: { el: "❓ FAQ Section", en: "❓ FAQ Section" }, category: "homepage" },
+  home_tryFreeCta:          { enabled: true, label: { el: "🆓 Try Free CTA Section", en: "🆓 Try Free CTA Section" }, category: "homepage" },
+
+  // ─── Header / Navbar UI elements ──────────────────────────
+  navbar_search:            { enabled: true, label: { el: "🔍 Search button (header)", en: "🔍 Search button (header)" }, category: "uiHeader" },
+  navbar_voiceCommand:      { enabled: true, label: { el: "🎤 Voice Command button (header)", en: "🎤 Voice Command button (header)" }, category: "uiHeader" },
+  navbar_notifications:     { enabled: true, label: { el: "🔔 Notification Bell (header)", en: "🔔 Notification Bell (header)" }, category: "uiHeader" },
+  navbar_themeToggle:       { enabled: true, label: { el: "🌙 Dark mode toggle (header)", en: "🌙 Dark mode toggle (header)" }, category: "uiHeader" },
+  navbar_languageToggle:    { enabled: true, label: { el: "🌐 Language toggle (header)", en: "🌐 Language toggle (header)" }, category: "uiHeader" },
+  navbar_xpBadge:           { enabled: true, label: { el: "⭐ XP Level Badge (header)", en: "⭐ XP Level Badge (header)" }, category: "uiHeader" },
+  navbar_coinsBadge:        { enabled: true, label: { el: "🪙 Coins Badge (header)", en: "🪙 Coins Badge (header)" }, category: "uiHeader" },
+  navbar_ageBadge:          { enabled: true, label: { el: "🎂 Age/Category Badge (header)", en: "🎂 Age/Category Badge (header)" }, category: "uiHeader" },
+  navbar_taglinePill:       { enabled: true, label: { el: "🌟 Tagline pill δίπλα στο logo", en: "🌟 Tagline pill next to logo" }, category: "uiHeader" },
+
+  // ─── Global UI Components (πάντα ορατά παντού) ────────────
+  global_cookieConsent:     { enabled: true, label: { el: "🍪 Cookie Consent banner (απαιτείται για EU)", en: "🍪 Cookie Consent banner (EU required)" }, category: "uiGlobal" },
+  global_installPrompt:     { enabled: true, label: { el: "📲 PWA Install Prompt", en: "📲 PWA Install Prompt" }, category: "uiGlobal" },
+  global_swUpdateBanner:    { enabled: true, label: { el: "🔄 Service Worker Update banner", en: "🔄 Service Worker Update banner" }, category: "uiGlobal" },
+  global_offlineBanner:     { enabled: true, label: { el: "📡 Offline Banner (όταν χάθηκε internet)", en: "📡 Offline Banner" }, category: "uiGlobal" },
+  global_systemAnnouncement:{ enabled: true, label: { el: "📢 System Announcement banner", en: "📢 System Announcement banner" }, category: "uiGlobal" },
+  global_milestoneListener: { enabled: true, label: { el: "🏆 Milestone Listener (auto popups)", en: "🏆 Milestone Listener" }, category: "uiGlobal" },
+  global_timeLimitOverlay:  { enabled: true, label: { el: "⏱️ Time Limit Overlay (parental cap)", en: "⏱️ Time Limit Overlay (parental cap)" }, category: "uiGlobal" },
+
+  // ─── Footer Sections ──────────────────────────────────────
+  footer_links:             { enabled: true, label: { el: "🔗 Footer Links Section", en: "🔗 Footer Links Section" }, category: "uiFooter" },
+  footer_socialIcons:       { enabled: true, label: { el: "📱 Footer Social Icons", en: "📱 Footer Social Icons" }, category: "uiFooter" },
+  footer_legalLinks:        { enabled: true, label: { el: "📜 Footer Legal Links (Privacy/Terms/Cookies/DPA)", en: "📜 Footer Legal Links" }, category: "uiFooter" },
+  footer_statusLink:        { enabled: true, label: { el: "🟢 Footer Status link", en: "🟢 Footer Status link" }, category: "uiFooter" },
+  footer_rssLink:           { enabled: true, label: { el: "📡 Footer RSS link", en: "📡 Footer RSS link" }, category: "uiFooter" },
+  footer_helpLink:          { enabled: true, label: { el: "💬 Footer Help Center link", en: "💬 Footer Help Center link" }, category: "uiFooter" },
+
+  // ─── Help & Documentation ──────────────────────────────────
+  helpCenter:               { enabled: true, label: { el: "💬 Κέντρο Βοήθειας (/help, /faq)", en: "💬 Help Center (/help, /faq)" }, category: "documentation" },
+  helpCenter_search:        { enabled: true, label: { el: "🔍 Search στο Help Center", en: "🔍 Search in Help Center" }, category: "documentation" },
+  helpCenter_categories:    { enabled: true, label: { el: "🏷️ Κατηγορίες/φίλτρα στο Help Center", en: "🏷️ Categories/filters in Help Center" }, category: "documentation" },
+  helpCenter_contactCta:    { enabled: true, label: { el: "✉️ Contact CTA στο Help Center", en: "✉️ Contact CTA in Help Center" }, category: "documentation" },
+
+  // ─── Admin Dashboard Tabs (αν θέλει admin να κρύψει tab) ───────────────
+  adminTab_overview:        { enabled: true, label: { el: "📊 Tab · Επισκόπηση", en: "📊 Tab · Overview" }, category: "adminTabs" },
+  adminTab_users:           { enabled: true, label: { el: "👥 Tab · Χρήστες", en: "👥 Tab · Users" }, category: "adminTabs" },
+  adminTab_flags:           { enabled: true, label: { el: "🎛️ Tab · Feature Flags", en: "🎛️ Tab · Feature Flags" }, category: "adminTabs" },
+  adminTab_premium:         { enabled: true, label: { el: "💎 Tab · Premium Content", en: "💎 Tab · Premium Content" }, category: "adminTabs" },
+  adminTab_games:           { enabled: true, label: { el: "🎮 Tab · Παιχνίδια (per-game on/off)", en: "🎮 Tab · Games (per-game on/off)" }, category: "adminTabs" },
+  adminTab_content:         { enabled: true, label: { el: "📝 Tab · Περιεχόμενο", en: "📝 Tab · Content" }, category: "adminTabs" },
+  adminTab_moderation:      { enabled: true, label: { el: "🛡️ Tab · Moderation", en: "🛡️ Tab · Moderation" }, category: "adminTabs" },
+  adminTab_subs:            { enabled: true, label: { el: "💰 Tab · Subscriptions", en: "💰 Tab · Subscriptions" }, category: "adminTabs" },
+  adminTab_invoicing:       { enabled: true, label: { el: "💼 Tab · Invoicing (B2B)", en: "💼 Tab · Invoicing (B2B)" }, category: "adminTabs" },
+  adminTab_analytics:       { enabled: true, label: { el: "📈 Tab · Analytics (A/B)", en: "📈 Tab · Analytics (A/B)" }, category: "adminTabs" },
+  adminTab_system:          { enabled: true, label: { el: "⚙️ Tab · Σύστημα", en: "⚙️ Tab · System" }, category: "adminTabs" },
+  adminTab_logs:            { enabled: true, label: { el: "📋 Tab · Logs", en: "📋 Tab · Logs" }, category: "adminTabs" },
+  adminTab_errors:          { enabled: true, label: { el: "🐞 Tab · Σφάλματα (Sentry)", en: "🐞 Tab · Errors (Sentry)" }, category: "adminTabs" },
+  adminTab_emails:          { enabled: true, label: { el: "📧 Tab · Email Queue", en: "📧 Tab · Email Queue" }, category: "adminTabs" },
+  adminTab_push:            { enabled: true, label: { el: "🔔 Tab · Push Notifications", en: "🔔 Tab · Push Notifications" }, category: "adminTabs" },
+  adminTab_feedback:        { enabled: true, label: { el: "💬 Tab · Γνώμες χρηστών", en: "💬 Tab · User Feedback" }, category: "adminTabs" },
 };
 
 const CACHE_KEY = "geo:featureFlags";
@@ -261,6 +338,29 @@ export const FeatureFlagService = {
     }
     const def = DEFAULT_FLAGS[id];
     return def ? !!def.enabled : true;
+  },
+
+  /**
+   * Per-game enable check. Defaults to true (game is enabled) unless an admin
+   * has explicitly disabled it via Firestore. Flag id pattern:
+   *   game_<ageGroup>_<mode>_<gameId>     (matches gameItemId() in gamesCatalog)
+   */
+  isGameEnabled(ageGroup, mode, gameId) {
+    if (!ageGroup || !mode || !gameId) return true;
+    const id = `game_${ageGroup}_${mode}_${gameId}`;
+    const cache = loadCache();
+    if (Object.prototype.hasOwnProperty.call(cache, id)) {
+      return cache[id] !== false;
+    }
+    return true;
+  },
+
+  /** Returns the raw boolean override (or undefined if no override set). */
+  getGameOverride(ageGroup, mode, gameId) {
+    const id = `game_${ageGroup}_${mode}_${gameId}`;
+    const cache = loadCache();
+    if (Object.prototype.hasOwnProperty.call(cache, id)) return cache[id] !== false;
+    return undefined;
   },
 
   getAll() {

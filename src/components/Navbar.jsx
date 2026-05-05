@@ -389,9 +389,11 @@ export default function Navbar() {
           <span className="group-hover:scale-110 transition-transform inline-flex">
             <KiblooLogo variant="full" size={36} />
           </span>
-          <span className="hidden 2xl:inline-block text-[9px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 px-1.5 py-0.5 rounded-full border border-amber-200 dark:border-amber-700 ml-1 tracking-wider uppercase">
-            {isEl ? "Μάθε παίζοντας" : "Where curiosity blooms"}
-          </span>
+          {FeatureFlagService.isEnabled("navbar_taglinePill") && (
+            <span className="hidden 2xl:inline-block text-[9px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 px-1.5 py-0.5 rounded-full border border-amber-200 dark:border-amber-700 ml-1 tracking-wider uppercase">
+              {isEl ? "Μάθε παίζοντας" : "Where curiosity blooms"}
+            </span>
+          )}
         </button>
 
         {/* Desktop nav - left-aligned after logo */}
@@ -423,6 +425,7 @@ export default function Navbar() {
         {/* Right side */}
         <div className="hidden lg:flex items-center gap-2 shrink-0">
           {/* Search */}
+          {FeatureFlagService.isEnabled("navbar_search") && (
           <button
             onClick={() => setSearchOpen(true)}
             aria-label={isEl ? "Αναζήτηση" : "Search"}
@@ -440,11 +443,15 @@ export default function Navbar() {
               {/Mac|iPhone|iPad/.test(navigator.userAgent) ? "⌘K" : "Ctrl+K"}
             </kbd>
           </button>
+          )}
           {/* Voice command — hidden on medium screens to save space */}
-          <span className="hidden xl:inline-flex"><VoiceCommandButton /></span>
+          {FeatureFlagService.isEnabled("navbar_voiceCommand") && (
+            <span className="hidden xl:inline-flex"><VoiceCommandButton /></span>
+          )}
           {/* Notification bell */}
-          {isLoggedIn && <NotificationBell />}
+          {isLoggedIn && FeatureFlagService.isEnabled("navbar_notifications") && <NotificationBell />}
           {/* Theme toggle */}
+          {FeatureFlagService.isEnabled("navbar_themeToggle") && (
           <button
             onClick={toggleTheme}
             aria-label={dark ? (isEl ? "Φωτεινό θέμα" : "Light mode") : (isEl ? "Σκοτεινό θέμα" : "Dark mode")}
@@ -465,8 +472,10 @@ export default function Navbar() {
               </svg>
             )}
           </button>
+          )}
 
           {/* Language toggle — flag-only on medium, full text on xl+ */}
+          {FeatureFlagService.isEnabled("navbar_languageToggle") && (
           <button
             onClick={() => setLang(lang === "el" ? "en" : "el")}
             className={`px-2.5 xl:px-3 py-2 rounded-lg text-sm font-medium flex items-center gap-1.5 transition-all ${
@@ -480,9 +489,10 @@ export default function Navbar() {
             <span>{lang === "el" ? "🇬🇧" : "🇬🇷"}</span>
             <span className="hidden xl:inline">{lang === "el" ? "English" : "Ελληνικά"}</span>
           </button>
+          )}
 
           {/* Age group badge with category dropdown */}
-          {isLoggedIn && currentAgeIcon && (
+          {isLoggedIn && currentAgeIcon && FeatureFlagService.isEnabled("navbar_ageBadge") && (
             <div className="relative" ref={ageCatRef}>
               <button
                 onClick={() => {
@@ -574,8 +584,8 @@ export default function Navbar() {
                   </div>
                 )}
                 {/* XP & coins only on xl screens (≥1280px) */}
-                {isLoggedIn && <span className="hidden xl:inline-flex"><XPLevelBadge lang={lang} size="sm" /></span>}
-                {isLoggedIn && (() => { const c = CoinService.getBalance(); return c.balance > 0 ? <span className="hidden xl:inline-flex text-xs font-bold text-amber-600 dark:text-amber-400 items-center gap-0.5"><span className="text-sm">🪙</span>{c.balance}</span> : null; })()}
+                {isLoggedIn && FeatureFlagService.isEnabled("navbar_xpBadge") && <span className="hidden xl:inline-flex"><XPLevelBadge lang={lang} size="sm" /></span>}
+                {isLoggedIn && FeatureFlagService.isEnabled("navbar_coinsBadge") && (() => { const c = CoinService.getBalance(); return c.balance > 0 ? <span className="hidden xl:inline-flex text-xs font-bold text-amber-600 dark:text-amber-400 items-center gap-0.5"><span className="text-sm">🪙</span>{c.balance}</span> : null; })()}
                 {/* Name only on lg screens (≥1024px) */}
                 <span className="hidden lg:inline text-sm font-semibold text-slate-700 dark:text-slate-200 max-w-[100px] truncate">
                   {displayName}

@@ -287,12 +287,15 @@ export default function FunQuizPage({ ageGroup: ageGroupProp, mode }) {
     try { return JSON.parse(localStorage.getItem("geo:progress:favorites")) || []; } catch { return []; }
   });
 
-  const allGamesRaw = useMemo(() =>
-    activeCategory
-      ? gameCategories[activeCategory]
-      : Object.values(gameCategories).flat(),
-    [activeCategory, gameCategories]
-  );
+  const allGamesRaw = useMemo(() => {
+    const raw = activeCategory
+      ? (gameCategories[activeCategory] || [])
+      : Object.values(gameCategories).flat();
+    // Filter out games that the admin has disabled via per-game flags.
+    return raw.filter((g) =>
+      FeatureFlagService.isGameEnabled(ageKey, mode || "fun", g.id)
+    );
+  }, [activeCategory, gameCategories, ageKey, mode]);
 
   const allGames = useMemo(() =>
     searchQuery.trim()

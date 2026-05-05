@@ -309,9 +309,17 @@ export default function AdultGamesPage() {
 
   const GameComponent = activeGame ? GAME_COMPONENTS[activeGame] : null;
   const currentGameMeta = activeGame ? ALL_GAMES.find(g => g.id === activeGame) : null;
-  const currentCat = activeCategory ? ADULT_GAME_CATEGORIES.find(c => c.id === activeCategory) : null;
+  const rawCat = activeCategory ? ADULT_GAME_CATEGORIES.find(c => c.id === activeCategory) : null;
 
   const ADULT_MODE_MAP = { brainTraining: "brain", funGames: "fun", logicThinking: "logic" };
+
+  // Filter out games disabled by admin (per-game flags) so they vanish across the UI
+  const currentCat = rawCat ? {
+    ...rawCat,
+    games: (rawCat.games || []).filter((g) =>
+      FeatureFlagService.isGameEnabled("adult", ADULT_MODE_MAP[rawCat.id] || "brain", g.id)
+    ),
+  } : null;
   const subsEnabled = FeatureFlagService.isEnabled("subs_enabled");
   const isGameLocked = (gameId) => {
     if (!subsEnabled) return false;
