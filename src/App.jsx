@@ -409,7 +409,7 @@ export default function App() {
                 <Route path="/photo-solver" element={<ErrorBoundary><PhotoSolverPage /></ErrorBoundary>} />
                 <Route path="/ai-story" element={<ErrorBoundary><AIStoryPage /></ErrorBoundary>} />
                 <Route path="/time-management" element={<ErrorBoundary><TimeManagementPage /></ErrorBoundary>} />
-                <Route path="/games" element={<ErrorBoundary><NewGamesShowcasePage /></ErrorBoundary>} />
+                <Route path="/games" element={<FeatureGate flags={["classicGames_master","classicGames_quickWins"]}><ErrorBoundary><NewGamesShowcasePage /></ErrorBoundary></FeatureGate>} />
                 <Route path="/games/wordle" element={<ErrorBoundary><WordlePage /></ErrorBoundary>} />
                 <Route path="/games/2048" element={<ErrorBoundary><Game2048Page /></ErrorBoundary>} />
                 <Route path="/games/snake" element={<ErrorBoundary><SnakePage /></ErrorBoundary>} />
@@ -421,7 +421,7 @@ export default function App() {
                 <Route path="/games/whack" element={<ErrorBoundary><WhackAMolePage /></ErrorBoundary>} />
                 <Route path="/games/connect-dots" element={<ErrorBoundary><ConnectDotsPage /></ErrorBoundary>} />
                 <Route path="/games/drawing" element={<ErrorBoundary><DrawingPadPage /></ErrorBoundary>} />
-                <Route path="/games/educational" element={<ErrorBoundary><EducationalGamesShowcasePage /></ErrorBoundary>} />
+                <Route path="/games/educational" element={<FeatureGate flags={["classicGames_master","classicGames_educational"]}><ErrorBoundary><EducationalGamesShowcasePage /></ErrorBoundary></FeatureGate>} />
                 <Route path="/games/spelling-bee" element={<ErrorBoundary><SpellingBeePage /></ErrorBoundary>} />
                 <Route path="/games/tell-time" element={<ErrorBoundary><TellTimePage /></ErrorBoundary>} />
                 <Route path="/games/money" element={<ErrorBoundary><MoneyCounterPage /></ErrorBoundary>} />
@@ -438,7 +438,7 @@ export default function App() {
                 <Route path="/games/logic-gates" element={<ErrorBoundary><LogicGatesPage /></ErrorBoundary>} />
                 <Route path="/games/fraction-pizza" element={<ErrorBoundary><FractionPizzaPage /></ErrorBoundary>} />
                 <Route path="/games/music-notes" element={<ErrorBoundary><MusicNotesPage /></ErrorBoundary>} />
-                <Route path="/games/creative" element={<ErrorBoundary><CreativeGamesShowcasePage /></ErrorBoundary>} />
+                <Route path="/games/creative" element={<FeatureGate flags={["classicGames_master","classicGames_creative"]}><ErrorBoundary><CreativeGamesShowcasePage /></ErrorBoundary></FeatureGate>} />
                 <Route path="/games/story-builder" element={<ErrorBoundary><StoryBuilderPage /></ErrorBoundary>} />
                 <Route path="/games/comic-maker" element={<ErrorBoundary><ComicMakerPage /></ErrorBoundary>} />
                 <Route path="/games/music-composer" element={<ErrorBoundary><MusicComposerPage /></ErrorBoundary>} />
@@ -452,8 +452,8 @@ export default function App() {
                 <Route path="/games/block-coding" element={<ErrorBoundary><BlockCodingPage /></ErrorBoundary>} />
                 <Route path="/games/robot-maze" element={<ErrorBoundary><RobotMazePage /></ErrorBoundary>} />
                 <Route path="/games/beat-maker" element={<ErrorBoundary><BeatMakerPage /></ErrorBoundary>} />
-                <Route path="/games/multiplayer" element={<ErrorBoundary><MultiplayerGamesShowcasePage /></ErrorBoundary>} />
-                <Route path="/games/action" element={<ErrorBoundary><ActionGamesShowcasePage /></ErrorBoundary>} />
+                <Route path="/games/multiplayer" element={<FeatureGate flags={["classicGames_master","classicGames_multiplayer"]}><ErrorBoundary><MultiplayerGamesShowcasePage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/games/action" element={<FeatureGate flags={["classicGames_master","classicGames_action"]}><ErrorBoundary><ActionGamesShowcasePage /></ErrorBoundary></FeatureGate>} />
                 <Route path="/games/battle-quiz" element={<ErrorBoundary><BattleQuizPage /></ErrorBoundary>} />
                 <Route path="/games/coop-maze" element={<ErrorBoundary><CoopMazePage /></ErrorBoundary>} />
                 <Route path="/games/word-battle" element={<ErrorBoundary><WordBattlePage /></ErrorBoundary>} />
@@ -467,8 +467,8 @@ export default function App() {
                 <Route path="/games/quick-math" element={<ErrorBoundary><QuickMathPage /></ErrorBoundary>} />
                 <Route path="/games/speed-reading" element={<ErrorBoundary><SpeedReadingPage /></ErrorBoundary>} />
                 <Route path="/games/tap-dance" element={<ErrorBoundary><TapDancePage /></ErrorBoundary>} />
-                <Route path="/games/stem" element={<ErrorBoundary><STEMGamesShowcasePage /></ErrorBoundary>} />
-                <Route path="/games/all" element={<ErrorBoundary><AllGamesShowcasePage /></ErrorBoundary>} />
+                <Route path="/games/stem" element={<FeatureGate flags={["classicGames_master","classicGames_stem"]}><ErrorBoundary><STEMGamesShowcasePage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/games/all" element={<FeatureGate flag="classicGames_master"><ErrorBoundary><AllGamesShowcasePage /></ErrorBoundary></FeatureGate>} />
                 <Route path="/games/chemistry" element={<ErrorBoundary><ChemistryLabPage /></ErrorBoundary>} />
                 <Route path="/games/physics" element={<ErrorBoundary><PhysicsSandboxPage /></ErrorBoundary>} />
                 <Route path="/games/solar-system" element={<ErrorBoundary><SolarSystemPage /></ErrorBoundary>} />
@@ -476,8 +476,8 @@ export default function App() {
                 <Route path="/games/circuit" element={<ErrorBoundary><CircuitBuilderPage /></ErrorBoundary>} />
                 <Route path="/games/weather" element={<ErrorBoundary><WeatherSimPage /></ErrorBoundary>} />
                 <Route path="/games/ecosystem" element={<ErrorBoundary><EcosystemPage /></ErrorBoundary>} />
-                <Route path="/games/leaderboard" element={<ErrorBoundary><ReflexLeaderboardPage /></ErrorBoundary>} />
-                <Route path="/whats-new" element={<ErrorBoundary><WhatsNewPage /></ErrorBoundary>} />
+                <Route path="/games/leaderboard" element={<FeatureGate flag="classicGames_leaderboard"><ErrorBoundary><ReflexLeaderboardPage /></ErrorBoundary></FeatureGate>} />
+                <Route path="/whats-new" element={<FeatureGate flag="classicGames_whatsNew"><ErrorBoundary><WhatsNewPage /></ErrorBoundary></FeatureGate>} />
                 <Route path="/k" element={<FeatureGate flag="kidLogin"><ErrorBoundary><KidLoginPage /></ErrorBoundary></FeatureGate>} />
                 <Route path="/k/:code" element={<FeatureGate flag="kidLogin"><ErrorBoundary><KidLoginPage /></ErrorBoundary></FeatureGate>} />
                 <Route path="/affiliate" element={<FeatureGate flag="affiliate"><ErrorBoundary><AffiliatePage /></ErrorBoundary></FeatureGate>} />
@@ -515,9 +515,9 @@ export default function App() {
             <MilestoneListener />
             <CookieConsent />
             <InstallPrompt />
-            <WelcomeQuest />
-            <FeedbackWidget />
-            <RewardToast />
+            {FeatureFlagService.isEnabled("welcomeQuest") && <WelcomeQuest />}
+            {FeatureFlagService.isEnabled("feedbackWidget") && <FeedbackWidget />}
+            {FeatureFlagService.isEnabled("classicGames_rewardToast") && <RewardToast />}
             <SWUpdateBanner />
             <OfflineBanner />
             <SystemAnnouncementBanner />

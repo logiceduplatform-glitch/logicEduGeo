@@ -5,8 +5,8 @@ import SEO from "../../components/SEO";
 import { LanguageContext } from "../../i18n/LanguageContext";
 
 const T = {
-  el: { title: "Νέα Παιχνίδια", subtitle: "Κλασικά παιχνίδια που λατρεύουμε όλοι!" },
-  en: { title: "New Games", subtitle: "Timeless classics everyone loves!" },
+  el: { title: "Quick Wins", subtitle: "Κλασικά παιχνίδια που λατρεύουμε όλοι!" },
+  en: { title: "Quick Wins", subtitle: "Timeless classics everyone loves!" },
 };
 
 const GAMES = [
@@ -30,7 +30,7 @@ export default function NewGamesShowcasePage() {
     <>
       <Navbar />
       <SEO title={l.title} description={l.subtitle} canonical="/games" />
-      <main className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 dark:from-slate-900 dark:to-slate-800 py-8">
+      <main className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 dark:from-slate-900 dark:to-slate-800 pt-24 pb-8">
         <div className="max-w-5xl mx-auto px-4">
           <div className="text-center mb-8">
             <div className="text-5xl mb-2">🎮</div>

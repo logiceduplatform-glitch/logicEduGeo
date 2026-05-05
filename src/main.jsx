@@ -7,6 +7,7 @@ import './services/ErrorReportingService';
 import { hasConsent } from './components/CookieConsent';
 import { ClarityService } from './services/ClarityService';
 import { enableAnalytics } from './auth/firebase';
+import { FeatureFlagService } from './services/FeatureFlagService';
 import './index.css';
 
 try {
@@ -20,7 +21,9 @@ try {
 try {
   if (hasConsent("analytics")) {
     enableAnalytics();
-    ClarityService.init();
+    if (FeatureFlagService.isEnabled("analytics_clarity")) {
+      ClarityService.init();
+    }
   }
 } catch { /* no-op */ }
 

@@ -65,6 +65,14 @@ const CATEGORY_LABELS = {
   round13:   { el: "🎮 Round 13 · Engagement Polish", en: "🎮 Round 13 · Engagement Polish" },
   round14:   { el: "♿ Round 14 · Προσβασιμότητα", en: "♿ Round 14 · Accessibility" },
   round15:   { el: "🚀 Round 15 · Ambitious (AR/Co-Play/Print)", en: "🚀 Round 15 · Ambitious (AR/Co-Play/Print)" },
+  classicGames:     { el: "🕹️ Κλασικά Παιχνίδια (Mega Combo · 59 παιχνίδια)", en: "🕹️ Classic Games (Mega Combo · 59 games)" },
+  analytics:        { el: "📊 Analytics & Tracking", en: "📊 Analytics & Tracking" },
+  onboarding:       { el: "🚀 Onboarding & Engagement", en: "🚀 Onboarding & Engagement" },
+  b2b:              { el: "🏢 B2B & Family / School Plans", en: "🏢 B2B & Family / School Plans" },
+  parentalControls: { el: "👨‍👩‍👧 Parental Controls (Time)", en: "👨‍👩‍👧 Parental Controls (Time)" },
+  learningEngine:   { el: "🧠 Learning Engine (SRS)", en: "🧠 Learning Engine (SRS)" },
+  multiplayerNew:   { el: "🤝 Multiplayer (νέα modes)", en: "🤝 Multiplayer (new modes)" },
+  aiNew:            { el: "🤖 AI Tools (νέα)", en: "🤖 AI Tools (new)" },
 };
 
 // Order categories for display
@@ -91,6 +99,14 @@ const CATEGORY_ORDER = [
   "round13",
   "round14",
   "round15",
+  "classicGames",
+  "analytics",
+  "onboarding",
+  "b2b",
+  "parentalControls",
+  "learningEngine",
+  "multiplayerNew",
+  "aiNew",
 ];
 
 export default function AdminFlags() {

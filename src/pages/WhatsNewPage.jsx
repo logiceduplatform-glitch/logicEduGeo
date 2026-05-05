@@ -50,7 +50,7 @@ export default function WhatsNewPage() {
     <>
       <Navbar />
       <SEO title={l.title} description={l.subtitle} canonical="/whats-new" />
-      <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-slate-900 dark:to-slate-800 py-10">
+      <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-slate-900 dark:to-slate-800 pt-24 pb-10">
         <div className="max-w-5xl mx-auto px-4">
           <div className="text-center mb-10">
             <div className="text-7xl mb-3">🎉</div>

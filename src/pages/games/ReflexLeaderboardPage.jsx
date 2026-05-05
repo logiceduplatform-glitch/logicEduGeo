@@ -37,7 +37,7 @@ export default function ReflexLeaderboardPage() {
     <>
       <Navbar />
       <SEO title={l.title} description={l.subtitle} canonical="/games/leaderboard" />
-      <main className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-50 dark:from-slate-900 dark:to-slate-800 py-8">
+      <main className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-50 dark:from-slate-900 dark:to-slate-800 pt-24 pb-8">
         <div className="max-w-3xl mx-auto px-4">
           <div className="text-center mb-6">
             <div className="text-5xl mb-2">🏆</div>

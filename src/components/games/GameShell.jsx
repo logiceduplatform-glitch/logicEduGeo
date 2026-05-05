@@ -54,7 +54,7 @@ export default function GameShell({
     <>
       <Navbar />
       <SEO title={title} description={description} canonical={canonical} />
-      <main className="min-h-screen bg-gradient-to-br from-slate-50 to-purple-50 dark:from-slate-900 dark:to-slate-800 py-6">
+      <main className="min-h-screen bg-gradient-to-br from-slate-50 to-purple-50 dark:from-slate-900 dark:to-slate-800 pt-24 pb-8">
         <div className="max-w-3xl mx-auto px-3">
           <div className="flex items-center justify-between mb-4 gap-2">
             <Link

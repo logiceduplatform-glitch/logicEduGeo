@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../auth/AuthContext";
 import { LanguageContext } from "../i18n/LanguageContext";
 import SEO from "../components/SEO";
+import { FeatureFlagService } from "../services/FeatureFlagService";
 
 import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
@@ -246,33 +247,34 @@ export default function HomePage() {
         <FunZoneSection />
       </RevealSection>
 
-      {/* NEW GAMES MEGA BANNER */}
+      {/* CLASSIC GAMES MEGA BANNER */}
+      {FeatureFlagService.isEnabled("classicGames_homeBanner") && (
       <RevealSection>
         <div className="max-w-6xl mx-auto px-4 py-6">
           <a
-            href="/whats-new"
+            href="/games/all"
             className="block rounded-3xl p-8 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 text-white shadow-2xl hover:shadow-2xl hover:scale-[1.01] transition-all mb-4"
           >
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
                 <div className="text-sm font-bold uppercase tracking-wider opacity-90">
-                  {lang === "el" ? "🎉 Νέα στην Kibloo" : "🎉 New on Kibloo"}
+                  {lang === "el" ? "🕹️ Κλασικά Παιχνίδια" : "🕹️ Classic Games"}
                 </div>
                 <h3 className="text-2xl sm:text-4xl font-extrabold mt-1">
-                  {lang === "el" ? "59 νέα παιχνίδια — 6 κατηγορίες!" : "59 new games — 6 categories!"}
+                  {lang === "el" ? "59 αγαπημένα παιχνίδια — 6 κατηγορίες!" : "59 beloved games — 6 categories!"}
                 </h3>
                 <div className="text-sm opacity-90 mt-1">
-                  {lang === "el" ? "Κλασικά · Εκπαιδευτικά · Δημιουργικά · Multiplayer · Δράσης · STEM" : "Classics · Educational · Creative · Multiplayer · Action · STEM"}
+                  {lang === "el" ? "Quick Wins · Εκπαιδευτικά · Δημιουργικά · Multiplayer · Δράσης · STEM" : "Quick Wins · Educational · Creative · Multiplayer · Action · STEM"}
                 </div>
               </div>
               <span className="px-5 py-3 bg-white/20 hover:bg-white/30 rounded-full font-bold">
-                {lang === "el" ? "Τι Νέο →" : "What's New →"}
+                {lang === "el" ? "Δες όλα →" : "See all →"}
               </span>
             </div>
           </a>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
             {[
-              { p: "/games", e: "🎮", el: "Κλασικά", en: "Classics", n: 10 },
+              { p: "/games", e: "🎮", el: "Quick Wins", en: "Quick Wins", n: 10 },
               { p: "/games/educational", e: "🎓", el: "Μάθηση", en: "Learn", n: 16 },
               { p: "/games/creative", e: "🎨", el: "Τέχνη", en: "Create", n: 13 },
               { p: "/games/multiplayer", e: "🤝", el: "1v1", en: "1v1", n: 5 },
@@ -288,6 +290,7 @@ export default function HomePage() {
           </div>
         </div>
       </RevealSection>
+      )}
 
       {/* FEATURES */}
       <RevealSection>

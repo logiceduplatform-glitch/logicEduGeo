@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef } from "react";
 import { CoinService } from "../services/CoinService";
 import { AnalyticsService } from "../services/AnalyticsService";
 import { ProgressService } from "../services/ProgressService";
+import { FeatureFlagService } from "../services/FeatureFlagService";
 
 /**
  * Centralised rewards + analytics for the new mini-games batch.
@@ -57,26 +58,36 @@ export function useGameRewards(gameId, category = "game") {
   useEffect(() => {
     if (startedRef.current) return;
     startedRef.current = true;
-    AnalyticsService.gameStart(gameId, category);
+
+    const trackEvents = FeatureFlagService.isEnabled("analytics_gameEvents");
+    const trackMilestones = FeatureFlagService.isEnabled("analytics_milestones");
+    const coinsEnabled = FeatureFlagService.isEnabled("classicGames_coinRewards");
+    const achievementsEnabled = FeatureFlagService.isEnabled("classicGames_achievements");
+
+    if (trackEvents) AnalyticsService.gameStart(gameId, category);
 
     const totals = readJson(totalsKey(gameId), { plays: 0, firstPlayedAt: null });
     if (!totals.plays) {
       totals.firstPlayedAt = new Date().toISOString();
-      try { CoinService.earn(FIRST_PLAY_BONUS); } catch { /* */ }
-      emitReward(FIRST_PLAY_BONUS, "first play");
-      AnalyticsService.milestone("first_play_" + gameId, FIRST_PLAY_BONUS);
+      if (coinsEnabled) {
+        try { CoinService.earn(FIRST_PLAY_BONUS); } catch { /* */ }
+        emitReward(FIRST_PLAY_BONUS, "first play");
+      }
+      if (trackMilestones) AnalyticsService.milestone("first_play_" + gameId, FIRST_PLAY_BONUS);
 
       // Track number of unique games played (for sampler/explorer achievements).
-      const played = readJson(PLAYED_KEY, []);
-      if (!played.includes(gameId)) {
-        played.push(gameId);
-        writeJson(PLAYED_KEY, played);
-        try {
-          if (played.length === 1) ProgressService.unlockAchievement(ACHIEVEMENTS.FIRST_GAME);
-          if (played.length === 5) ProgressService.unlockAchievement(ACHIEVEMENTS.SAMPLER);
-          if (played.length === 15) ProgressService.unlockAchievement(ACHIEVEMENTS.EXPLORER);
-          if (played.length === 30) ProgressService.unlockAchievement(ACHIEVEMENTS.COMPLETIONIST);
-        } catch { /* */ }
+      if (achievementsEnabled) {
+        const played = readJson(PLAYED_KEY, []);
+        if (!played.includes(gameId)) {
+          played.push(gameId);
+          writeJson(PLAYED_KEY, played);
+          try {
+            if (played.length === 1) ProgressService.unlockAchievement(ACHIEVEMENTS.FIRST_GAME);
+            if (played.length === 5) ProgressService.unlockAchievement(ACHIEVEMENTS.SAMPLER);
+            if (played.length === 15) ProgressService.unlockAchievement(ACHIEVEMENTS.EXPLORER);
+            if (played.length === 30) ProgressService.unlockAchievement(ACHIEVEMENTS.COMPLETIONIST);
+          } catch { /* */ }
+        }
       }
     }
     totals.plays = (totals.plays || 0) + 1;
@@ -85,6 +96,7 @@ export function useGameRewards(gameId, category = "game") {
 
   const award = useCallback((amount, label = "") => {
     if (!amount || amount <= 0) return 0;
+    if (!FeatureFlagService.isEnabled("classicGames_coinRewards")) return 0;
     const dKey = todayKey(gameId);
     const earnedToday = readJson(dKey, 0);
     const remaining = Math.max(0, DAILY_CAP - earnedToday);
@@ -98,11 +110,15 @@ export function useGameRewards(gameId, category = "game") {
   }, [gameId]);
 
   const complete = useCallback((score = null, total = null) => {
-    AnalyticsService.gameComplete(gameId, score, total);
+    if (FeatureFlagService.isEnabled("analytics_gameEvents")) {
+      AnalyticsService.gameComplete(gameId, score, total);
+    }
   }, [gameId]);
 
   const milestone = useCallback((name, value = null) => {
-    AnalyticsService.milestone(`${gameId}_${name}`, value);
+    if (FeatureFlagService.isEnabled("analytics_milestones")) {
+      AnalyticsService.milestone(`${gameId}_${name}`, value);
+    }
   }, [gameId]);
 
   return { award, complete, milestone };

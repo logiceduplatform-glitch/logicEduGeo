@@ -27,7 +27,7 @@ export default function MultiplayerGamesShowcasePage() {
     <>
       <Navbar />
       <SEO title={l.title} description={l.subtitle} canonical="/games/multiplayer" />
-      <main className="min-h-screen bg-gradient-to-br from-rose-50 to-purple-50 dark:from-slate-900 dark:to-slate-800 py-8">
+      <main className="min-h-screen bg-gradient-to-br from-rose-50 to-purple-50 dark:from-slate-900 dark:to-slate-800 pt-24 pb-8">
         <div className="max-w-5xl mx-auto px-4">
           <div className="text-center mb-8">
             <div className="text-5xl mb-2">🤝</div>

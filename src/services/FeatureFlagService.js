@@ -158,6 +158,57 @@ export const DEFAULT_FLAGS = {
   arFlashcards:   { enabled: true, label: { el: "AR Flashcards (κάμερα)", en: "AR Flashcards (camera)" }, category: "round15" },
   coPlay:         { enabled: true, label: { el: "Co-Play με Γονιό", en: "Co-Play with Parent" }, category: "round15" },
   printShop:      { enabled: true, label: { el: "Print Shop (φυσικά προϊόντα)", en: "Print Shop (physical goods)" }, category: "round15" },
+
+  // ─── Classic Games (Mega Combo Round - 59 games, 6 categories) ─────
+  classicGames_master:       { enabled: true, label: { el: "Master · Όλα τα Κλασικά Παιχνίδια", en: "Master · All Classic Games" }, category: "classicGames" },
+  classicGames_quickWins:    { enabled: true, label: { el: "Quick Wins (10) · Wordle, 2048, Snake, Tetris…", en: "Quick Wins (10) · Wordle, 2048, Snake, Tetris…" }, category: "classicGames" },
+  classicGames_educational:  { enabled: true, label: { el: "Εκπαιδευτικά (16) · Spelling Bee, Math Sprint…", en: "Educational (16) · Spelling Bee, Math Sprint…" }, category: "classicGames" },
+  classicGames_creative:     { enabled: true, label: { el: "Δημιουργικά (13) · Pixel Art, Beat Maker…", en: "Creative (13) · Pixel Art, Beat Maker…" }, category: "classicGames" },
+  classicGames_multiplayer:  { enabled: true, label: { el: "Multiplayer (5) · Battle Quiz, Co-op Maze…", en: "Multiplayer (5) · Battle Quiz, Co-op Maze…" }, category: "classicGames" },
+  classicGames_action:       { enabled: true, label: { el: "Δράσης (8) · Reaction, Bubble Pop…", en: "Action (8) · Reaction, Bubble Pop…" }, category: "classicGames" },
+  classicGames_stem:         { enabled: true, label: { el: "STEM (7) · Chemistry, Solar System, DNA…", en: "STEM (7) · Chemistry, Solar System, DNA…" }, category: "classicGames" },
+  classicGames_navMenu:      { enabled: true, label: { el: "Εμφάνιση στο Navbar Menu", en: "Show in Navbar Menu" }, category: "classicGames" },
+  classicGames_homeBanner:   { enabled: true, label: { el: "Mega banner στην Home Page", en: "Mega banner on Home Page" }, category: "classicGames" },
+  classicGames_coinRewards:  { enabled: true, label: { el: "Coin rewards για κάθε παιχνίδι", en: "Coin rewards per game" }, category: "classicGames" },
+  classicGames_achievements: { enabled: true, label: { el: "Achievements για milestones (5/15/30 παιχνίδια)", en: "Achievements for milestones (5/15/30 games)" }, category: "classicGames" },
+  classicGames_firstTip:     { enabled: true, label: { el: "First-time tutorial popups", en: "First-time tutorial popups" }, category: "classicGames" },
+  classicGames_rewardToast:  { enabled: true, label: { el: "Reward toast notifications", en: "Reward toast notifications" }, category: "classicGames" },
+  classicGames_leaderboard:  { enabled: true, label: { el: "Personal Bests (Reflex Leaderboard)", en: "Personal Bests (Reflex Leaderboard)" }, category: "classicGames" },
+  classicGames_whatsNew:     { enabled: true, label: { el: "Σελίδα 'Τι Νέο'", en: "'What's New' page" }, category: "classicGames" },
+
+  // ─── Analytics & Tracking ───────────────────────────────
+  analytics_clarity:        { enabled: true, label: { el: "Microsoft Clarity (heatmaps, session recordings)", en: "Microsoft Clarity (heatmaps, sessions)" }, category: "analytics" },
+  analytics_gameEvents:     { enabled: true, label: { el: "Game events (start/complete/score)", en: "Game events (start/complete/score)" }, category: "analytics" },
+  analytics_milestones:     { enabled: true, label: { el: "Milestone tracking", en: "Milestone tracking" }, category: "analytics" },
+
+  // ─── Onboarding & Engagement ────────────────────────────
+  welcomeQuest:             { enabled: true, label: { el: "Welcome Quest (interactive onboarding)", en: "Welcome Quest (interactive onboarding)" }, category: "onboarding" },
+  feedbackWidget:           { enabled: true, label: { el: "In-app Feedback Widget (floating)", en: "In-app Feedback Widget (floating)" }, category: "onboarding" },
+  foundingMemberBadge:      { enabled: true, label: { el: "Founding Member Badge", en: "Founding Member Badge" }, category: "onboarding" },
+
+  // ─── B2B & Plans ────────────────────────────────────────
+  familyPlan_profiles:      { enabled: true, label: { el: "Family Plan · Πολλαπλά Child Profiles", en: "Family Plan · Multiple child profiles" }, category: "b2b" },
+  schoolLicense:            { enabled: true, label: { el: "School License (B2B activation)", en: "School License (B2B activation)" }, category: "b2b" },
+  schoolLicensePage:        { enabled: true, label: { el: "Σελίδα Activation Σχολείου", en: "School Activation page" }, category: "b2b" },
+
+  // ─── Parental Controls ─────────────────────────────────
+  timeManagement:           { enabled: true, label: { el: "Time Management Dashboard (γονικός έλεγχος)", en: "Time Management Dashboard (parental)" }, category: "parentalControls" },
+  timeManagement_schedule:  { enabled: true, label: { el: "Schedule windows (ώρες χρήσης)", en: "Schedule windows" }, category: "parentalControls" },
+  timeManagement_dailyCap:  { enabled: true, label: { el: "Ημερήσιο όριο λεπτών", en: "Daily minutes cap" }, category: "parentalControls" },
+
+  // ─── Learning Engine ───────────────────────────────────
+  srs:                      { enabled: true, label: { el: "Spaced Repetition (SRS)", en: "Spaced Repetition (SRS)" }, category: "learningEngine" },
+  srsDashboard:             { enabled: true, label: { el: "SRS Dashboard widget", en: "SRS Dashboard widget" }, category: "learningEngine" },
+
+  // ─── Multiplayer (new modes) ───────────────────────────
+  friendChallenges:         { enabled: true, label: { el: "Friend Challenges (Async 1v1)", en: "Friend Challenges (Async 1v1)" }, category: "multiplayerNew" },
+  liveClassroom:            { enabled: true, label: { el: "Live Classroom Mode (Kahoot-style)", en: "Live Classroom Mode (Kahoot-style)" }, category: "multiplayerNew" },
+  ticTacToeOnline:          { enabled: true, label: { el: "Tic-Tac-Toe Online (Firestore)", en: "Tic-Tac-Toe Online (Firestore)" }, category: "multiplayerNew" },
+
+  // ─── AI Tools (new) ────────────────────────────────────
+  aiPhotoSolver:            { enabled: true, label: { el: "AI Math Photo Solver", en: "AI Math Photo Solver" }, category: "aiNew" },
+  aiStoryGen:               { enabled: true, label: { el: "AI Story Generator", en: "AI Story Generator" }, category: "aiNew" },
+  aiVoiceQuiz:              { enabled: true, label: { el: "Φωνητικό Quiz με AI", en: "AI Voice Quiz" }, category: "aiNew" },
 };
 
 const CACHE_KEY = "geo:featureFlags";

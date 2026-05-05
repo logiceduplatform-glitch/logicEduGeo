@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, useCallback } from "react";
 import { LanguageContext } from "../i18n/LanguageContext";
 import { enableAnalytics } from "../auth/firebase";
 import { ClarityService } from "../services/ClarityService";
+import { FeatureFlagService } from "../services/FeatureFlagService";
 
 const STORAGE_KEY = "edu:cookieConsent";
 const CONSENT_LOG_KEY = "edu:cookieConsentLog";
@@ -68,7 +69,9 @@ export default function CookieConsent() {
     logConsentEvent(consent);
     if (consent.analytics) {
       enableAnalytics();
-      ClarityService.init();
+      if (FeatureFlagService.isEnabled("analytics_clarity")) {
+        ClarityService.init();
+      }
     }
     setVisible(false);
   }, []);

@@ -20,20 +20,37 @@ const T = {
 /**
  * Wrap a route or component to gate it on a feature flag.
  *
- * <FeatureGate flag="battleRoyale"><BattleRoyalePage /></FeatureGate>
+ *   <FeatureGate flag="battleRoyale">...</FeatureGate>
+ *   <FeatureGate flags={["classicGames_master","classicGames_quickWins"]}>...</FeatureGate>
+ *
+ * Props:
+ *   flag:  string                    – single flag id (legacy API)
+ *   flags: string | string[]         – flag id(s); ALL must be enabled
+ *   children: ReactNode
+ *   fallback: ReactNode | null       – optional custom fallback (skips default UI)
+ *   hideNav: boolean                 – do not render Navbar in fallback
  */
-export default function FeatureGate({ flag, children, fallback = null, hideNav = false }) {
+export default function FeatureGate({ flag, flags, children, fallback = null, hideNav = false }) {
   const { lang } = useContext(LanguageContext) || { lang: "el" };
   const l = T[lang] || T.en;
 
-  if (FeatureFlagService.isEnabled(flag)) return children;
+  // Build the list of required flags from either prop.
+  const list = []
+    .concat(flag ? [flag] : [])
+    .concat(Array.isArray(flags) ? flags : flags ? [flags] : []);
+
+  // No flags supplied → render as-is.
+  if (list.length === 0) return children;
+
+  const allOn = list.every((id) => FeatureFlagService.isEnabled(id));
+  if (allOn) return children;
 
   if (fallback) return fallback;
 
   return (
     <>
       {!hideNav && <Navbar />}
-      <div className="min-h-[70vh] flex items-center justify-center px-4">
+      <div className="min-h-[70vh] flex items-center justify-center px-4 pt-24 pb-10">
         <div className="max-w-md text-center bg-white dark:bg-slate-800 rounded-3xl p-8 shadow-xl border border-slate-100 dark:border-slate-700">
           <div className="text-6xl mb-3">🚧</div>
           <h1 className="text-xl font-extrabold text-slate-800 dark:text-slate-100 mb-2">{l.title}</h1>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { FeatureFlagService } from "../../services/FeatureFlagService";
 
 /**
  * Shows a one-shot tip popup the first time a user visits a complex game.
@@ -8,6 +9,7 @@ export default function FirstTimeTip({ id, title, body }) {
   const key = `tip:seen:${id}`;
   const [open, setOpen] = useState(false);
   useEffect(() => {
+    if (!FeatureFlagService.isEnabled("classicGames_firstTip")) return;
     try {
       if (!localStorage.getItem(key)) setOpen(true);
     } catch { /* */ }

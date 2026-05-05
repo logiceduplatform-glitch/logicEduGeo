@@ -227,7 +227,7 @@ export default function Navbar() {
     if (!isLoggedIn) {
       links = [
         { label: isEl ? "Παιχνίδια" : "Games", fullLabel: isEl ? "Παιχνίδια" : "Games", href: "#categories", icon: "🎮" },
-        { label: isEl ? "Νέα 🆕" : "New 🆕", fullLabel: isEl ? "Νέα Παιχνίδια (59)" : "New Games (59)", href: "/games/all", isRoute: true, icon: "🎉" },
+        { label: isEl ? "Κλασικά" : "Classics", fullLabel: isEl ? "Κλασικά Παιχνίδια (59)" : "Classic Games (59)", href: "/games/all", isRoute: true, icon: "🕹️", flag: "classicGames_navMenu" },
         { label: isEl ? "Γονείς" : "Parents", fullLabel: isEl ? "Για Γονείς" : "For Parents", href: "/for-parents", isRoute: true, icon: "👨‍👩‍👧" },
         { label: isEl ? "Δάσκαλοι" : "Teachers", fullLabel: isEl ? "Για Εκπαιδευτικούς" : "For Teachers", href: "/for-teachers", isRoute: true, icon: "👨‍🏫" },
         { label: isEl ? "Blog" : "Blog", fullLabel: isEl ? "Blog" : "Blog", href: "/blog", isRoute: true, icon: "📝", flag: "blog" },
@@ -236,17 +236,25 @@ export default function Navbar() {
     } else if (userRole === "teacher" && !teacherInChildMode) {
       links = [
         { label: isEl ? "Dashboard" : "Dashboard", fullLabel: isEl ? "Πίνακας Δασκάλου" : "Teacher Dashboard", href: "/teacher-dashboard", isRoute: true, icon: "📚" },
+        { label: isEl ? "Κλασικά" : "Classics", fullLabel: isEl ? "Κλασικά Παιχνίδια (59)" : "Classic Games (59)", href: "/games/all", isRoute: true, icon: "🕹️", flag: "classicGames_navMenu" },
         { label: isEl ? "AI Μάθημα" : "AI Lesson", fullLabel: isEl ? "AI Δημιουργός Μαθήματος" : "AI Lesson Generator", href: "/teacher/ai-lesson", isRoute: true, icon: "🤖", flag: "aiLessonGen" },
         { label: isEl ? "Πακέτα" : "Packs", fullLabel: isEl ? "Έτοιμα Πακέτα Μαθημάτων" : "Curriculum Packs", href: "/curriculum", isRoute: true, icon: "📦", flag: "curriculumPacks" },
         { label: isEl ? "Σχολείο" : "School", fullLabel: isEl ? "Διαχείριση Σχολείου" : "School Admin", href: "/school-admin", isRoute: true, icon: "🏫", flag: "schoolAdmin" },
         { label: isEl ? "Live Quiz" : "Live Quiz", fullLabel: isEl ? "Live Quiz" : "Live Quiz", href: "/live-quiz", isRoute: true, icon: "🎮", flag: "liveQuiz" },
         { label: isEl ? "Φύλλα" : "Worksheets", fullLabel: isEl ? "Φύλλα Εργασίας" : "Worksheets", href: "/worksheets", isRoute: true, icon: "🖨️", flag: "worksheets" },
-        { label: isEl ? "Affiliate" : "Affiliate", fullLabel: isEl ? "Affiliate Πρόγραμμα" : "Affiliate Program", href: "/affiliate", isRoute: true, icon: "💼", flag: "affiliate" },
+        // Classic games sub-categories (in "More" dropdown)
+        { label: isEl ? "Quick Wins" : "Quick Wins", fullLabel: isEl ? "Quick Wins (10)" : "Quick Wins (10)", href: "/games", isRoute: true, icon: "🎮", group: "more", section: isEl ? "🕹️ Κλασικά Παιχνίδια" : "🕹️ Classic Games", flag: "classicGames_quickWins" },
+        { label: isEl ? "Εκπαιδευτικά (16)" : "Educational (16)", fullLabel: isEl ? "Εκπαιδευτικά Παιχνίδια" : "Educational Games", href: "/games/educational", isRoute: true, icon: "🎓", group: "more", section: isEl ? "🕹️ Κλασικά Παιχνίδια" : "🕹️ Classic Games", flag: "classicGames_educational" },
+        { label: isEl ? "Δημιουργικά (13)" : "Creative (13)", fullLabel: isEl ? "Δημιουργικά Παιχνίδια" : "Creative Games", href: "/games/creative", isRoute: true, icon: "🎨", group: "more", section: isEl ? "🕹️ Κλασικά Παιχνίδια" : "🕹️ Classic Games", flag: "classicGames_creative" },
+        { label: isEl ? "Multiplayer (5)" : "Multiplayer (5)", fullLabel: isEl ? "Παιχνίδια Πολλαπλών" : "Multiplayer Games", href: "/games/multiplayer", isRoute: true, icon: "🤝", group: "more", section: isEl ? "🕹️ Κλασικά Παιχνίδια" : "🕹️ Classic Games", flag: "classicGames_multiplayer" },
+        { label: isEl ? "Δράσης (8)" : "Action (8)", fullLabel: isEl ? "Παιχνίδια Δράσης" : "Action Games", href: "/games/action", isRoute: true, icon: "⚡", group: "more", section: isEl ? "🕹️ Κλασικά Παιχνίδια" : "🕹️ Classic Games", flag: "classicGames_action" },
+        { label: isEl ? "STEM (7)" : "STEM (7)", fullLabel: isEl ? "STEM & Επιστήμη" : "STEM & Science", href: "/games/stem", isRoute: true, icon: "🔬", group: "more", section: isEl ? "🕹️ Κλασικά Παιχνίδια" : "🕹️ Classic Games", flag: "classicGames_stem" },
+        { label: isEl ? "Affiliate" : "Affiliate", fullLabel: isEl ? "Affiliate Πρόγραμμα" : "Affiliate Program", href: "/affiliate", isRoute: true, icon: "💼", group: "more", flag: "affiliate" },
       ];
     } else if (userRole === "parent" && !activeChild) {
       links = [
         { label: isEl ? "Παιχνίδια" : "Games", fullLabel: isEl ? "Παιχνίδια" : "Games", href: "#categories", icon: "🎮" },
-        { label: isEl ? "Νέα 🆕" : "New 🆕", fullLabel: isEl ? "Νέα Παιχνίδια (59)" : "New Games (59)", href: "/games/all", isRoute: true, icon: "🎉" },
+        { label: isEl ? "Κλασικά" : "Classics", fullLabel: isEl ? "Κλασικά Παιχνίδια (59)" : "Classic Games (59)", href: "/games/all", isRoute: true, icon: "🕹️", flag: "classicGames_navMenu" },
         { label: isEl ? "Dashboard" : "Dashboard", fullLabel: isEl ? "Γονικός Πίνακας" : "Parent Dashboard", href: "/parent-dashboard", isRoute: true, icon: "📊" },
         { label: isEl ? "Οικ. Quiz" : "Family Quiz", fullLabel: isEl ? "Οικογενειακή Πρόκληση" : "Family Challenge", href: "/family-challenge", isRoute: true, icon: "👨‍👩‍👧", flag: "familyChallenge" },
         { label: isEl ? "Αναφορές" : "Reports", fullLabel: isEl ? "Εβδομαδιαίες Αναφορές" : "Weekly Reports", href: "/weekly-report", isRoute: true, icon: "📋", flag: "weeklyDigest" },
@@ -282,17 +290,16 @@ export default function Navbar() {
         { label: isEl ? "Διαδρομή Μάθησης" : "Learning Path", fullLabel: isEl ? "Προσωπική Διαδρομή Μάθησης" : "Personalized Learning Path", href: "/learning-path", isRoute: true, icon: "🎯", group: "more", section: isEl ? "📊 Πρόοδος" : "📊 Progress", flag: "learningPath" },
         { label: isEl ? "Trophy Room" : "Trophy Room", fullLabel: isEl ? "Trophy Room" : "Trophy Room", href: "/trophy-room", isRoute: true, icon: "🏆", group: "more", section: isEl ? "📊 Πρόοδος" : "📊 Progress", flag: "trophyRoom" },
         { label: isEl ? "Mastery Tracker" : "Mastery Tracker", fullLabel: isEl ? "Mastery Tracker" : "Mastery Tracker", href: "/mastery", isRoute: true, icon: "🔥", group: "more", section: isEl ? "📊 Πρόοδος" : "📊 Progress", flag: "masteryTracker" },
-        { label: isEl ? "Personal Bests" : "Personal Bests", fullLabel: isEl ? "Personal Bests" : "Personal Bests", href: "/games/leaderboard", isRoute: true, icon: "🏆", group: "more", section: isEl ? "📊 Πρόοδος" : "📊 Progress" },
+        { label: isEl ? "Personal Bests" : "Personal Bests", fullLabel: isEl ? "Personal Bests" : "Personal Bests", href: "/games/leaderboard", isRoute: true, icon: "🏆", group: "more", section: isEl ? "📊 Πρόοδος" : "📊 Progress", flag: "classicGames_leaderboard" },
 
-        // 🎮 Νέα Παιχνίδια (mega combo round)
-        { label: isEl ? "Όλα τα Νέα 🆕" : "All New Games 🆕", fullLabel: isEl ? "Όλα τα Νέα Παιχνίδια (59)" : "All New Games (59)", href: "/games/all", isRoute: true, icon: "🎯", group: "more", section: isEl ? "🎮 Νέα Παιχνίδια" : "🎮 New Games" },
-        { label: isEl ? "Κλασικά (10)" : "Classics (10)", fullLabel: isEl ? "Κλασικά Παιχνίδια" : "Classic Games", href: "/games", isRoute: true, icon: "🎮", group: "more", section: isEl ? "🎮 Νέα Παιχνίδια" : "🎮 New Games" },
-        { label: isEl ? "Εκπαιδευτικά (16)" : "Educational (16)", fullLabel: isEl ? "Εκπαιδευτικά Παιχνίδια" : "Educational Games", href: "/games/educational", isRoute: true, icon: "🎓", group: "more", section: isEl ? "🎮 Νέα Παιχνίδια" : "🎮 New Games" },
-        { label: isEl ? "Δημιουργικά (13)" : "Creative (13)", fullLabel: isEl ? "Δημιουργικά Παιχνίδια" : "Creative Games", href: "/games/creative", isRoute: true, icon: "🎨", group: "more", section: isEl ? "🎮 Νέα Παιχνίδια" : "🎮 New Games" },
-        { label: isEl ? "Multiplayer (5)" : "Multiplayer (5)", fullLabel: isEl ? "Παιχνίδια Πολλαπλών" : "Multiplayer Games", href: "/games/multiplayer", isRoute: true, icon: "🤝", group: "more", section: isEl ? "🎮 Νέα Παιχνίδια" : "🎮 New Games" },
-        { label: isEl ? "Δράσης (8)" : "Action (8)", fullLabel: isEl ? "Παιχνίδια Δράσης" : "Action Games", href: "/games/action", isRoute: true, icon: "⚡", group: "more", section: isEl ? "🎮 Νέα Παιχνίδια" : "🎮 New Games" },
-        { label: isEl ? "STEM (7)" : "STEM (7)", fullLabel: isEl ? "STEM & Επιστήμη" : "STEM & Science", href: "/games/stem", isRoute: true, icon: "🔬", group: "more", section: isEl ? "🎮 Νέα Παιχνίδια" : "🎮 New Games" },
-        { label: isEl ? "Τι Νέο 🆕" : "What's New 🆕", fullLabel: isEl ? "Τι Νέο" : "What's New", href: "/whats-new", isRoute: true, icon: "🎉", group: "more", section: isEl ? "🎮 Νέα Παιχνίδια" : "🎮 New Games" },
+        // 🕹️ Κλασικά Παιχνίδια (mega combo round)
+        { label: isEl ? "Όλα τα Κλασικά" : "All Classics", fullLabel: isEl ? "Όλα τα Κλασικά Παιχνίδια (59)" : "All Classic Games (59)", href: "/games/all", isRoute: true, icon: "🎯", group: "more", section: isEl ? "🕹️ Κλασικά Παιχνίδια" : "🕹️ Classic Games", flag: "classicGames_master" },
+        { label: isEl ? "Quick Wins (10)" : "Quick Wins (10)", fullLabel: isEl ? "Quick Wins (Wordle, 2048, Snake...)" : "Quick Wins (Wordle, 2048, Snake...)", href: "/games", isRoute: true, icon: "🎮", group: "more", section: isEl ? "🕹️ Κλασικά Παιχνίδια" : "🕹️ Classic Games", flag: "classicGames_quickWins" },
+        { label: isEl ? "Εκπαιδευτικά (16)" : "Educational (16)", fullLabel: isEl ? "Εκπαιδευτικά Παιχνίδια" : "Educational Games", href: "/games/educational", isRoute: true, icon: "🎓", group: "more", section: isEl ? "🕹️ Κλασικά Παιχνίδια" : "🕹️ Classic Games", flag: "classicGames_educational" },
+        { label: isEl ? "Δημιουργικά (13)" : "Creative (13)", fullLabel: isEl ? "Δημιουργικά Παιχνίδια" : "Creative Games", href: "/games/creative", isRoute: true, icon: "🎨", group: "more", section: isEl ? "🕹️ Κλασικά Παιχνίδια" : "🕹️ Classic Games", flag: "classicGames_creative" },
+        { label: isEl ? "Multiplayer (5)" : "Multiplayer (5)", fullLabel: isEl ? "Παιχνίδια Πολλαπλών" : "Multiplayer Games", href: "/games/multiplayer", isRoute: true, icon: "🤝", group: "more", section: isEl ? "🕹️ Κλασικά Παιχνίδια" : "🕹️ Classic Games", flag: "classicGames_multiplayer" },
+        { label: isEl ? "Δράσης (8)" : "Action (8)", fullLabel: isEl ? "Παιχνίδια Δράσης" : "Action Games", href: "/games/action", isRoute: true, icon: "⚡", group: "more", section: isEl ? "🕹️ Κλασικά Παιχνίδια" : "🕹️ Classic Games", flag: "classicGames_action" },
+        { label: isEl ? "STEM (7)" : "STEM (7)", fullLabel: isEl ? "STEM & Επιστήμη" : "STEM & Science", href: "/games/stem", isRoute: true, icon: "🔬", group: "more", section: isEl ? "🕹️ Κλασικά Παιχνίδια" : "🕹️ Classic Games", flag: "classicGames_stem" },
       ];
     }
     // Filter out links whose feature flag is disabled

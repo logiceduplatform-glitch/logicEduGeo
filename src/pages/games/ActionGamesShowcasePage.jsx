@@ -27,7 +27,7 @@ export default function ActionGamesShowcasePage() {
     <>
       <Navbar />
       <SEO title={l.title} description={l.subtitle} canonical="/games/action" />
-      <main className="min-h-screen bg-gradient-to-br from-orange-50 to-rose-50 dark:from-slate-900 dark:to-slate-800 py-8">
+      <main className="min-h-screen bg-gradient-to-br from-orange-50 to-rose-50 dark:from-slate-900 dark:to-slate-800 pt-24 pb-8">
         <div className="max-w-5xl mx-auto px-4">
           <div className="text-center mb-8">
             <div className="text-5xl mb-2">⚡</div>
