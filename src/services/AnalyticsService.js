@@ -153,6 +153,11 @@ export const AnalyticsService = {
   milestone(name, value = null) {
     log("milestone", { name, ...(value != null && { value }) });
   },
+
+  // Generic event for marketing surfaces (newsletter, blog reads, A/B tests).
+  track(name, params = {}) {
+    log(name, params);
+  },
 };
 
 // Auto-track retention on module load (once per session).

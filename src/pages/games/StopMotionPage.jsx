@@ -60,7 +60,7 @@ export default function StopMotionPage() {
         <>
           <div className="relative">
             {playing && frames.length > 0 ? (
-              <img src={frames[pIdx]} alt="" className="w-full rounded-xl bg-black" />
+              <img src={frames[pIdx]} alt="" loading="lazy" decoding="async" className="w-full rounded-xl bg-black" />
             ) : (
               <video ref={videoRef} className="w-full rounded-xl bg-black" playsInline />
             )}
@@ -79,7 +79,7 @@ export default function StopMotionPage() {
           <div className="mt-3 grid grid-cols-6 gap-1 max-h-32 overflow-y-auto">
             {frames.map((f, i) => (
               <div key={i} className="relative">
-                <img src={f} alt="" className="w-full aspect-square object-cover rounded border-2 border-slate-300" />
+                <img src={f} alt="" loading="lazy" decoding="async" className="w-full aspect-square object-cover rounded border-2 border-slate-300" />
                 <button onClick={() => remove(i)} className="absolute top-0 right-0 bg-rose-500 text-white text-xs w-5 h-5 rounded-full leading-none">×</button>
               </div>
             ))}

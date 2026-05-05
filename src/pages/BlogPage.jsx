@@ -410,7 +410,154 @@ const ARTICLES = [
       en: "The key is balance: learning + rest + fun. Don't push — let learning come naturally.",
     },
   },
+  {
+    slug: "screen-time-balance",
+    gradient: "from-rose-400 to-orange-500",
+    icon: "📱",
+    tag: { el: "Γονείς", en: "Parents" },
+    tagColor: "bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300",
+    readTime: { el: "4 λεπτά", en: "4 min read" },
+    title: {
+      el: "Πώς να βρείτε υγιή ισορροπία στον χρόνο μπροστά στην οθόνη",
+      en: "How to find a healthy screen-time balance for kids",
+    },
+    intro: {
+      el: "Δεν είναι όλος ο χρόνος μπροστά στην οθόνη ίδιος. Παθητική κατανάλωση (videos) διαφέρει από ενεργό μάθηση (παιχνίδια). Ορίστε όρια χωρίς ενοχές.",
+      en: "Not all screen time is equal. Passive consumption (videos) differs from active learning (games). Set boundaries without guilt.",
+    },
+    sections: {
+      el: [
+        { title: "1. Ποιοτικός vs ποσοτικός χρόνος", content: "20 λεπτά εκπαιδευτικού παιχνιδιού αξίζουν περισσότερο από 1 ώρα παθητικών videos. Επιλέξτε apps που απαιτούν σκέψη, αλληλεπίδραση και δημιουργικότητα." },
+        { title: "2. Συστάσεις WHO ανά ηλικία", content: "0-2 ετών: σχεδόν μηδέν. 3-5 ετών: έως 1 ώρα ποιοτικού περιεχομένου. 6+: μην υπερβαίνετε τις 2 ώρες ψυχαγωγικού screen time τη μέρα. Εκπαιδευτικό μετράει χωριστά." },
+        { title: "3. Καθιερώστε «οθόνη-free» ζώνες", content: "Δωμάτιο ύπνου, τραπέζι φαγητού, 1 ώρα πριν τον ύπνο. Έτσι δημιουργείται φυσική ροή χωρίς αντιπαράθεση." },
+        { title: "4. Παίξτε μαζί", content: "Όταν μπορείτε, παίξτε ένα εκπαιδευτικό παιχνίδι μαζί. Συζητήστε τι έμαθε. Μετατρέπει το screen time σε ποιοτικό χρόνο." },
+        { title: "5. Χρησιμοποιήστε χρονόμετρο", content: "Αντί για «θα σταματήσεις σε 5 λεπτά» (που δεν τηρείται ποτέ), χρησιμοποιήστε visual timer. Όταν χτυπήσει, σταματάει." },
+      ],
+      en: [
+        { title: "1. Quality vs quantity", content: "20 minutes of an educational game is worth more than 1 hour of passive videos. Choose apps that require thinking, interaction, and creativity." },
+        { title: "2. WHO recommendations by age", content: "0-2: almost zero. 3-5: up to 1 hour of quality content. 6+: don't exceed 2 hours of recreational screen time per day. Educational counts separately." },
+        { title: "3. Establish 'screen-free' zones", content: "Bedroom, dining table, 1 hour before bed. This creates natural flow without confrontation." },
+        { title: "4. Play together", content: "When you can, play an educational game together. Discuss what they learned. Turns screen time into quality time." },
+        { title: "5. Use a timer", content: "Instead of 'you'll stop in 5 minutes' (which never sticks), use a visual timer. When it rings, it stops." },
+      ],
+    },
+    tip: {
+      el: "Στο Kibloo όλο το περιεχόμενο είναι εκπαιδευτικό και ad-free, άρα κάθε λεπτό μετράει σε «ποιοτικό» screen time.",
+      en: "On Kibloo, all content is educational and ad-free, so every minute counts as 'quality' screen time.",
+    },
+  },
+  {
+    slug: "learning-styles-explained",
+    gradient: "from-purple-400 to-fuchsia-500",
+    icon: "🧠",
+    tag: { el: "Παιδαγωγικά", en: "Learning" },
+    tagColor: "bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300",
+    readTime: { el: "5 λεπτά", en: "5 min read" },
+    title: {
+      el: "Στυλ μάθησης: Ποιο ταιριάζει στο παιδί σας;",
+      en: "Learning styles: Which fits your child?",
+    },
+    intro: {
+      el: "Κάθε παιδί μαθαίνει διαφορετικά. Κάποια χρειάζονται να βλέπουν, άλλα να ακούν, άλλα να αγγίζουν. Ανακαλύψτε το στυλ του παιδιού σας και προσαρμόστε τη μάθηση.",
+      en: "Every child learns differently. Some need to see, others to hear, others to touch. Discover your child's style and adapt learning.",
+    },
+    sections: {
+      el: [
+        { title: "1. Οπτικός μαθητής (Visual)", content: "Μαθαίνει καλύτερα με εικόνες, διαγράμματα, χρώματα και βίντεο. Σημάδια: ζωγραφίζει συνεχώς, θυμάται πρόσωπα όχι ονόματα. Δοκιμάστε: εκπαιδευτικά videos, χάρτες, mind maps." },
+        { title: "2. Ακουστικός μαθητής (Auditory)", content: "Μαθαίνει με ήχο και μουσική. Σημάδια: μιλάει στον εαυτό του, αγαπά τραγούδια & ιστορίες. Δοκιμάστε: audio books, εκπαιδευτικά τραγούδια, podcasts." },
+        { title: "3. Κιναισθητικός μαθητής (Hands-on)", content: "Μαθαίνει κάνοντας. Σημάδια: δεν μπορεί να καθίσει ήσυχος, αγαπά αθλήματα και κατασκευές. Δοκιμάστε: επιστημονικά πειράματα, building blocks, role-play." },
+        { title: "4. Αναγνωστικός/συγγραφικός", content: "Μαθαίνει διαβάζοντας και γράφοντας. Σημάδια: αγαπά βιβλία, κρατάει σημειώσεις. Δοκιμάστε: εκπαιδευτικά βιβλία, journaling, λίστες." },
+        { title: "5. Πολλαπλά στυλ είναι ο κανόνας", content: "Τα περισσότερα παιδιά έχουν συνδυασμό 2-3 στυλ. Εστιάστε στο ισχυρότερο για δύσκολες έννοιες, αλλά εκθέστε τα και σε άλλα στυλ για πληρότητα." },
+      ],
+      en: [
+        { title: "1. Visual learner", content: "Learns best with images, diagrams, colors and video. Signs: draws constantly, remembers faces not names. Try: educational videos, maps, mind maps." },
+        { title: "2. Auditory learner", content: "Learns through sound and music. Signs: talks to themselves, loves songs & stories. Try: audio books, educational songs, podcasts." },
+        { title: "3. Kinesthetic learner", content: "Learns by doing. Signs: can't sit still, loves sports and crafts. Try: science experiments, building blocks, role-play." },
+        { title: "4. Reading/writing", content: "Learns by reading and writing. Signs: loves books, takes notes. Try: educational books, journaling, lists." },
+        { title: "5. Multiple styles are the norm", content: "Most kids have a combination of 2-3 styles. Focus on the strongest for hard concepts, but expose them to others for completeness." },
+      ],
+    },
+    tip: {
+      el: "Το Kibloo προσφέρει και τα 4 στυλ: visual παιχνίδια, voice quiz, hands-on δραστηριότητες, και reading exercises.",
+      en: "Kibloo offers all 4 styles: visual games, voice quiz, hands-on activities, and reading exercises.",
+    },
+  },
+  {
+    slug: "teacher-classroom-tips",
+    gradient: "from-emerald-400 to-teal-500",
+    icon: "👩‍🏫",
+    tag: { el: "Δάσκαλοι", en: "Teachers" },
+    tagColor: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300",
+    readTime: { el: "4 λεπτά", en: "4 min read" },
+    title: {
+      el: "5 τρόποι να εντάξετε εκπαιδευτικά παιχνίδια στην τάξη",
+      en: "5 ways to integrate educational games into your classroom",
+    },
+    intro: {
+      el: "Η μάθηση μέσα από παιχνίδι αυξάνει την κατανόηση μέχρι και 40%. Δείτε πώς μπορείτε να το κάνετε στην πράξη — χωρίς να χάνετε τον έλεγχο της τάξης.",
+      en: "Game-based learning increases retention by up to 40%. Here's how to make it happen — without losing classroom control.",
+    },
+    sections: {
+      el: [
+        { title: "1. Warm-up 5 λεπτών", content: "Ξεκινήστε το μάθημα με ένα γρήγορο quiz/παιχνίδι που σχετίζεται με την προηγούμενη ύλη. Ενεργοποιεί τα παιδιά και ελέγχει την κατανόηση." },
+        { title: "2. Διαχωρισμός σε ομάδες", content: "Χρησιμοποιήστε εκπαιδευτικά παιχνίδια ως ομαδικό challenge. Ενισχύει τη συνεργασία και τη φιλική ανταγωνιστικότητα." },
+        { title: "3. Διαφοροποιημένη μάθηση", content: "Δώστε στους πιο γρήγορους μαθητές πιο δύσκολα παιχνίδια όσο εσείς υποστηρίζετε αυτούς που χρειάζονται περισσότερη βοήθεια." },
+        { title: "4. Ανάθεση εργασίας ως παιχνίδι", content: "Αντί για παραδοσιακή εργασία, αναθέστε ένα παιχνίδι με συγκεκριμένο στόχο σκορ ή χρόνο. Τα παιδιά τη βλέπουν διαφορετικά." },
+        { title: "5. Παρακολούθηση μέσω dashboard", content: "Στο Kibloo Teacher Dashboard βλέπετε ποια θέματα δυσκολεύουν τους μαθητές σας και προσαρμόζετε ανάλογα την ύλη." },
+      ],
+      en: [
+        { title: "1. 5-minute warm-up", content: "Start your lesson with a quick quiz/game tied to last week's material. Energizes students and checks retention." },
+        { title: "2. Group splits", content: "Use educational games as team challenges. Boosts cooperation and friendly competition." },
+        { title: "3. Differentiated learning", content: "Give faster students harder games while you support those who need more help." },
+        { title: "4. Homework as game", content: "Instead of traditional homework, assign a game with a target score or time. Kids see it differently." },
+        { title: "5. Track via dashboard", content: "In the Kibloo Teacher Dashboard you see which topics are tough for your students and adjust the curriculum accordingly." },
+      ],
+    },
+    tip: {
+      el: "Δωρεάν για όλους τους δασκάλους: σχέδιο μαθήματος, αναθέσεις, στατιστικά. Ξεκινήστε από /for-teachers.",
+      en: "Free for all teachers: lesson plans, assignments, stats. Start at /for-teachers.",
+    },
+  },
+  {
+    slug: "why-multiplayer-helps",
+    gradient: "from-amber-400 to-yellow-500",
+    icon: "🤝",
+    tag: { el: "Έρευνα", en: "Research" },
+    tagColor: "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
+    readTime: { el: "4 λεπτά", en: "4 min read" },
+    title: {
+      el: "Γιατί τα multiplayer παιχνίδια βοηθούν στη μάθηση",
+      en: "Why multiplayer games boost learning",
+    },
+    intro: {
+      el: "Η συνεργατική μάθηση αυξάνει τα αποτελέσματα κατά 25-40% σύμφωνα με μελέτες (Vygotsky, Slavin). Τα multiplayer εκπαιδευτικά παιχνίδια ενσωματώνουν αυτή την αρχή στο ψηφιακό περιβάλλον.",
+      en: "Cooperative learning boosts outcomes by 25-40% according to research (Vygotsky, Slavin). Multiplayer educational games bring this principle into the digital realm.",
+    },
+    sections: {
+      el: [
+        { title: "1. Συνεργατική επίλυση προβλημάτων", content: "Όταν δύο παιδιά λύνουν μαζί, εκθέτουν διαφορετικές προσεγγίσεις και «διδάσκουν» το ένα στο άλλο. Αυτή είναι η βάση της θεωρίας του Vygotsky («zone of proximal development»)." },
+        { title: "2. Φιλική ανταγωνιστικότητα", content: "Λίγος ανταγωνισμός αυξάνει την προσοχή και προσπάθεια. Με σωστό σχεδιασμό (χωρίς bullying), τα παιδιά πιέζονται προς τα πάνω." },
+        { title: "3. Κοινωνικές δεξιότητες", content: "Multiplayer = επικοινωνία, διαπραγμάτευση, ομαδικότητα. Δεξιότητες που δεν μαθαίνονται από βιβλία αλλά από αλληλεπίδραση." },
+        { title: "4. Κίνητρο διατήρησης", content: "Όταν παίζω με φίλο, δεν θέλω να σταματήσω. Παρατείνεται η ενεργός μάθηση χωρίς πίεση από τον γονέα." },
+        { title: "5. Ασφαλής φιλία online", content: "Σε εκπαιδευτικό περιβάλλον (όπως το Kibloo Co-Play) τα παιδιά μαθαίνουν να επικοινωνούν online με ασφάλεια — βασική δεξιότητα για το μέλλον." },
+      ],
+      en: [
+        { title: "1. Cooperative problem-solving", content: "When two kids solve together, they expose different approaches and 'teach' each other. This is the basis of Vygotsky's 'zone of proximal development'." },
+        { title: "2. Friendly competition", content: "A little competition increases attention and effort. With proper design (no bullying), kids push themselves up." },
+        { title: "3. Social skills", content: "Multiplayer = communication, negotiation, teamwork. Skills not learned from books but from interaction." },
+        { title: "4. Sustained motivation", content: "When I play with a friend, I don't want to stop. Active learning is sustained without parental nagging." },
+        { title: "5. Safe online friendship", content: "In an educational environment (like Kibloo Co-Play) kids learn to communicate online safely — a key future skill." },
+      ],
+    },
+    tip: {
+      el: "Δοκίμασε το Co-Play του Kibloo: παίζετε μαζί ένα παιχνίδι από διαφορετικές συσκευές, με voice/chat κουμπιά, σε ασφαλές περιβάλλον.",
+      en: "Try Kibloo Co-Play: play a game together from different devices, with voice/chat buttons, in a safe environment.",
+    },
+  },
 ];
+
+// Export so blog data can power RSS, sitemap, and other surfaces.
+export { ARTICLES };
 
 function ArticleView({ slug }) {
   const { lang } = useContext(LanguageContext);
@@ -598,5 +745,3 @@ export default function BlogPage() {
   const { slug } = useParams();
   return slug ? <ArticleView slug={slug} /> : <BlogListView />;
 }
-
-export { ARTICLES };

@@ -10,9 +10,14 @@
   <!-- DNS prefetch & preconnect for third-party origins we hit early -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
   <link rel="dns-prefetch" href="https://firestore.googleapis.com">
   <link rel="dns-prefetch" href="https://identitytoolkit.googleapis.com">
   <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+  <link rel="dns-prefetch" href="https://www.clarity.ms">
+  <link rel="dns-prefetch" href="https://api.stripe.com">
+  <!-- Hint browser to preload the brand favicon for instant tab icons -->
+  <link rel="prefetch" href="/icon-192.png" as="image" type="image/png">
 
   <!-- Async-load fonts: render text in fallback first, swap on load -->
   <link
@@ -22,6 +27,7 @@
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"></noscript>
   <link rel="canonical" href="https://kibloo.app/">
+  <link rel="alternate" type="application/rss+xml" title="Kibloo Blog · RSS" href="/rss.xml">
   <title>Kibloo – Where curiosity blooms</title>
   <meta name="description" content="Kibloo is a playful learning world for kids 2–12 and curious adults. 350+ educational games in math, logic, language, science and more — with progress tracking. Free to try!">
   <meta name="theme-color" content="#7c3aed">

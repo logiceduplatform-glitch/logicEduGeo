@@ -12,6 +12,7 @@ import InstallPrompt from "./components/InstallPrompt";
 import WelcomeQuest from "./components/WelcomeQuest";
 import FeedbackWidget from "./components/FeedbackWidget";
 import RewardToast from "./components/games/RewardToast";
+import SupportBubble from "./components/SupportBubble";
 import SWUpdateBanner from "./components/SWUpdateBanner";
 import OfflineBanner from "./components/OfflineBanner";
 import SystemAnnouncementBanner from "./components/SystemAnnouncementBanner";
@@ -524,6 +525,7 @@ export default function App() {
             {FeatureFlagService.isEnabled("welcomeQuest") && <WelcomeQuest />}
             {FeatureFlagService.isEnabled("feedbackWidget") && <FeedbackWidget />}
             {FeatureFlagService.isEnabled("classicGames_rewardToast") && <RewardToast />}
+            <SupportBubble />
             <SWUpdateBanner />
             <OfflineBanner />
             <SystemAnnouncementBanner />

@@ -136,6 +136,93 @@ function receiptTemplate({ name, amountPaid, currency, hostedInvoiceUrl, lang = 
   return { subject, html };
 }
 
+function day3Template({ name, lang = "el" }) {
+  const isEl = lang === "el";
+  const subject = isEl
+    ? "🎯 3 παιχνίδια που ίσως δεν έχεις δοκιμάσει"
+    : "🎯 3 games you might have missed";
+  const greeting = isEl ? `Γεια σου ${name || ""}!` : `Hi ${name || ""}!`;
+  const intro = isEl
+    ? "Πέρασαν ήδη 3 ημέρες από τότε που ήρθες στην Kibloo. Δες 3 παιχνίδια που λατρεύουν οι χρήστες μας:"
+    : "It's been 3 days since you joined Kibloo. Here are 3 games our users love:";
+  const games = [
+    {
+      icon: "🧠",
+      title: isEl ? "Daily Brain Challenge" : "Daily Brain Challenge",
+      desc:  isEl ? "Νέο παζλ κάθε μέρα — 5 λεπτά αρκούν." : "A new puzzle every day — 5 mins is enough.",
+      href:  `${APP_URL}/daily`,
+    },
+    {
+      icon: "🎮",
+      title: isEl ? "Wordle (EL/EN)" : "Wordle (EL/EN)",
+      desc:  isEl ? "Ο διεθνής φαινόμενο, σε ελληνικά & αγγλικά." : "The global phenomenon, in Greek & English.",
+      href:  `${APP_URL}/games/wordle`,
+    },
+    {
+      icon: "🚀",
+      title: isEl ? "Multiplayer Race" : "Multiplayer Race",
+      desc:  isEl ? "Παίξε με φίλους live, σε διαφορετικές συσκευές." : "Play with friends live, across devices.",
+      href:  `${APP_URL}/games/multiplayer`,
+    },
+  ];
+  const gameRows = games.map((g) => `
+    <tr><td style="padding:16px 0;border-bottom:1px solid #e5e7eb;">
+      <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+          <td width="56" style="vertical-align:top;font-size:36px;line-height:1;">${g.icon}</td>
+          <td style="vertical-align:top;padding-left:12px;">
+            <div style="font-weight:700;color:#1f2937;font-size:16px;">${g.title}</div>
+            <div style="color:#6b7280;font-size:14px;margin-top:2px;">${g.desc}</div>
+            <a href="${g.href}" style="display:inline-block;margin-top:8px;color:#7c3aed;font-weight:600;font-size:13px;text-decoration:none;">${isEl ? "Δοκίμασε →" : "Try it →"}</a>
+          </td>
+        </tr>
+      </table>
+    </td></tr>`).join("");
+  const html = baseTemplate({
+    title: subject,
+    body: `
+      <p style="font-size:16px;color:#1f2937;">${greeting}</p>
+      <p style="font-size:15px;color:#4b5563;">${intro}</p>
+      <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:16px;">${gameRows}</table>
+      <p style="margin-top:32px;font-size:13px;color:#9ca3af;">${isEl ? "Έχεις απορία; Απλά απάντησε σε αυτό το email." : "Got a question? Just reply to this email."}</p>
+    `,
+    lang,
+  });
+  return { subject, html };
+}
+
+function day7Template({ name, lang = "el" }) {
+  const isEl = lang === "el";
+  const subject = isEl
+    ? "🎁 1 εβδομάδα μαζί! Premium δωρεάν για 14 μέρες"
+    : "🎁 1 week together! 14 days of free Premium";
+  const greeting = isEl ? `Γεια σου ${name || ""}!` : `Hi ${name || ""}!`;
+  const html = baseTemplate({
+    title: subject,
+    body: `
+      <p style="font-size:16px;color:#1f2937;">${greeting}</p>
+      <p style="font-size:15px;color:#4b5563;">
+        ${isEl
+          ? "Έχεις περάσει 1 ολόκληρη εβδομάδα στην Kibloo! Σαν ευχαριστώ, σου χαρίζουμε <b>14 ημέρες δωρεάν Premium</b> — ξεκλείδωσε όλα τα παιχνίδια & χαρακτηριστικά."
+          : "You've spent 1 whole week on Kibloo! As a thank you, we're gifting you <b>14 days of free Premium</b> — unlock all games & features."}
+      </p>
+      <ul style="font-size:14px;color:#4b5563;line-height:1.8;padding-left:20px;">
+        <li>${isEl ? "350+ εκπαιδευτικά παιχνίδια" : "350+ educational games"}</li>
+        <li>${isEl ? "AI Tutor & δημιουργός φύλλων" : "AI Tutor & worksheet generator"}</li>
+        <li>${isEl ? "Detailed reports & analytics" : "Detailed reports & analytics"}</li>
+        <li>${isEl ? "Multiplayer & co-play modes" : "Multiplayer & co-play modes"}</li>
+        <li>${isEl ? "Χωρίς διαφημίσεις — ποτέ" : "Ad-free — forever"}</li>
+      </ul>
+      <div style="margin:32px 0;text-align:center;">
+        <a href="${APP_URL}/subscription?utm_source=email&utm_campaign=day7" style="background:linear-gradient(90deg,#10b981,#0891b2);color:#fff;padding:14px 28px;border-radius:12px;text-decoration:none;font-weight:700;display:inline-block;">${isEl ? "🎁 Ενεργοποίησε δωρεάν Premium" : "🎁 Activate Free Premium"}</a>
+      </div>
+      <p style="font-size:13px;color:#9ca3af;text-align:center;">${isEl ? "Χωρίς κάρτα. Χωρίς δέσμευση. Ακυρώνεις όποτε θες." : "No card. No commitment. Cancel anytime."}</p>
+    `,
+    lang,
+  });
+  return { subject, html };
+}
+
 function paymentFailedTemplate({ name, hostedInvoiceUrl, lang = "el" }) {
   const isEl = lang === "el";
   const subject = isEl ? "⚠️ Πρόβλημα με την πληρωμή σου" : "⚠️ Payment problem";
@@ -269,11 +356,15 @@ export const scheduledTrialReminders = onSchedule(
         }
         let tpl;
         if (data.type === "trial_ending") {
-          tpl = trialEndingTemplate({ name: userRecord.displayName || "", daysLeft: data.daysLeft || 3, lang: "el" });
+          tpl = trialEndingTemplate({ name: userRecord.displayName || "", daysLeft: data.daysLeft || 3, lang: data.lang || "el" });
         } else if (data.type === "receipt") {
-          tpl = receiptTemplate({ name: userRecord.displayName || "", amountPaid: data.amountPaid, currency: data.currency, hostedInvoiceUrl: data.hostedInvoiceUrl, lang: "el" });
+          tpl = receiptTemplate({ name: userRecord.displayName || "", amountPaid: data.amountPaid, currency: data.currency, hostedInvoiceUrl: data.hostedInvoiceUrl, lang: data.lang || "el" });
         } else if (data.type === "payment_failed") {
-          tpl = paymentFailedTemplate({ name: userRecord.displayName || "", hostedInvoiceUrl: data.hostedInvoiceUrl, lang: "el" });
+          tpl = paymentFailedTemplate({ name: userRecord.displayName || "", hostedInvoiceUrl: data.hostedInvoiceUrl, lang: data.lang || "el" });
+        } else if (data.type === "day3") {
+          tpl = day3Template({ name: userRecord.displayName || "", lang: data.lang || "el" });
+        } else if (data.type === "day7") {
+          tpl = day7Template({ name: userRecord.displayName || "", lang: data.lang || "el" });
         } else {
           await doc.ref.update({ status: "skipped", reason: "unknown-type" });
           continue;
@@ -291,5 +382,66 @@ export const scheduledTrialReminders = onSchedule(
     }
 
     logger.info(`Processed ${queueSnap.size} queued emails`);
+  },
+);
+
+// ─── 4. Onboarding sequence — auto-enqueue day-3 and day-7 emails ───────
+//
+// Runs daily at 10:00 Athens time and enqueues day-3 / day-7 emails for users
+// whose `users/{uid}` document hit those age thresholds, idempotently. The
+// per-user `onboardingEmailsSent` map prevents duplicates if the job re-runs.
+//
+// Requires `users/{uid}.createdAt` to be a Firestore Timestamp.
+export const onboardingEmailSequence = onSchedule(
+  {
+    schedule: "every day 10:00",
+    timeZone: "Europe/Athens",
+    region: "europe-west1",
+    memory: "256MiB",
+    timeoutSeconds: 300,
+  },
+  async () => {
+    const db = getFirestore();
+    const now = Date.now();
+    const DAY = 24 * 60 * 60 * 1000;
+
+    // Bracket: (day-1, day-2] for day3 → trigger when user is between
+    //   2 and 3 days old. Same logic for day7 → between 6 and 7 days old.
+    const buckets = [
+      { type: "day3", minAgeMs: 2 * DAY, maxAgeMs: 4 * DAY, flag: "day3" },
+      { type: "day7", minAgeMs: 6 * DAY, maxAgeMs: 8 * DAY, flag: "day7" },
+    ];
+
+    let enqueued = 0;
+    for (const bucket of buckets) {
+      const minDate = new Date(now - bucket.maxAgeMs);
+      const maxDate = new Date(now - bucket.minAgeMs);
+      const usersSnap = await db.collection("users")
+        .where("createdAt", ">=", minDate)
+        .where("createdAt", "<",  maxDate)
+        .limit(500)
+        .get();
+
+      for (const userDoc of usersSnap.docs) {
+        const data = userDoc.data();
+        if (data.onboardingEmailsSent?.[bucket.flag]) continue;
+        // Skip users who opted out of marketing emails.
+        if (data.emailMarketingConsent === false) continue;
+
+        await db.collection("emailQueue").add({
+          type: bucket.type,
+          uid: userDoc.id,
+          lang: data.lang || "el",
+          createdAt: FieldValue.serverTimestamp(),
+          status: "pending",
+        });
+        await userDoc.ref.set({
+          onboardingEmailsSent: { [bucket.flag]: true },
+        }, { merge: true });
+        enqueued++;
+      }
+    }
+
+    logger.info(`Onboarding sequence: enqueued ${enqueued} emails`);
   },
 );

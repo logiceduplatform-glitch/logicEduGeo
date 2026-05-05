@@ -32,6 +32,7 @@ import BlogTipsSection from "../components/BlogTipsSection";
 import ValuePillarsSection from "../components/ValuePillarsSection";
 import ComparisonSection from "../components/ComparisonSection";
 import NewsletterSignup from "../components/NewsletterSignup";
+import { FAQS } from "../components/FAQSection";
 
 const CATEGORIES = [
   { key: "Age 2-3", icon: "👶", gradient: "from-rose-400 to-pink-400", route: "/play/2-3-school", desc: { el: "Πρώτα βήματα", en: "First steps" } },
@@ -68,6 +69,7 @@ export default function HomePage() {
       <SEO
         title={isEl ? "Αρχική" : "Home"}
         description={isEl ? "Εκπαιδευτικά παιχνίδια για όλες τις ηλικίες" : "Educational games for all ages"}
+        faq={FAQS[isEl ? "el" : "en"]}
       />
       <Navbar />
 

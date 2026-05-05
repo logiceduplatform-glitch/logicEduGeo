@@ -21,23 +21,56 @@ Disallow: /lesson
 Disallow: /affiliate
 Disallow: /print-shop
 Disallow: /co-play
+Disallow: /guest-expired
+Disallow: /quiz/
+Disallow: /api/
 
 # Social/preview crawlers can fetch og-images directly
 User-agent: facebookexternalhit
 Allow: /
 User-agent: Twitterbot
 Allow: /
+User-agent: LinkedInBot
+Allow: /
+User-agent: Slackbot-LinkExpanding
+Allow: /
+User-agent: WhatsApp
+Allow: /
+User-agent: TelegramBot
+Allow: /
+
+# Aggressive bots — slow them down
+User-agent: AhrefsBot
+Crawl-delay: 10
+User-agent: SemrushBot
+Crawl-delay: 10
+User-agent: MJ12bot
+Crawl-delay: 10
+User-agent: DotBot
+Crawl-delay: 10
 
 # AI crawlers — opt out by default to protect content (toggle if needed for marketing)
 User-agent: GPTBot
 Disallow: /
-User-agent: ClaudeBot
+User-agent: ChatGPT-User
 Disallow: /
-User-agent: CCBot
+User-agent: OAI-SearchBot
+Disallow: /
+User-agent: ClaudeBot
 Disallow: /
 User-agent: anthropic-ai
 Disallow: /
+User-agent: CCBot
+Disallow: /
 User-agent: Google-Extended
+Disallow: /
+User-agent: Bytespider
+Disallow: /
+User-agent: PerplexityBot
+Disallow: /
+User-agent: YouBot
+Disallow: /
+User-agent: cohere-ai
 Disallow: /
 
 Sitemap: https://kibloo.app/sitemap.xml

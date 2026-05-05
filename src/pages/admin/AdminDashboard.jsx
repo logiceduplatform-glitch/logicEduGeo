@@ -17,6 +17,8 @@ import AdminErrorReports from "../../components/admin/AdminErrorReports";
 import AdminEmailQueue from "../../components/admin/AdminEmailQueue";
 import AdminPush from "../../components/admin/AdminPush";
 import AdminFeedback from "../../components/admin/AdminFeedback";
+import AdminInvoicing from "../../components/admin/AdminInvoicing";
+import AdminAnalytics from "../../components/admin/AdminAnalytics";
 
 const T = {
   el: {
@@ -36,6 +38,8 @@ const T = {
     emails: "Emails",
     push: "Push",
     feedback: "Γνώμες",
+    invoicing: "Τιμολόγηση",
+    analytics: "Analytics",
   },
   en: {
     title: "🛠️ Admin Dashboard",
@@ -54,6 +58,8 @@ const T = {
     emails: "Emails",
     push: "Push",
     feedback: "Feedback",
+    invoicing: "Invoicing",
+    analytics: "Analytics",
   },
 };
 
@@ -65,6 +71,8 @@ const TABS = [
   { id: "content",     icon: "📝", key: "content",     Comp: AdminContent },
   { id: "moderation",  icon: "🛡️", key: "moderation",  Comp: AdminModeration },
   { id: "subs",        icon: "💰", key: "subs",        Comp: AdminSubscriptions },
+  { id: "invoicing",   icon: "💼", key: "invoicing",   Comp: AdminInvoicing },
+  { id: "analytics",   icon: "📈", key: "analytics",   Comp: AdminAnalytics },
   { id: "system",      icon: "⚙️", key: "system",      Comp: AdminSystem },
   { id: "logs",        icon: "📋", key: "logs",        Comp: AdminLogs },
   { id: "errors",      icon: "🐞", key: "errors",      Comp: AdminErrorReports },

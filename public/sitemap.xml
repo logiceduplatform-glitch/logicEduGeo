@@ -5,57 +5,77 @@
   <!-- Core marketing pages -->
   <url>
     <loc>https://kibloo.app/</loc>
+    <lastmod>2026-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://kibloo.app/?lang=en"/>
     <xhtml:link rel="alternate" hreflang="el" href="https://kibloo.app/?lang=el"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://kibloo.app/"/>
   </url>
-  <url><loc>https://kibloo.app/auth</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://kibloo.app/subscription</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://kibloo.app/for-teachers</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://kibloo.app/for-parents</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://kibloo.app/about</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://kibloo.app/faq</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://kibloo.app/contact</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
-  <url><loc>https://kibloo.app/curriculum</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://kibloo.app/auth</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://kibloo.app/subscription</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://kibloo.app/for-teachers</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://kibloo.app/for-parents</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://kibloo.app/about</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://kibloo.app/faq</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://kibloo.app/contact</loc><lastmod>2026-05-05</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://kibloo.app/curriculum</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://kibloo.app/whats-new</loc><lastmod>2026-05-05</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 
   <!-- Game category landing pages — high SEO value -->
-  <url><loc>https://kibloo.app/play/2-3-school</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://kibloo.app/play/2-3-fun</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://kibloo.app/play/4-5-school</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://kibloo.app/play/4-5-fun</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://kibloo.app/play/6</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://kibloo.app/play/6-fun</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://kibloo.app/play/7-8</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://kibloo.app/play/7-8-fun</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://kibloo.app/play/9-10</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://kibloo.app/play/9-10-fun</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://kibloo.app/play/11-12-school</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://kibloo.app/play/11-12-fun</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://kibloo.app/play/board-games</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://kibloo.app/play/adult-games</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://kibloo.app/play/2-3-school</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/play/2-3-fun</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/play/4-5-school</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/play/4-5-fun</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/play/6</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/play/6-fun</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/play/7-8</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/play/7-8-fun</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/play/9-10</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/play/9-10-fun</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/play/11-12-school</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/play/11-12-fun</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/play/board-games</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/play/adult-games</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Classic Games showcase pages (Mega Combo Round) -->
+  <url><loc>https://kibloo.app/games/all</loc><lastmod>2026-05-05</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://kibloo.app/games</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/games/educational</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/games/creative</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/games/multiplayer</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/games/action</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/games/stem</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/games/leaderboard</loc><lastmod>2026-05-05</lastmod><changefreq>daily</changefreq><priority>0.6</priority></url>
 
   <!-- Blog -->
-  <url><loc>https://kibloo.app/blog</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://kibloo.app/blog/math-magic-tricks</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://kibloo.app/blog/word-games-school-performance</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://kibloo.app/blog/puzzles-make-kids-smarter</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://kibloo.app/blog/teaching-kids-to-lose</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://kibloo.app/blog/school-readiness-checklist</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://kibloo.app/blog/fun-educational-holidays</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://kibloo.app/blog</loc><lastmod>2026-05-05</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kibloo.app/blog/math-magic-tricks</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://kibloo.app/blog/word-games-school-performance</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://kibloo.app/blog/puzzles-make-kids-smarter</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://kibloo.app/blog/teaching-kids-to-lose</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://kibloo.app/blog/school-readiness-checklist</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://kibloo.app/blog/fun-educational-holidays</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://kibloo.app/blog/screen-time-balance</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://kibloo.app/blog/learning-styles-explained</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://kibloo.app/blog/teacher-classroom-tips</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://kibloo.app/blog/why-multiplayer-helps</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
 
   <!-- Discovery features -->
-  <url><loc>https://kibloo.app/achievements</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://kibloo.app/leaderboard</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
-  <url><loc>https://kibloo.app/daily</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
-  <url><loc>https://kibloo.app/events</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://kibloo.app/online-multiplayer</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://kibloo.app/accessibility</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://kibloo.app/achievements</loc><lastmod>2026-05-05</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://kibloo.app/leaderboard</loc><lastmod>2026-05-05</lastmod><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://kibloo.app/daily</loc><lastmod>2026-05-05</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://kibloo.app/events</loc><lastmod>2026-05-05</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://kibloo.app/online-multiplayer</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://kibloo.app/accessibility</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.4</priority></url>
+
+  <!-- Operational -->
+  <url><loc>https://kibloo.app/status</loc><lastmod>2026-05-05</lastmod><changefreq>daily</changefreq><priority>0.3</priority></url>
 
   <!-- Legal -->
-  <url><loc>https://kibloo.app/privacy</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://kibloo.app/terms</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://kibloo.app/cookies</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://kibloo.app/dpa</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://kibloo.app/privacy</loc><lastmod>2026-05-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://kibloo.app/terms</loc><lastmod>2026-05-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://kibloo.app/cookies</loc><lastmod>2026-05-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://kibloo.app/dpa</loc><lastmod>2026-05-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
 
 </urlset>

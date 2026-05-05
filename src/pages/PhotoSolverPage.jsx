@@ -115,7 +115,7 @@ export default function PhotoSolverPage() {
 
             {imageDataUrl && (
               <>
-                <img src={imageDataUrl} alt="exercise" className="w-full max-h-72 object-contain rounded-xl bg-slate-100 dark:bg-slate-900 mb-3" />
+                <img src={imageDataUrl} alt="exercise" loading="lazy" decoding="async" className="w-full max-h-72 object-contain rounded-xl bg-slate-100 dark:bg-slate-900 mb-3" />
                 <button
                   type="button"
                   onClick={handleSolve}

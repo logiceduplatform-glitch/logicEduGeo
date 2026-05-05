@@ -60,6 +60,25 @@ html.dark body {
   border-radius: 4px;
 }
 
+/* High-contrast focus ring on dark backgrounds */
+.dark *:focus-visible {
+  outline-color: #f9a8d4;
+}
+
+/* Larger tap targets on touch devices (WCAG AAA = 44×44 px) */
+@media (pointer: coarse) {
+  button, a, [role="button"], input[type="button"], input[type="submit"] {
+    min-height: 44px;
+  }
+}
+
+/* Respect Windows high-contrast mode */
+@media (forced-colors: active) {
+  .skip-link, button[aria-label] {
+    border: 1px solid CanvasText;
+  }
+}
+
 /* Screen-reader only */
 .sr-only {
   position: absolute;

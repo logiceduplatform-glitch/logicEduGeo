@@ -186,6 +186,24 @@ export const stripeWebhook = onRequest(
 
     const db = getFirestore();
 
+    // Idempotency: Stripe retries failed webhooks. Skip if we've already
+    // processed this event id. We use create() (fails if doc exists) so two
+    // concurrent retries can't both proceed.
+    try {
+      await db.collection("stripeWebhookEvents").doc(event.id).create({
+        type: event.type,
+        receivedAt: FieldValue.serverTimestamp(),
+      });
+    } catch (e) {
+      // AlreadyExists → we processed this before. Acknowledge fast.
+      if (e?.code === 6 /* ALREADY_EXISTS */ || /already exists/i.test(e?.message || "")) {
+        logger.info("Stripe webhook duplicate", { eventId: event.id, type: event.type });
+        res.json({ received: true, duplicate: true });
+        return;
+      }
+      logger.warn("Webhook idempotency check failed (continuing)", e?.message);
+    }
+
     try {
       switch (event.type) {
         case "checkout.session.completed": {

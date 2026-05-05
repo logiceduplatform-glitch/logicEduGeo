@@ -17,9 +17,12 @@
  */
 import { useEffect, useState } from "react";
 import { AnalyticsService } from "./AnalyticsService";
+import { db } from "../auth/firebase";
+import { doc, setDoc, increment, serverTimestamp } from "firebase/firestore";
 
 const ASSIGNMENTS_KEY = "edu:abAssignments";
 const USER_ID_KEY = "edu:abUserId";
+const IMPRESSION_LOG_KEY = "edu:abImpressionsLogged"; // dedupe within session
 
 /**
  * Stable per-browser user id for variant hashing. We could also use the
@@ -103,6 +106,9 @@ export const ABTestService = {
         variant: chosen,
       });
     }
+    // Persist impression to Firestore (deduped per session) so the admin
+    // dashboard can compute conversion rates per variant.
+    persistEvent(experimentId, chosen, "impression");
     return chosen;
   },
 
@@ -123,6 +129,7 @@ export const ABTestService = {
         value,
       });
     }
+    persistEvent(experimentId, variant, `conv_${goal}`);
   },
 
   /**
@@ -156,6 +163,38 @@ export const ABTestService = {
     saveAssignments(assignments);
   },
 };
+
+/**
+ * Persist an A/B event (impression / conversion) into Firestore so admins
+ * can compute lift. Impressions are deduped per session/experiment to keep
+ * counter writes minimal (one impression per user-session, not per render).
+ *
+ * Document layout:
+ *   abExperiments/{experimentId} = {
+ *     variants: { control: { impressions: N, conv_signup: M }, ... },
+ *     updatedAt: serverTimestamp,
+ *   }
+ */
+function persistEvent(experimentId, variant, kind) {
+  if (!db) return;
+  // Dedupe impressions within this tab/session.
+  if (kind === "impression") {
+    try {
+      const logged = JSON.parse(sessionStorage.getItem(IMPRESSION_LOG_KEY) || "{}");
+      const sigKey = `${experimentId}:${variant}`;
+      if (logged[sigKey]) return;
+      logged[sigKey] = 1;
+      sessionStorage.setItem(IMPRESSION_LOG_KEY, JSON.stringify(logged));
+    } catch { /* sessionStorage blocked → still fire; cost is small */ }
+  }
+  try {
+    const ref = doc(db, "abExperiments", experimentId);
+    setDoc(ref, {
+      variants: { [variant]: { [kind]: increment(1) } },
+      updatedAt: serverTimestamp(),
+    }, { merge: true }).catch(() => { /* never crash on analytics */ });
+  } catch { /* ignore */ }
+}
 
 /**
  * Apply ?ab_<experiment>=<variant> overrides from URL on page load.

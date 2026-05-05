@@ -183,6 +183,20 @@ export const DEFAULT_FLAGS = {
   sentry_enabled:           { enabled: true, label: { el: "Sentry · Error tracking & performance", en: "Sentry · Error tracking & performance" }, category: "analytics" },
   appcheck_enabled:         { enabled: true, label: { el: "Firebase App Check (anti-abuse)", en: "Firebase App Check (anti-abuse)" }, category: "analytics" },
 
+  // ─── Marketing & Growth ─────────────────────────────────
+  marketing_comparison:     { enabled: true,  label: { el: "Σύγκριση με ανταγωνισμό (homepage table)", en: "Comparison vs competitors (homepage table)" }, category: "marketing" },
+  marketing_newsletter:     { enabled: true,  label: { el: "Newsletter signup widget", en: "Newsletter signup widget" }, category: "marketing" },
+  marketing_blog:           { enabled: true,  label: { el: "Blog (/blog)", en: "Blog (/blog)" }, category: "marketing" },
+  marketing_rssLink:        { enabled: true,  label: { el: "RSS feed link στο head", en: "RSS feed link in head" }, category: "marketing" },
+  marketing_seoFaqSchema:   { enabled: true,  label: { el: "FAQPage JSON-LD schema (rich results)", en: "FAQPage JSON-LD schema (rich results)" }, category: "marketing" },
+
+  // ─── Business Operations ────────────────────────────────
+  supportWidget:            { enabled: true,  label: { el: "3rd-party chat widget (Crisp/Tawk)", en: "3rd-party chat widget (Crisp/Tawk)" }, category: "business" },
+  supportBubble:            { enabled: true,  label: { el: "Floating help bubble (fallback)", en: "Floating help bubble (fallback)" }, category: "business" },
+  schoolInvoicing:          { enabled: true,  label: { el: "School / B2B invoicing (admin)", en: "School / B2B invoicing (admin)" }, category: "business" },
+  onboardingEmails_day3:    { enabled: true,  label: { el: "Onboarding email Day 3", en: "Onboarding email Day 3" }, category: "business" },
+  onboardingEmails_day7:    { enabled: true,  label: { el: "Onboarding email Day 7", en: "Onboarding email Day 7" }, category: "business" },
+
   // ─── Onboarding & Engagement ────────────────────────────
   welcomeQuest:             { enabled: true, label: { el: "Welcome Quest (interactive onboarding)", en: "Welcome Quest (interactive onboarding)" }, category: "onboarding" },
   feedbackWidget:           { enabled: true, label: { el: "In-app Feedback Widget (floating)", en: "In-app Feedback Widget (floating)" }, category: "onboarding" },

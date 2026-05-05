@@ -57,7 +57,7 @@ const CATEGORY_LABELS = {
   teachers:  { el: "👨‍🏫 Δάσκαλοι", en: "👨‍🏫 Teachers" },
   parents:   { el: "👨‍👩‍👧 Γονείς", en: "👨‍👩‍👧 Parents" },
   ux:        { el: "🎨 UX & Theme", en: "🎨 UX & Theme" },
-  marketing: { el: "📈 Marketing", en: "📈 Marketing" },
+  marketing: { el: "📈 Marketing & SEO (Comparison · Newsletter · Blog · RSS · Schema)", en: "📈 Marketing & SEO (Comparison · Newsletter · Blog · RSS · Schema)" },
   round9:    { el: "🚀 Round 9 · AI / PWA / Quests", en: "🚀 Round 9 · AI / PWA / Quests" },
   round10:   { el: "🌐 Round 10 · Multiplayer & Social", en: "🌐 Round 10 · Multiplayer & Social" },
   round11:   { el: "✨ Round 11 · Innovative Modes", en: "✨ Round 11 · Innovative Modes" },
@@ -73,6 +73,7 @@ const CATEGORY_LABELS = {
   learningEngine:   { el: "🧠 Learning Engine (SRS)", en: "🧠 Learning Engine (SRS)" },
   multiplayerNew:   { el: "🤝 Multiplayer (νέα modes)", en: "🤝 Multiplayer (new modes)" },
   aiNew:            { el: "🤖 AI Tools (νέα)", en: "🤖 AI Tools (new)" },
+  business:         { el: "💼 Business Operations (Invoicing · Support · Onboarding emails)", en: "💼 Business Operations (Invoicing · Support · Onboarding emails)" },
 };
 
 // Order categories for display
@@ -107,6 +108,7 @@ const CATEGORY_ORDER = [
   "learningEngine",
   "multiplayerNew",
   "aiNew",
+  "business",
 ];
 
 export default function AdminFlags() {

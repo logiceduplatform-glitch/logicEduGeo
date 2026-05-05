@@ -99,6 +99,11 @@ export default function FooterSection({ t }) {
               <span className="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
               Status
             </a>
+            <span className="text-slate-700">|</span>
+            <a href="/rss.xml" className="hover:text-white transition-colors flex items-center gap-1" title="RSS feed">
+              <span aria-hidden="true">📡</span>
+              RSS
+            </a>
           </div>
           <span className="text-slate-500">
             {isEl ? "Κατασκευασμένο με ❤️ στην Ελλάδα" : "Made with ❤️ in Greece"}

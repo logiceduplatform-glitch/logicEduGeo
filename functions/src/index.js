@@ -21,6 +21,7 @@ export {
   sendWelcomeEmail,
   sendTrialEndingEmail,
   scheduledTrialReminders,
+  onboardingEmailSequence,
 } from "./modules/email.js";
 
 // Push notifications (FCM)
@@ -34,3 +35,9 @@ export {
   scheduledFirestoreBackup,
   manualFirestoreBackup,
 } from "./modules/backups.js";
+
+// School / B2B invoicing (admin → Stripe Invoice)
+export {
+  createSchoolInvoice,
+  voidSchoolInvoice,
+} from "./modules/invoicing.js";
