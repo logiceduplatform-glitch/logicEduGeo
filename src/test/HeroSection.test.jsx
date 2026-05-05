@@ -123,7 +123,7 @@ describe('HeroSection', () => {
 
   it('renders tagline badge', () => {
     renderHero();
-    const matches = screen.getAllByText(/Where curiosity blooms/);
+    const matches = screen.getAllByText(/most fun way to learn/i);
     expect(matches.length).toBeGreaterThanOrEqual(1);
   });
 });

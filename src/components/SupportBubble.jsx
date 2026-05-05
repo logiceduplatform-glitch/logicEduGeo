@@ -76,7 +76,7 @@ export default function SupportBubble() {
               ✉️ {l.email}
             </a>
             <a
-              href="/faq"
+              href="/help"
               className="block px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-600 font-semibold text-sm"
             >
               📖 {l.faq}

@@ -97,7 +97,7 @@ export default function HeroSection({ t, loginWithGoogle, beginGuest, guest, use
         {/* Left - text */}
         <div className="flex flex-col justify-center gap-5">
           <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 text-sm font-bold border border-amber-200 dark:border-amber-700 tracking-wide uppercase self-start">
-            🧠 {t("tagline", "Train your brain with logic")}
+            🎉 {t("tagline", "The most fun way to learn")}
           </div>
 
           <h1

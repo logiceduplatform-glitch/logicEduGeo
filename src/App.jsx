@@ -10,6 +10,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import CookieConsent from "./components/CookieConsent";
 import InstallPrompt from "./components/InstallPrompt";
 import WelcomeQuest from "./components/WelcomeQuest";
+import RoleOnboarding from "./components/RoleOnboarding";
 import FeedbackWidget from "./components/FeedbackWidget";
 import RewardToast from "./components/games/RewardToast";
 import SupportBubble from "./components/SupportBubble";
@@ -353,6 +354,7 @@ export default function App() {
                 <Route path="/dpa" element={<DPAPage />} />
                 <Route path="/status" element={<StatusPage />} />
                 <Route path="/faq" element={<FAQPage />} />
+                <Route path="/help" element={<FAQPage />} />
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/subscription" element={<FeatureGate flag="subs_enabled"><SubscriptionPage /></FeatureGate>} />
@@ -523,6 +525,7 @@ export default function App() {
             <CookieConsent />
             <InstallPrompt />
             {FeatureFlagService.isEnabled("welcomeQuest") && <WelcomeQuest />}
+            {FeatureFlagService.isEnabled("roleOnboarding") && <RoleOnboarding />}
             {FeatureFlagService.isEnabled("feedbackWidget") && <FeedbackWidget />}
             {FeatureFlagService.isEnabled("classicGames_rewardToast") && <RewardToast />}
             <SupportBubble />

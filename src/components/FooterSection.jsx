@@ -38,7 +38,7 @@ export default function FooterSection({ t }) {
               <li><a href="/#games" className="hover:text-white transition-colors">{isEl ? "Παιχνίδια" : "Games"}</a></li>
               <li><a href="/#how-it-works" className="hover:text-white transition-colors">{isEl ? "Πώς λειτουργεί" : "How it works"}</a></li>
               <li><a href="/#pricing" className="hover:text-white transition-colors">{isEl ? "Τιμές" : "Pricing"}</a></li>
-              <li><a href="/faq" className="hover:text-white transition-colors">{isEl ? "Συχνές Ερωτήσεις" : "FAQ"}</a></li>
+              <li><a href="/help" className="hover:text-white transition-colors">{isEl ? "💬 Κέντρο Βοήθειας" : "💬 Help Center"}</a></li>
               <li><a href="/curriculum" className="hover:text-white transition-colors">{isEl ? "Χάρτης Μαθημάτων" : "Curriculum Map"}</a></li>
               <li><a href="/blog" className="hover:text-white transition-colors">{isEl ? "Blog" : "Blog"}</a></li>
               <li><a href="/for-parents" className="hover:text-white transition-colors">{isEl ? "Για Γονείς" : "For Parents"}</a></li>

@@ -199,7 +199,8 @@ export const DEFAULT_FLAGS = {
   onboardingEmails_day7:    { enabled: true,  label: { el: "Onboarding email Day 7", en: "Onboarding email Day 7" }, category: "business" },
 
   // ─── Onboarding & Engagement ────────────────────────────
-  welcomeQuest:             { enabled: true, label: { el: "Welcome Quest (interactive onboarding)", en: "Welcome Quest (interactive onboarding)" }, category: "onboarding" },
+  welcomeQuest:             { enabled: true, label: { el: "Welcome Quest (interactive onboarding · μαθητές)", en: "Welcome Quest (interactive onboarding · students)" }, category: "onboarding" },
+  roleOnboarding:           { enabled: true, label: { el: "Role Onboarding Tour (γονείς + δάσκαλοι)", en: "Role Onboarding Tour (parents + teachers)" }, category: "onboarding" },
   feedbackWidget:           { enabled: true, label: { el: "In-app Feedback Widget (floating)", en: "In-app Feedback Widget (floating)" }, category: "onboarding" },
   foundingMemberBadge:      { enabled: true, label: { el: "Founding Member Badge", en: "Founding Member Badge" }, category: "onboarding" },
 
