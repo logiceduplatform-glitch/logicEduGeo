@@ -33,6 +33,7 @@ import AccessibilityFAB from "./components/AccessibilityFAB";
 import "./services/AccessibilityService";
 import KeyboardShortcutsHandler from "./components/KeyboardShortcutsHandler";
 import ScrollToTopButton from "./components/ScrollToTopButton";
+import FloatingBackButton from "./components/FloatingBackButton";
 
 const MilestoneCertificate = React.lazy(() => import("./components/rewards/MilestoneCertificate"));
 
@@ -539,6 +540,7 @@ export default function App() {
             {FeatureFlagService.isEnabled("classicGames_rewardToast") && <RewardToast />}
             <SupportBubble />
             <ScrollToTopButton />
+            <FloatingBackButton />
             {FeatureFlagService.isEnabled("global_swUpdateBanner") && <SWUpdateBanner />}
             {FeatureFlagService.isEnabled("global_offlineBanner") && <OfflineBanner />}
             {FeatureFlagService.isEnabled("global_systemAnnouncement") && <SystemAnnouncementBanner />}

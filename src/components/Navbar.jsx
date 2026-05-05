@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useRef, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { LanguageContext } from "../i18n/LanguageContext";
 import { AuthContext } from "../auth/AuthContext";
 import { useTheme } from "../contexts/ThemeContext";
@@ -53,6 +53,7 @@ const AGE_ICONS = {
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { lang, setLang } = useContext(LanguageContext);
   const { user, guest, userProfile, userRole, logout } = useContext(AuthContext);
   const { dark, toggle: toggleTheme } = useTheme();
@@ -81,6 +82,21 @@ export default function Navbar() {
     })();
     return () => { cancelled = true; };
   }, [user]);
+
+  // Track child-mode state so we can hide sensitive entries (Admin link,
+  // Parent area, etc.). We poll on mount + listen to storage events fired
+  // when ProfileService activates/clears a child profile in another tab.
+  const [isChildMode, setIsChildMode] = useState(() => !!ProfileService.getActive());
+  useEffect(() => {
+    const refresh = () => setIsChildMode(!!ProfileService.getActive());
+    refresh();
+    const onStorage = (e) => {
+      if (!e.key || e.key === "geo:activeProfileId") refresh();
+    };
+    window.addEventListener("storage", onStorage);
+    // Also recheck when the route changes (covers same-tab profile switches).
+    return () => window.removeEventListener("storage", onStorage);
+  }, [location.pathname]);
 
   const classroomHasNew = (() => {
     try {
@@ -877,7 +893,7 @@ export default function Navbar() {
                     </>
                   )}
 
-                  {isAdmin && (
+                  {isAdmin && !isChildMode && (
                     <>
                       <div className="border-t border-slate-100 dark:border-slate-700 my-1" />
                       <button

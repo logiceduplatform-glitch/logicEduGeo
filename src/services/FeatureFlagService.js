@@ -273,6 +273,7 @@ export const DEFAULT_FLAGS = {
   global_milestoneListener: { enabled: true, label: { el: "🏆 Milestone Listener (auto popups)", en: "🏆 Milestone Listener" }, category: "uiGlobal" },
   global_timeLimitOverlay:  { enabled: true, label: { el: "⏱️ Time Limit Overlay (parental cap)", en: "⏱️ Time Limit Overlay (parental cap)" }, category: "uiGlobal" },
   scrollToTopButton:        { enabled: true, label: { el: "⬆️ Scroll-to-Top κουμπί (floating)", en: "⬆️ Scroll-to-Top button (floating)" }, category: "uiGlobal" },
+  globalBackButton:         { enabled: true, label: { el: "← Κουμπί 'Πίσω' σε εσωτερικές σελίδες", en: "← 'Back' button on inner pages" }, category: "uiGlobal" },
   forSchoolsPage:           { enabled: true, label: { el: "🏫 Σελίδα 'Για Σχολεία' (B2B landing)", en: "🏫 'For Schools' page (B2B landing)" }, category: "marketing" },
   game_lights_out:          { enabled: true, label: { el: "💡 Lights Out (puzzle)", en: "💡 Lights Out (puzzle)" }, category: "classicGames" },
   game_sudoku_mini:         { enabled: true, label: { el: "🔢 Sudoku Mini 4×4", en: "🔢 Sudoku Mini 4×4" }, category: "classicGames" },
