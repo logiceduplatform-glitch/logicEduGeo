@@ -650,7 +650,7 @@ export default function TeacherLessons({ quizzes = [], classrooms = [], lang }) 
               {previewLesson.sections.map((sec, i) => (
                 <div key={i} className="border-l-4 border-purple-400 pl-4">
                   <h4 className="font-bold text-slate-800 dark:text-white text-base mb-2">{sec.title}</h4>
-                  {sec.imageUrl && <img src={sec.imageUrl} alt="" className="rounded-xl mb-3 max-h-48 object-cover" />}
+                  {sec.imageUrl && <img src={sec.imageUrl} alt="" loading="lazy" decoding="async" className="rounded-xl mb-3 max-h-48 object-cover" />}
                   <div className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed whitespace-pre-line">{sec.content}</div>
                   {(sec.attachments || []).length > 0 && (
                     <div className="mt-3 space-y-1.5">

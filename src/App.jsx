@@ -32,6 +32,7 @@ import AccessibilitySVGFilters from "./components/AccessibilitySVGFilters";
 import AccessibilityFAB from "./components/AccessibilityFAB";
 import "./services/AccessibilityService";
 import KeyboardShortcutsHandler from "./components/KeyboardShortcutsHandler";
+import ScrollToTopButton from "./components/ScrollToTopButton";
 
 const MilestoneCertificate = React.lazy(() => import("./components/rewards/MilestoneCertificate"));
 
@@ -93,6 +94,9 @@ const WordlePage = React.lazy(() => import("./pages/games/WordlePage"));
 const Game2048Page = React.lazy(() => import("./pages/games/Game2048Page"));
 const SnakePage = React.lazy(() => import("./pages/games/SnakePage"));
 const TetrisPage = React.lazy(() => import("./pages/games/TetrisPage"));
+const LightsOutPage = React.lazy(() => import("./pages/games/LightsOutPage"));
+const SudokuMiniPage = React.lazy(() => import("./pages/games/SudokuMiniPage"));
+const MemoryPairsPage = React.lazy(() => import("./pages/games/MemoryPairsPage"));
 const TicTacToeOnlinePage = React.lazy(() => import("./pages/games/TicTacToeOnlinePage"));
 const Game24Page = React.lazy(() => import("./pages/games/Game24Page"));
 const WordSearchPage = React.lazy(() => import("./pages/games/WordSearchPage"));
@@ -172,6 +176,7 @@ const ShopPage = React.lazy(() => import("./pages/ShopPage"));
 const CurriculumMapPage = React.lazy(() => import("./pages/CurriculumMapPage"));
 const BlogPage = React.lazy(() => import("./pages/BlogPage"));
 const ForTeachersPage = React.lazy(() => import("./pages/ForTeachersPage"));
+const ForSchoolsPage = React.lazy(() => import("./pages/ForSchoolsPage"));
 const ForParentsPage = React.lazy(() => import("./pages/ForParentsPage"));
 const LessonViewPage = React.lazy(() => import("./pages/LessonViewPage"));
 const DailyChallengePage = React.lazy(() => import("./pages/DailyChallengePage"));
@@ -362,6 +367,7 @@ export default function App() {
                 <Route path="/blog/:slug" element={<FeatureGate flag="blog"><BlogPage /></FeatureGate>} />
                 <Route path="/blog" element={<FeatureGate flag="blog"><BlogPage /></FeatureGate>} />
                 <Route path="/for-teachers" element={<ForTeachersPage />} />
+                <Route path="/for-schools" element={<ForSchoolsPage />} />
                 <Route path="/for-parents" element={<ForParentsPage />} />
                 <Route path="/my-records" element={<LeaderboardPage />} />
                 <Route path="/leaderboard" element={<FeatureGate flag="leaderboard"><PremiumGate id="feature_leaderboard"><GlobalLeaderboardPage /></PremiumGate></FeatureGate>} />
@@ -423,6 +429,9 @@ export default function App() {
                 <Route path="/games/2048" element={<ErrorBoundary><Game2048Page /></ErrorBoundary>} />
                 <Route path="/games/snake" element={<ErrorBoundary><SnakePage /></ErrorBoundary>} />
                 <Route path="/games/tetris" element={<ErrorBoundary><TetrisPage /></ErrorBoundary>} />
+                <Route path="/games/lights-out" element={<ErrorBoundary><LightsOutPage /></ErrorBoundary>} />
+                <Route path="/games/sudoku-mini" element={<ErrorBoundary><SudokuMiniPage /></ErrorBoundary>} />
+                <Route path="/games/memory-pairs" element={<ErrorBoundary><MemoryPairsPage /></ErrorBoundary>} />
                 <Route path="/games/tic-tac-toe" element={<ErrorBoundary><TicTacToeOnlinePage /></ErrorBoundary>} />
                 <Route path="/games/tic-tac-toe/:code" element={<ErrorBoundary><TicTacToeOnlinePage /></ErrorBoundary>} />
                 <Route path="/games/24" element={<ErrorBoundary><Game24Page /></ErrorBoundary>} />
@@ -529,6 +538,7 @@ export default function App() {
             {FeatureFlagService.isEnabled("feedbackWidget") && <FeedbackWidget />}
             {FeatureFlagService.isEnabled("classicGames_rewardToast") && <RewardToast />}
             <SupportBubble />
+            <ScrollToTopButton />
             {FeatureFlagService.isEnabled("global_swUpdateBanner") && <SWUpdateBanner />}
             {FeatureFlagService.isEnabled("global_offlineBanner") && <OfflineBanner />}
             {FeatureFlagService.isEnabled("global_systemAnnouncement") && <SystemAnnouncementBanner />}

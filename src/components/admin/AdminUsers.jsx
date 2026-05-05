@@ -172,7 +172,7 @@ export default function AdminUsers() {
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
                           {u.photoURL ? (
-                            <img src={u.photoURL} alt="" className="w-8 h-8 rounded-full shrink-0" />
+                            <img src={u.photoURL} alt="" loading="lazy" decoding="async" className="w-8 h-8 rounded-full shrink-0" />
                           ) : (
                             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-white text-xs font-bold shrink-0">{(u.displayName || u.email || "?")[0]?.toUpperCase()}</div>
                           )}

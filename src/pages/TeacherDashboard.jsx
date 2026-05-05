@@ -618,7 +618,7 @@ function QuizPlayer({ quiz, lang, onBack }) {
       <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
         {q.imageUrl && q.imageUrl.trim() && (
           <div className="mb-4 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-600 bg-slate-100 dark:bg-slate-700">
-            <img src={q.imageUrl} alt="" className="w-full max-h-56 object-contain" />
+            <img src={q.imageUrl} alt="" loading="lazy" decoding="async" className="w-full max-h-56 object-contain" />
           </div>
         )}
         <div className="flex items-start gap-3 mb-5">

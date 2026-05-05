@@ -213,7 +213,7 @@ export default function LessonViewPage() {
               {currentSection.title}
             </h2>
             {currentSection.imageUrl && (
-              <img src={currentSection.imageUrl} alt="" className="rounded-xl mb-4 max-h-64 object-cover w-full" />
+              <img src={currentSection.imageUrl} alt="" loading="lazy" decoding="async" className="rounded-xl mb-4 max-h-64 object-cover w-full" />
             )}
             <div className="prose prose-slate dark:prose-invert max-w-none text-sm sm:text-base leading-relaxed whitespace-pre-line text-slate-700 dark:text-slate-300">
               {currentSection.content}

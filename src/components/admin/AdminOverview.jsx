@@ -103,7 +103,7 @@ export default function AdminOverview() {
             {recent.map((u) => (
               <li key={u.id} className="px-5 py-3 flex items-center gap-3">
                 {u.photoURL ? (
-                  <img src={u.photoURL} alt="" className="w-8 h-8 rounded-full" />
+                  <img src={u.photoURL} alt="" loading="lazy" decoding="async" className="w-8 h-8 rounded-full" />
                 ) : (
                   <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-white text-xs font-bold">{(u.displayName || u.email || "?")[0]?.toUpperCase()}</div>
                 )}

@@ -272,6 +272,12 @@ export const DEFAULT_FLAGS = {
   global_systemAnnouncement:{ enabled: true, label: { el: "📢 System Announcement banner", en: "📢 System Announcement banner" }, category: "uiGlobal" },
   global_milestoneListener: { enabled: true, label: { el: "🏆 Milestone Listener (auto popups)", en: "🏆 Milestone Listener" }, category: "uiGlobal" },
   global_timeLimitOverlay:  { enabled: true, label: { el: "⏱️ Time Limit Overlay (parental cap)", en: "⏱️ Time Limit Overlay (parental cap)" }, category: "uiGlobal" },
+  scrollToTopButton:        { enabled: true, label: { el: "⬆️ Scroll-to-Top κουμπί (floating)", en: "⬆️ Scroll-to-Top button (floating)" }, category: "uiGlobal" },
+  pageTransitions:          { enabled: true, label: { el: "✨ Page Transitions (smooth fade σε αλλαγή σελίδας)", en: "✨ Page Transitions (smooth fade on route change)" }, category: "uiGlobal" },
+  forSchoolsPage:           { enabled: true, label: { el: "🏫 Σελίδα 'Για Σχολεία' (B2B landing)", en: "🏫 'For Schools' page (B2B landing)" }, category: "marketing" },
+  game_lights_out:          { enabled: true, label: { el: "💡 Lights Out (puzzle)", en: "💡 Lights Out (puzzle)" }, category: "classicGames" },
+  game_sudoku_mini:         { enabled: true, label: { el: "🔢 Sudoku Mini 4×4", en: "🔢 Sudoku Mini 4×4" }, category: "classicGames" },
+  game_memory_pairs:        { enabled: true, label: { el: "🧠 Memory Pairs", en: "🧠 Memory Pairs" }, category: "classicGames" },
 
   // ─── Footer Sections ──────────────────────────────────────
   footer_links:             { enabled: true, label: { el: "🔗 Footer Links Section", en: "🔗 Footer Links Section" }, category: "uiFooter" },

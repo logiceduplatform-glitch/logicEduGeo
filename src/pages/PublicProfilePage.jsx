@@ -158,7 +158,7 @@ export default function PublicProfilePage() {
                 <div className="absolute -top-12 -right-12 text-9xl opacity-10">{country?.flag || "🌍"}</div>
                 <div className="flex items-center gap-4">
                   {profile.avatar ? (
-                    <img src={profile.avatar} alt="" className="w-20 h-20 rounded-full ring-4 ring-fuchsia-200 dark:ring-fuchsia-900" />
+                    <img src={profile.avatar} alt="" loading="lazy" decoding="async" className="w-20 h-20 rounded-full ring-4 ring-fuchsia-200 dark:ring-fuchsia-900" />
                   ) : (
                     <div className="w-20 h-20 rounded-full bg-gradient-to-br from-fuchsia-400 to-pink-500 flex items-center justify-center text-3xl font-extrabold text-white">
                       {(profile.displayName || "?")[0].toUpperCase()}

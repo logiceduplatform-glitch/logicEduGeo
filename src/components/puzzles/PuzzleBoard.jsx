@@ -217,6 +217,8 @@ export default function PuzzleBoard({ piecesCount = 4, onComplete, lang = "el" }
             <img
               src={`/images/${puzzle.title.toLowerCase()}.png`}
               alt={puzzle.title}
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover"
             />
             {/* Overlay με όνομα ζώου (για ΟΛΑ τα παζλ) */}

@@ -81,7 +81,7 @@ export default function AdminSubscriptions() {
               return (
                 <li key={u.id} className="px-5 py-3 flex items-center gap-3 flex-wrap">
                   {u.photoURL ? (
-                    <img src={u.photoURL} alt="" className="w-9 h-9 rounded-full" />
+                    <img src={u.photoURL} alt="" loading="lazy" decoding="async" className="w-9 h-9 rounded-full" />
                   ) : (
                     <div className="w-9 h-9 rounded-full bg-gradient-to-br from-amber-400 to-pink-400 flex items-center justify-center text-white text-sm font-bold">{(u.displayName || u.email || "?")[0]?.toUpperCase()}</div>
                   )}

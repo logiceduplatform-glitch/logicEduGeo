@@ -362,7 +362,7 @@ export default function JoinClassroomPage() {
                   <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
                     {q.imageUrl && String(q.imageUrl).trim() && (
                       <div className="mb-4 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-600">
-                        <img src={q.imageUrl} alt="" className="w-full max-h-56 object-contain" />
+                        <img src={q.imageUrl} alt="" loading="lazy" decoding="async" className="w-full max-h-56 object-contain" />
                       </div>
                     )}
                     <p className="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-5">{q.question}</p>
