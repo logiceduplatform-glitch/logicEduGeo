@@ -340,10 +340,12 @@ export default function HomePage() {
       <PricingSection />
       </RevealSection>
 
-      {/* NEWSLETTER SIGNUP */}
-      {FeatureFlagService.isEnabled("marketing_newsletter") && (
+      {/* Newsletter signup lives in the footer (variant="footer") to avoid
+          double-asking for an email; the marketing_newsletter flag here is
+          kept off by default. Toggle on for a homepage hero CTA when desired. */}
+      {FeatureFlagService.isEnabled("marketing_newsletterHero") && (
         <RevealSection>
-          <NewsletterSignup />
+          <NewsletterSignup variant="hero" source="homepage" />
         </RevealSection>
       )}
 

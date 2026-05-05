@@ -66,11 +66,6 @@ describe('FooterSection', () => {
     expect(container.querySelector('footer')).toBeInTheDocument();
   });
 
-  it('shows the "Made with" tagline', () => {
-    render(<LangWrapper lang="en"><FooterSection t={mockT} /></LangWrapper>);
-    expect(screen.getByText(/Made with/)).toBeInTheDocument();
-  });
-
   it('renders the branding tagline', () => {
     render(<LangWrapper lang="en"><FooterSection t={mockT} /></LangWrapper>);
     expect(screen.getByText('Where curiosity blooms')).toBeInTheDocument();

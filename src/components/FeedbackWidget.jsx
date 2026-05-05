@@ -9,8 +9,13 @@ const STORAGE_KEY = "kibloo:feedback:lastShown";
 const SUBMITTED_KEY = "kibloo:feedback:submittedAt";
 const DISMISS_KEY = "kibloo:feedback:dismissed";
 
-// Don't pester: only show again 7 days after last submit/dismiss.
-const COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000;
+// Re-engage after 1 day so users see it again without being spammed.
+const COOLDOWN_MS = 24 * 60 * 60 * 1000;
+const SHOW_DELAY_MS = 5000;
+// Schema bump → invalidates older "dismissed/submitted" timestamps so the FAB
+// re-appears after a UX change. Bump this number whenever placement changes.
+const COOLDOWN_SCHEMA = 2;
+const SCHEMA_KEY = "kibloo:feedback:schema";
 
 const T = {
   el: {
@@ -61,18 +66,24 @@ export default function FeedbackWidget() {
 
   // Decide whether to show the FAB after some engagement.
   useEffect(() => {
-    // Hide on auth/onboarding/admin pages
     if (location.pathname.startsWith("/auth")) return;
     if (location.pathname.startsWith("/onboarding")) return;
     if (location.pathname.startsWith("/admin")) return;
 
-    // Cooldown after submit / dismiss
+    // If the placement schema bumped, wipe stale dismiss/submit timestamps
+    // so existing users see the relocated widget immediately.
+    const storedSchema = parseInt(localStorage.getItem(SCHEMA_KEY) || "0", 10);
+    if (storedSchema < COOLDOWN_SCHEMA) {
+      localStorage.removeItem(DISMISS_KEY);
+      localStorage.removeItem(SUBMITTED_KEY);
+      localStorage.setItem(SCHEMA_KEY, String(COOLDOWN_SCHEMA));
+    }
+
     const dismissed = parseInt(localStorage.getItem(DISMISS_KEY) || "0", 10);
     const submitted = parseInt(localStorage.getItem(SUBMITTED_KEY) || "0", 10);
     if (Date.now() - Math.max(dismissed, submitted) < COOLDOWN_MS) return;
 
-    // Show after 30s on the page (gives user time to actually use the app)
-    const timer = setTimeout(() => setShowFab(true), 30000);
+    const timer = setTimeout(() => setShowFab(true), SHOW_DELAY_MS);
     return () => clearTimeout(timer);
   }, [location.pathname]);
 
@@ -122,7 +133,7 @@ export default function FeedbackWidget() {
           type="button"
           onClick={() => setOpen(true)}
           aria-label={l.open}
-          className="fixed bottom-4 right-4 z-[55] bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white text-sm font-bold px-4 py-2.5 rounded-full shadow-lg hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
+          className="fixed bottom-6 right-24 z-[55] bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white text-sm font-bold px-4 py-2.5 rounded-full shadow-lg hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
         >
           {l.fab}
           <button
@@ -141,7 +152,7 @@ export default function FeedbackWidget() {
           role="dialog"
           aria-modal="true"
           aria-label={l.title}
-          className="fixed bottom-4 right-4 z-[60] w-[min(360px,calc(100vw-2rem))] bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border-2 border-emerald-200 dark:border-emerald-800 animate-fade-in-up overflow-hidden"
+          className="fixed bottom-24 right-6 z-[60] w-[min(360px,calc(100vw-2rem))] bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border-2 border-emerald-200 dark:border-emerald-800 animate-fade-in-up overflow-hidden"
         >
           <div className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-4 py-3 flex items-center justify-between">
             <div>

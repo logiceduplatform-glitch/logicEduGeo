@@ -57,7 +57,7 @@ export default function FooterSection({ t }) {
               {isEl ? "Νέα παιχνίδια, συμβουλές & προσφορές στο inbox σου." : "New games, tips & offers in your inbox."}
             </p>
             <div className="mb-5">
-              {FeatureFlagService.isEnabled("newsletter") && <NewsletterSignup variant="footer" />}
+              {FeatureFlagService.isEnabled("marketing_newsletter") && <NewsletterSignup variant="footer" source="footer" />}
             </div>
             <a href="mailto:hello@kibloo.app" className="text-sm hover:text-white transition-colors block mb-4">
               hello@kibloo.app
@@ -105,9 +105,6 @@ export default function FooterSection({ t }) {
               RSS
             </a>
           </div>
-          <span className="text-slate-500">
-            {isEl ? "Κατασκευασμένο με ❤️ στην Ελλάδα" : "Made with ❤️ in Greece"}
-          </span>
         </div>
       </div>
     </footer>

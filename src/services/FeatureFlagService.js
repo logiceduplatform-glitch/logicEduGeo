@@ -185,7 +185,8 @@ export const DEFAULT_FLAGS = {
 
   // ─── Marketing & Growth ─────────────────────────────────
   marketing_comparison:     { enabled: true,  label: { el: "Σύγκριση με ανταγωνισμό (homepage table)", en: "Comparison vs competitors (homepage table)" }, category: "marketing" },
-  marketing_newsletter:     { enabled: true,  label: { el: "Newsletter signup widget", en: "Newsletter signup widget" }, category: "marketing" },
+  marketing_newsletter:     { enabled: true,  label: { el: "Newsletter signup (footer)", en: "Newsletter signup (footer)" }, category: "marketing" },
+  marketing_newsletterHero: { enabled: false, label: { el: "Newsletter — large homepage hero (διπλό)", en: "Newsletter — large homepage hero (duplicate)" }, category: "marketing" },
   marketing_blog:           { enabled: true,  label: { el: "Blog (/blog)", en: "Blog (/blog)" }, category: "marketing" },
   marketing_rssLink:        { enabled: true,  label: { el: "RSS feed link στο head", en: "RSS feed link in head" }, category: "marketing" },
   marketing_seoFaqSchema:   { enabled: true,  label: { el: "FAQPage JSON-LD schema (rich results)", en: "FAQPage JSON-LD schema (rich results)" }, category: "marketing" },
